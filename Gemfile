@@ -4,6 +4,8 @@ source 'https://rubygems.org'
 
 gem 'backports', '~> 2.6.1'
 
+gem 'veritas', :git => 'https://github.com/dkubb/veritas'
+
 group :development do
   gem 'jeweler', '~> 1.8.3'
   gem 'rake',    '~> 0.9.2'
