@@ -11,9 +11,20 @@ describe Adapter::Elasticsearch::Literal,'.sort' do
 
   subject { object.sort(input) }
 
-  let(:input) { Relation.new(header,[]).sort_by { |r| [r.id.asc] } }
 
-  it 'should return sort literal' do
-    should == { :sort => [{:id => { :order => :asc } }]}
+  context 'when sorting asc' do
+    let(:input) { Relation.new(header,[]).sort_by { |r| [r.id.asc] } }
+
+    it 'should return sort literal' do
+      should == { :sort => [{:id => { :order => :asc } }]}
+    end
+  end
+
+  context 'when sorting desc' do
+    let(:input) { Relation.new(header,[]).sort_by { |r| [r.id.desc] } }
+
+    it 'should return sort literal' do
+      should == { :sort => [{:id => { :order => :desc } }]}
+    end
   end
 end

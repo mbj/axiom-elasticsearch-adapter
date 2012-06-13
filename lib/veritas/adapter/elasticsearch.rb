@@ -29,21 +29,15 @@ module Veritas
         @uri
       end
 
-      # Read tuples from relation
-      #
-      # @param [Relation] relation
-      #   the relation to access
-      def read(relation,&block)
-        return to_enum(__method__, relation) unless block_given?
+    # # Read tuples from relation
+    # #
+    # # @param [Relation] relation
+    # #   the relation to access
+    # def read(relation,&block)
+    #   return to_enum(__method__, relation) unless block_given?
 
-        Query.new(connection,relation).each(&block)
-      end
-
-    private
-
-      def connection
-        @connection ||= Object.new
-      end
+    #   Query.new(connection,relation).each(&block)
+    # end
     end
   end
 end
