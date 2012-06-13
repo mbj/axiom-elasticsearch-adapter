@@ -33,6 +33,25 @@ describe Adapter::Elasticsearch::Literal,'.filter' do
     end
   end
 
+  context 'with conjunction' do
+    let(:left)  { Function::Predicate::Equality.new(attribute,1) }
+    let(:right) { Function::Predicate::Equality.new(attribute,2) }
+    let(:input) { Function::Connective::Conjunction.new(left,right) }
+
+    it 'should return filter literal' do
+      should == { :filter => { :and => [{ :term => { :id => 1 } },{:term => { :id => 2} } ] } }
+    end
+  end
+
+  context 'with negation' do
+    let(:predicate)  { Function::Predicate::Equality.new(attribute,1) }
+    let(:input) { Function::Connective::Negation.new(predicate) }
+
+    it 'should return filter literal' do
+      should == { :filter => { :not => { :term => { :id => 1 } } } }
+    end
+  end
+
   context 'with inclusion predicate' do
     let(:input) { Function::Predicate::Inclusion.new(attribute,[1,2,3]) }
 

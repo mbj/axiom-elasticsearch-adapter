@@ -40,14 +40,14 @@ module Veritas
 
         # Create filter literal
         #
-        # @param [Veritas::Function::Predicate] predicate
+        # @param [Veritas::Function] function
         #
         # @return [Hash]
         #
         # @api private
         #
-        def self.filter(predicate)
-          { :filter => predicate(predicate) }
+        def self.filter(function)
+          { :filter => function(function) }
         end
 
         # Create sort literal
@@ -120,39 +120,68 @@ module Veritas
           Veritas::Function::Predicate::LessThan             => :less_than_predicate,
           Veritas::Function::Predicate::LessThanOrEqualTo    => :less_than_or_equal_to_predicate,
           Veritas::Function::Connective::Disjunction         => :disjunction, 
+          Veritas::Function::Connective::Conjunction         => :conjunction, 
+          Veritas::Function::Connective::Negation            => :create_inverse, 
         }.freeze
 
         # Create filter literal internals 
         #
-        # @param [Veritas::Function::Predicate] predicate
+        # @param [Veritas::Function] function
         #
         # @return [Hash]
         #
         # @api private
         #
-        def self.predicate(predicate)
-          klass = predicate.class
+        def self.function(function)
+          klass = function.class
 
           method = TABLE.fetch(klass) do
-            raise ArgumentError, "Unsupported predicate: #{klass}"
+            raise ArgumentError, "Unsupported function: #{klass}"
           end
 
-          send(method,predicate)
+          send(method,function)
         end
-        private_class_method :predicate
+        private_class_method :function
 
-        # Create filter literal internals from disjunction predicate
+        # Create filter literal internals from disjunction 
         #
-        # @param [Veritas::Function::Predicate::Disjunction] predicate
+        # @param [Veritas::Function::Predicate::Disjunction] disjunction
         #
         # @return [Hash]
         #
         # @api private
         #
-        def self.disjunction(predicate)
-          { :or => [predicate(predicate.left),predicate(predicate.right)] }
+        def self.disjunction(disjunction)
+          create_connective(disjunction,:or)
         end
         private_class_method :disjunction
+
+        # Create filter literal internals from conjunction 
+        #
+        # @param [Veritas::Function::Predicate::Disjunction] conjunction
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def self.conjunction(conjunction)
+          create_connective(conjunction,:and)
+        end
+        private_class_method :conjunction
+
+        # Create connective literal
+        #
+        # @param [Veritas::Function::Connective] connective
+        # @param [Symbol] operator
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def self.create_connective(connective,operator)
+          { operator => [function(connective.left),function(connective.right)] }
+        end
+        private_class_method :create_connective
 
         # Create filter literal internals from quality predicate
         #
@@ -278,14 +307,14 @@ module Veritas
 
         # Create inverted filter
         #
-        # @param [Veritas::Function::Predicate] predicate
+        # @param [Veritas::Function] function
         #
         # @return [Hash]
         #
         # @api private
         #
-        def self.create_inverse(predicate)
-          { :not => predicate(predicate.inverse) }
+        def self.create_inverse(function)
+          { :not => function(function.inverse) }
         end
         private_class_method :create_inverse
       end
