@@ -110,13 +110,17 @@ module Veritas
         end
         private_class_method :sort_direction
 
-        TABLE = Hash[
-          [
-            [ Veritas::Function::Predicate::Equality,     :equality_predicate ],
-            [ Veritas::Function::Predicate::Inequality,   :inequality_predicate ],
-            [ Veritas::Function::Connective::Disjunction, :disjunction ],
-          ]
-        ]
+        TABLE = {
+          Veritas::Function::Predicate::Equality             => :equality_predicate,
+          Veritas::Function::Predicate::Inequality           => :create_inverse,
+          Veritas::Function::Predicate::Inclusion            => :inclusion_predicate,
+          Veritas::Function::Predicate::Exclusion            => :create_inverse,
+          Veritas::Function::Predicate::GreaterThan          => :greater_than_predicate,
+          Veritas::Function::Predicate::GreaterThanOrEqualTo => :greater_than_or_equal_to_predicate,
+          Veritas::Function::Predicate::LessThan             => :less_than_predicate,
+          Veritas::Function::Predicate::LessThanOrEqualTo    => :less_than_or_equal_to_predicate,
+          Veritas::Function::Connective::Disjunction         => :disjunction, 
+        }.freeze
 
         # Create filter literal internals 
         #
@@ -150,19 +154,6 @@ module Veritas
         end
         private_class_method :disjunction
 
-        # Create filter literal internals from inequality predicate
-        #
-        # @param [Veritas::Function::Predicate::Inequality] predicate
-        #
-        # @return [Hash]
-        #
-        # @api private
-        #
-        def self.inequality_predicate(predicate)
-          { :not => predicate(predicate.inverse) }
-        end
-        private_class_method :inequality_predicate
-
         # Create filter literal internals from quality predicate
         #
         # @param [Veritas::Function::Predicate::Equality] predicate
@@ -172,9 +163,131 @@ module Veritas
         # @api private
         #
         def self.equality_predicate(predicate)
-          { :term => { predicate.left.name => predicate.right } }
+          create_filter(predicate,:term)
         end
         private_class_method :equality_predicate
+
+        # Create filter literal internals from inclusion predicate
+        #
+        # @param [Veritas::Function::Predicate::Inclusion] predicate
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def self.inclusion_predicate(predicate)
+          create_filter(predicate,:terms)
+        end
+        private_class_method :inclusion_predicate
+
+        # Create filter literal internals from less than predicate
+        #
+        # @param [Veritas::Function::Predicate::LessThan] predicate
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def self.less_than_predicate(predicate)
+          create_filter_operator(predicate,:range,:lt)
+        end
+        private_class_method :less_than_predicate
+
+        # Create filter literal internals from less than or equal to predicate
+        #
+        # @param [Veritas::Function::Predicate::LessThanOrEqualTo] predicate
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def self.less_than_or_equal_to_predicate(predicate)
+          create_filter_operator(predicate,:range,:lte)
+        end
+        private_class_method :less_than_or_equal_to_predicate
+
+        # Create filter literal internals from greater than predicate
+        #
+        # @param [Veritas::Function::Predicate::GreaterThan] predicate
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def self.greater_than_predicate(predicate)
+          create_filter_operator(predicate,:range,:gt)
+        end
+        private_class_method :greater_than_predicate
+
+        # Create filter literal internals from greater than or equal to predicate
+        #
+        # @param [Veritas::Function::Predicate::GreaterThanOrEqualTo] predicate
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def self.greater_than_or_equal_to_predicate(predicate)
+          create_filter_operator(predicate,:range,:gte)
+        end
+        private_class_method :greater_than_or_equal_to_predicate
+
+        # Create filter from predicate and type
+        #
+        # @param [Veritas::Function::Predicate] predicate
+        # @param [Symbol] type
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def self.create_filter(predicate,type)
+          create_filter_operand(predicate,type,predicate.right)
+        end
+        private_class_method :create_filter
+
+        # Create filter from predicate type and operator
+        #
+        # @param [Veritas::Function::Predicate] predicate
+        # @param [Symbol] type
+        # @param [Symbol] operator
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def self.create_filter_operator(predicate,type,operator)
+          create_filter_operand(predicate,type,operator => predicate.right)
+        end
+        private_class_method :create_filter_operator
+
+        # Create filter from predicate type and operand
+        #
+        # @param [Veritas::Function::Predicate] predicate
+        # @param [Symbol] type
+        # @param [Object] operand
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def self.create_filter_operand(predicate,type,operand)
+          { type => { predicate.left.name => operand } }
+        end
+        private_class_method :create_filter_operand
+
+        # Create inverted filter
+        #
+        # @param [Veritas::Function::Predicate] predicate
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def self.create_inverse(predicate)
+          { :not => predicate(predicate.inverse) }
+        end
+        private_class_method :create_inverse
       end
     end
   end
