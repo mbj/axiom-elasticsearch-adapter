@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
   gem.extra_rdoc_files = %w[LICENSE README.md TODO]
 
   gem.add_runtime_dependency('backports', '~> 2.5.3')
+  gem.add_runtime_dependency('faraday',   '~> 0.8.1')
 
   gem.add_development_dependency('rake',        '~> 0.9.2')
   gem.add_development_dependency('rspec',       '~> 1.3.2')
