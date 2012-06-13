@@ -30,14 +30,13 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
     it_should_behave_like 'an idempotent method'
 
     it 'should return correct query' do
-      should == [
+      should == 
         [ "name", 
           {
             :size   => 100_000,
             :fields => [:firstname,:lastname],
           }
         ]
-      ]
     end
   end
 
@@ -47,7 +46,7 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
     it_should_behave_like 'an idempotent method'
 
     it 'should return correct query' do
-      should == [
+      should ==
         [ "name", 
           {
             :size   => 100_000,
@@ -55,7 +54,6 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
             :filter => { :term => { :firstname => 'Markus' } }
           }
         ]
-      ]
     end
   end
 
@@ -65,7 +63,7 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
     it_should_behave_like 'an idempotent method'
 
     it 'should return correct query' do
-      should == [
+      should == 
         [ "name", 
           {
             :size   => 100_000,
@@ -73,7 +71,6 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
             :filter => { :not => { :term => { :firstname => 'Markus' } } }
           }
         ]
-      ]
     end
   end
 
@@ -83,7 +80,7 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
     it_should_behave_like 'an idempotent method'
 
     it 'should return correct query' do
-      should == [
+      should == 
         [ "name", 
           {
             :size   => 100_000,
@@ -91,7 +88,6 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
             :filter => { :or => [{ :term => { :firstname => 'Markus' } },{:term => { :lastname => 'Schirp' } }] }
           }
         ]
-      ]
     end
   end
 
@@ -103,7 +99,7 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
     let(:relation) { ordered_relation }
 
     it 'should return correct query' do
-      should == [
+      should == 
         [ "name", 
           {
             :size   => 100_000,
@@ -111,7 +107,6 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
             :sort   => [ { :firstname => { :order => :desc } }, { :lastname => { :order => :asc } } ]
           }
         ]
-      ]
     end
 
     context 'when limiting' do
@@ -120,7 +115,7 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
       it_should_behave_like 'an idempotent method'
 
       it 'should return correct query' do
-        should == [
+        should == 
           [ "name", 
             {
               :fields => [:firstname,:lastname],
@@ -128,7 +123,6 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
               :sort   => [ { :firstname => { :order => :desc } }, { :lastname => { :order => :asc } } ]
             }
           ]
-        ]
       end
     end
 
@@ -138,7 +132,7 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
       it_should_behave_like 'an idempotent method'
 
       it 'should return correct query' do
-        should == [
+        should == 
           [ "name", 
             {
               :size   => 100_000,
@@ -147,7 +141,6 @@ describe Adapter::Elasticsearch::QueryBuilder,'#to_query' do
               :sort   => [ { :firstname => { :order => :desc } }, { :lastname => { :order => :asc } } ]
             }
           ]
-        ]
       end
     end
   end

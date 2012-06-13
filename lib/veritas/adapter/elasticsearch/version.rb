@@ -1,6 +1,6 @@
 module Veritas
   module Adapter
-    module Elasticsearch
+    class Elasticsearch
       VERSION = '0.0.1'.freeze
     end
   end

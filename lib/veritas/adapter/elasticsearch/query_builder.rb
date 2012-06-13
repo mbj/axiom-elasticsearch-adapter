@@ -65,12 +65,7 @@ module Veritas
         # @api private
         #
         def build_query
-          [ 
-            [ 
-              type, 
-              build_query_inner
-            ]
-          ]
+          [ type, build_query_inner ]
         end
 
         # Build inner query from stored fragments
