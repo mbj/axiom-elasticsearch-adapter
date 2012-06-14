@@ -3,21 +3,19 @@ module Veritas
     class Elasticsearch
       # Base class for request and response preprocessor
       class Preprocessor
-
-        # Invoke preprocessor on env
+        # Invoke preprocessor
         #
         # @param [Hash] env
         #
         # @api private
-        #
+        # 
         # @return [self]
         #
-        def self.run(env,logger)
-          self.new(env,logger).preprocess
+        def self.run(env)
+          self.new(env).run
 
           self
         end
-
       protected
 
         # Return request method
@@ -27,7 +25,7 @@ module Veritas
         # @api private
         #
         def method
-          @env[:method]
+          @env.fetch(:method)
         end
 
         # Read request url
@@ -37,7 +35,7 @@ module Veritas
         # @api private
         #
         def url
-          @env[:url]
+          @env.fetch(:url)
         end
 
         # Return request or response body
@@ -47,29 +45,7 @@ module Veritas
         # @api private
         #
         def body
-          @env[:body]
-        end
-
-        # Check if request is a bulk request
-        #
-        # @return [true|false]
-        #
-        # @api private
-        #
-        def bulk?
-          url.to_s =~ /_bulk\Z/
-        end
-
-        # Return loggable body
-        #
-        # Will return "BULK" in case body is a bulk request.
-        #
-        # @return [String]
-        #
-        # @api private
-        #
-        def log_body
-          bulk? ? 'BULK' : body
+          @env.fetch(:body)
         end
 
         # Check if request method is HEAD
@@ -89,7 +65,7 @@ module Veritas
         # @api private
         #
         def logger
-          @logger
+          @env[:logger]
         end
 
       private
@@ -97,14 +73,13 @@ module Veritas
         # Initialize preprecessor
         #
         # @param [Hash] env
-        # @param [Logger] logger
         #
         # @return [undefined]
         #
         # @api private
         #
-        def initialize(env,logger)
-          @env,@logger = env,logger
+        def initialize(env)
+          @env = env
         end
       end
     end

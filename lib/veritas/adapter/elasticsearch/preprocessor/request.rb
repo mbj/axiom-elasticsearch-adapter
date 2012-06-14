@@ -11,7 +11,7 @@ module Veritas
           #
           # @api private
           #
-          def preprocess
+          def run
             convert_json
             log
 
@@ -42,7 +42,7 @@ module Veritas
             logger = self.logger
 
             if logger
-              logger.debug("#{method.upcase} #{url} #{log_body}")
+              logger.debug("#{method.upcase} #{url} #{body}")
             end
 
             self

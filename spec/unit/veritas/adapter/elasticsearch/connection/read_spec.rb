@@ -33,14 +33,9 @@ describe Adapter::Elasticsearch::Connection,'#read' do
       should == data
     end
 
-    context 'when logger is present' do
-      let(:logger) { mock }
-
-      it 'should log' do
-        logger.should_receive(:debug).with("GET http://example.com:9200/index/type/_search #{JSON.dump(query)}")
-        logger.should_receive(:debug).with("200 ab")
-        subject
-      end
+    it 'should execute requests' do
+      subject
+      adapter.verify_stubbed_calls
     end
   end
 

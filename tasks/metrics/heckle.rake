@@ -19,7 +19,10 @@ begin
       name = if map
         map[constant] || map[:default]
       else
-        method.gsub(/[?!=]\z/, '')
+        method.
+          gsub('?','_ques').
+          gsub('!','_bang').
+          gsub('=','_assign')
       end
       "#{name}_spec.rb"
     end

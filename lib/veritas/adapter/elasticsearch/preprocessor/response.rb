@@ -10,7 +10,7 @@ module Veritas
           #
           # @api private
           #
-          def preprocess
+          def run
             raise_on_error
             convert_json
             log
@@ -68,7 +68,7 @@ module Veritas
           # @api private
           #
           def content_type
-            response_headers.fetch('content_type')
+            response_headers.fetch('content_type',nil)
           end
 
           # Return response headers
@@ -101,7 +101,7 @@ module Veritas
             logger = self.logger
 
             if logger
-              logger.debug("#{status} #{log_body}")
+              logger.debug("#{status}")
             end
 
             self

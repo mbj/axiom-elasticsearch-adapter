@@ -50,9 +50,19 @@ module Veritas
         # @api private
         #
         def refresh
-          connection.post(:_refresh)
+          connection.post('_refresh')
 
           self
+        end
+
+        # Return connection logger
+        #
+        # @return [Logger]
+        #
+        # @api private
+        #
+        def logger
+          @logger
         end
 
       private
@@ -75,8 +85,7 @@ module Veritas
         #
         def connection
           @connection ||= Faraday.new(@uri) do |builder|
-            builder.use(Middleware::Response,@logger)
-            builder.use(Middleware::Request,@logger)
+            builder.use(Middleware,@logger)
             builder.adapter(*adapter)
           end
         end
