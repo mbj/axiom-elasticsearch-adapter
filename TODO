@@ -1,4 +1,3 @@
 * Investigate into thrift connection for performance better than http. 
   http://www.elasticsearch.org/guide/reference/modules/thrift.html
 * Raise less generic errors than Runtime Error.
-* Whitelist expected status codes rather than doing 400..600 test.

@@ -1,10 +1,12 @@
 require 'spec_helper'
 
 describe Adapter::Elasticsearch::Connection,'#refresh' do
-  let(:object)     { described_class.new(uri) }
+  let(:object)     { described_class.new(uri,options) }
   let(:uri)        { 'http://example.com:9200/index' }
 
   subject { object.refresh }
+
+  let(:options)    { { :adapter => [:test,adapter] } }
 
   let(:adapter) do 
     Faraday::Adapter::Test::Stubs.new do |stub|
@@ -15,18 +17,26 @@ describe Adapter::Elasticsearch::Connection,'#refresh' do
     end
   end
 
-  before do
-    object.stub(:adapter => [:test,adapter])
-  end
-
   let(:request) do
-    [:post,"/index/_refresh",[200,{},'']]
+    [:post,"/index/_refresh",[status,{},'body']]
   end
 
-  it 'should execute requests' do
-    subject
-    adapter.verify_stubbed_calls
+  context 'and request is successful' do
+    let(:status) { 200 }
+
+    it 'should execute requests' do
+      subject
+      adapter.verify_stubbed_calls
+    end
+
+    it_should_behave_like 'a command method'
   end
 
-  it_should_behave_like 'a command method'
+  context 'and request is NOT successful' do
+    let(:status) { 500 }
+
+    it 'should raise error' do
+      expect { subject }.to raise_error(RuntimeError,'Remote error: body')
+    end
+  end
 end

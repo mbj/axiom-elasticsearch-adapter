@@ -9,11 +9,14 @@ describe Adapter::Elasticsearch::Preprocessor::Response,'#run' do
     {
       :logger => logger,
       :method => method,
+      :request => options,
       :status => status,
       :response_headers => response_headers,
       :body => body
     }
   end
+
+  let(:options) { {} }
 
   let(:body) { '{"foo":"bar"}' }
   let(:method) { :get }
@@ -26,28 +29,64 @@ describe Adapter::Elasticsearch::Preprocessor::Response,'#run' do
 
   it_should_behave_like 'a command method'
 
-  context 'when content type is application/json' do
-    it 'should convert body from json' do
-      subject
-      env[:body].should == { 'foo' => 'bar' }
+  context 'when body should be converted from json' do
+    before do
+      options[:convert_json]=true
+    end
+
+    context 'and content type is json' do
+      it 'should convert body from json' do
+        subject
+        env[:body].should == { 'foo' => 'bar' }
+      end
+    end
+
+    context 'and content type is NOT json' do
+      let(:content_type) { 'text/plain' }
+
+      it 'should raise error' do
+        expect { subject }.to raise_error(RuntimeError,'Expected json content type but got: text/plain')
+      end
     end
   end
 
-  context 'when status is between 400 and 600' do
-    let(:body) { 'error' }
-    let(:content_type) { 'text/plain' }
-    let(:status) { 500 }
+  context 'when many status codes are expected' do
+    before do
+      options[:expect_status] = [200,400]
+    end
 
-    context 'and request method is NOT HEAD' do
+    context 'and status code NOT matches an expected status' do
+      let(:body)   { 'error' }
+      let(:status) { 201 }
+
       it 'should raise error' do
         expect { subject }.to raise_error(RuntimeError,'Remote error: error')
       end
     end
 
-    context 'and request method is HEAD' do
-      let(:method) { :head }
+    context 'and status code matches expected status' do
+      it 'should not raise exception' do
+        subject
+      end
+    end
+  end
 
-      it 'should not raise' do
+  context 'when single status code was expected' do
+    before do
+      options[:expect_status] = 200
+    end
+
+    context 'and status code NOT matches expected status' do
+      let(:body)   { 'error' }
+      let(:status) { 201 }
+
+      it 'should raise error' do
+        expect { subject }.to raise_error(RuntimeError,'Remote error: error')
+      end
+    end
+
+    context 'and status code matches expected status' do
+      it 'should not raise exception' do
         subject
       end
     end

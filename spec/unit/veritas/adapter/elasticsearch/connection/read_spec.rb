@@ -2,12 +2,14 @@ require 'spec_helper'
 
 # This is a pice of mocked shit. But im unable to inject the faraday test adapter nicely.
 describe Adapter::Elasticsearch::Connection,'#read' do
-  let(:object)     { described_class.new(uri,logger) }
+  let(:object)     { described_class.new(uri,options) }
   let(:uri)        { 'http://example.com:9200/index' }
   let(:data)       { { 'a' => 'b' } }
   let(:query)      { { 'foo' => 'bar' } }
   let(:type)       { 'type' }
   let(:logger)     { nil }
+
+  let(:options)    { { :adapter => [:test,adapter] } }
 
   subject { object.read(type,query) }
 
@@ -18,10 +20,6 @@ describe Adapter::Elasticsearch::Connection,'#read' do
         result
       end
     end
-  end
-
-  before do
-    object.stub(:adapter => [:test,adapter])
   end
 
   context 'with successful read' do

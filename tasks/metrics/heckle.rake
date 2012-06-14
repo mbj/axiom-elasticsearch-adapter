@@ -164,6 +164,12 @@ begin
         specs << [ ".#{method}", descedant_specs ]
       end
 
+      # A mutation can trigger the net_http adapter that tries to contact example.com
+      # So mutations on 
+      if mod == Veritas::Adapter::Elasticsearch::Connection
+        specs.delete_if { |method, spec_files| method == '#initialize' }
+      end
+
       specs.sort.each do |(method, spec_files)|
         puts "Heckling #{mod}#{method}"
         IO.popen("spec #{spec_files.join(' ')} --heckle '#{mod}#{method}'") do |pipe|

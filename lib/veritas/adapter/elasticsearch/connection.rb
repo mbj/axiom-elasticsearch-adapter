@@ -14,6 +14,7 @@ module Veritas
         #
         def read(type,query)
           response = connection.get("#{type}/_search") do |request|
+            request.options.merge!(@read_options)
             request.body = query
           end
 
@@ -27,7 +28,11 @@ module Veritas
         # @api private
         #
         def drop
-          connection.delete if exist?
+          if exist?
+            connection.delete do |request|
+              request.options[:expect_status]=200
+            end 
+          end
 
           self
         end
@@ -39,7 +44,10 @@ module Veritas
         # @api private
         #
         def exist?
-          response = connection.head
+          response = connection.head do |request|
+            request.options[:expect_status]=[200,404]
+          end
+
           response.status == 200
         end
 
@@ -50,7 +58,9 @@ module Veritas
         # @api private
         #
         def refresh
-          connection.post('_refresh')
+          connection.post('_refresh') do |request|
+            request.options[:expect_status]=200
+          end
 
           self
         end
@@ -67,14 +77,22 @@ module Veritas
 
       private
 
+        DEFAULT_READ_OPTIONS = {
+          :expect_status => 200,
+          :convert_json  => true
+        }.freeze
+
         # Initialize connection
         #
         # @param [String] uri
         #
         # @api private
         #
-        def initialize(uri,logger=nil)
-          @uri,@logger = uri,logger
+        def initialize(uri,options={})
+          @uri= uri
+          @adapter      = [*options.fetch(:adapter,:net_http)]
+          @logger       = options.fetch(:logger,nil)
+          @read_options = options.fetch(:read_options,DEFAULT_READ_OPTIONS)
         end
 
         # Return http connection
@@ -86,18 +104,8 @@ module Veritas
         def connection
           @connection ||= Faraday.new(@uri) do |builder|
             builder.use(Middleware,@logger)
-            builder.adapter(*adapter)
+            builder.adapter(*@adapter)
           end
-        end
-
-        # Return http adapter arguments to use
-        #
-        # @return [Array]
-        #
-        # @api private
-        #
-        def adapter
-          [:net_http]
         end
       end
     end

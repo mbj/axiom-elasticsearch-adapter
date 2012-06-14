@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe Adapter::Elasticsearch::Connection,'#logger' do
-  let(:object) { described_class.new(mock,logger) }
+  let(:object) { described_class.new(mock,options) }
+
+  let(:options) { { :logger => logger } }
 
   let(:logger) { mock }
 

@@ -1,8 +1,10 @@
 require 'spec_helper'
 
 describe Adapter::Elasticsearch::Connection,'#exist?' do
-  let(:object)     { described_class.new(uri) }
+  let(:object)     { described_class.new(uri,options) }
   let(:uri)        { 'http://example.com:9200/index' }
+
+  let(:options) { { :adapter => [:test,adapter] } }
 
   subject { object.exist? }
 
@@ -15,21 +17,29 @@ describe Adapter::Elasticsearch::Connection,'#exist?' do
     end
   end
 
-  before do
-    object.stub(:adapter => [:test,adapter])
-  end
-
   context 'when index does exist' do
     let(:request) do
-      [:head,"/index",[200,{},'']]
+      [:head,"/index",[status,{},'body']]
     end
 
-    it 'should execute requests' do
-      subject
-      adapter.verify_stubbed_calls
+    context 'and request is successful' do
+      let(:status) { 200 }
+
+      it 'should execute requests' do
+        subject
+        adapter.verify_stubbed_calls
+      end
+
+      it { should be(true) }
     end
 
-    it { should be(true) }
+    context 'and request is NOT successful' do
+      let(:status) { 500 }
+
+      it 'should raise error' do
+        expect { subject }.to raise_error(RuntimeError,'Remote error: body')
+      end
+    end
   end
 
   context 'when index does NOT exist' do

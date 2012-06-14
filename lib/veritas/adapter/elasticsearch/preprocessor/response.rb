@@ -29,11 +29,23 @@ module Veritas
           # @api private
           #
           def raise_on_error
-            if !head? and error_status?
+            unless expected_status_codes.include?(status)
               raise "Remote error: #{body}"
             end
 
             self
+          end
+
+          # Return expected status codes
+          #
+          # Returns status in case expected status is not set
+          #
+          # @return [Array<Integer>]
+          #
+          # @api private
+          #
+          def expected_status_codes
+            [*options.fetch(:expect_status,status)]
           end
 
           # Return response status
@@ -53,12 +65,25 @@ module Veritas
           # @api private
           #
           def convert_json
-            body = self.body
-            if body and content_type == 'application/json; charset=UTF-8'
-              @env[:body] = JSON.load(body)
+            return unless convert_json?
+
+            unless json_content_type?
+              raise "Expected json content type but got: #{content_type}"
             end
 
+            @env[:body] = JSON.load(body)
+
             self
+          end
+
+          # Check for json content type
+          #
+          # @return [true|false]
+          #
+          # @api private
+          #
+          def json_content_type?
+            content_type == 'application/json; charset=UTF-8'
           end
 
           # Return response content type
@@ -79,16 +104,6 @@ module Veritas
           # 
           def response_headers
             @env.fetch(:response_headers)
-          end
-
-          # Check for error status code
-          #
-          # @return [true,false]
-          #
-          # @api private
-          #
-          def error_status?
-            (400..600).include?(status)
           end
 
           # Log this response

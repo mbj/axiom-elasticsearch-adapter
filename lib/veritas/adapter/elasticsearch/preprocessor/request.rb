@@ -27,7 +27,9 @@ module Veritas
           # @api private
           #
           def convert_json
-            @env[:body] = JSON.dump(body)
+            if convert_json?
+              @env[:body] = JSON.dump(body)
+            end
 
             self
           end
@@ -42,7 +44,7 @@ module Veritas
             logger = self.logger
 
             if logger
-              logger.debug("#{method.upcase} #{url} #{body}")
+              logger.debug("#{method.upcase} #{url} #{body.inspect}")
             end
 
             self

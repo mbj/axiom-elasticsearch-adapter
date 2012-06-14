@@ -28,6 +28,26 @@ module Veritas
           @env.fetch(:method)
         end
 
+        # Check if body should be converted from/to JSON 
+        #
+        # @return [true|false]
+        #
+        # @api private
+        #
+        def convert_json?
+          options.fetch(:convert_json,false)
+        end
+
+        # Return request options
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def options
+          @env.fetch(:request)
+        end
+
         # Read request url
         #
         # @return [String]
@@ -46,16 +66,6 @@ module Veritas
         #
         def body
           @env.fetch(:body)
-        end
-
-        # Check if request method is HEAD
-        #
-        # @return [true|false]
-        #
-        # @api private
-        #
-        def head?
-          method == :head
         end
 
         # Return logger
