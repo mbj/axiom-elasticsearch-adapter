@@ -44,7 +44,7 @@ module Veritas
             logger = self.logger
 
             if logger
-              logger.debug("#{method.upcase} #{url} #{body.inspect}")
+              logger.debug("#{method.upcase} #{url} #{body}")
             end
 
             self

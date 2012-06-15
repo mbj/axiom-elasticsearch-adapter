@@ -8,6 +8,7 @@ require 'veritas/adapter/elasticsearch/middleware'
 require 'veritas/adapter/elasticsearch/preprocessor'
 require 'veritas/adapter/elasticsearch/preprocessor/request'
 require 'veritas/adapter/elasticsearch/preprocessor/response'
+require 'veritas/adapter/elasticsearch/result'
 
 module Veritas
   module Adapter
@@ -22,8 +23,8 @@ module Veritas
       #
       # @api private
       #
-      def initialize(uri)
-        @uri = uri
+      def initialize(uri,options)
+        @uri,@options = uri,options
       end
 
       # Return URI of elasticsearch node
@@ -36,34 +37,35 @@ module Veritas
         @uri
       end
 
-#     # Read tuples from relation
-#     #
-#     # @param [Relation] relation
-#     #   the relation to access
-#     #
-#     # @return [Enumerable]
-#     #
-#     # @api private
-#     #
-#     def read(relation,&block)
-#       return to_enum(__method__, relation) unless block_given?
+      # Read tuples from relation
+      #
+      # @param [Relation] relation
+      #   the relation to access
+      #
+      # @return [Enumerable]
+      #
+      # @api private
+      #
+      def read(relation,&block)
+        return to_enum(__method__, relation) unless block_given?
 
-#       builder = QueryBuilder.new(relation)
-#       
-#       result = connection.read(*builder.to_query,&block)
-#     end
+        builder = QueryBuilder.new(relation)
 
-#   private
+        result = Result.new(relation,connection.read(*builder.to_query))
+        result.each(&block)
+      end
 
-#     # Access connection
-#     #
-#     # @return [Connection]
-#     #
-#     # @api private
-#     #
-#     def connection
-#       @connection ||= Connection.new(@uri)
-#     end
+    private
+
+      # Access connection
+      #
+      # @return [Connection]
+      #
+      # @api private
+      #
+      def connection
+        @connection ||= Connection.new(@uri,@options)
+      end
     end
   end
 end

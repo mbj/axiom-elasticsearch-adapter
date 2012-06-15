@@ -75,6 +75,31 @@ module Veritas
           @logger
         end
 
+        # Setup index
+        #
+        # Currently done with some hardcoded defaults.
+        #
+        # @return [self]
+        def setup
+          return if exist?
+
+          options = { 
+            'settings' => {
+              'number_of_shards' => 1,
+              'number_of_replicas' => 0
+            }
+          }
+
+          p options
+
+          connection.put do |request|
+            request.options.merge!(:expect_status => 200, :convert_json => true)
+            request.body = options
+          end
+
+          self
+        end
+
       private
 
         DEFAULT_READ_OPTIONS = {

@@ -18,6 +18,13 @@ module Veritas
           @query = build_query
         end
 
+
+        def tuples(result)
+          p result
+
+          []
+        end
+
       private
 
         # Initialize query builder instance

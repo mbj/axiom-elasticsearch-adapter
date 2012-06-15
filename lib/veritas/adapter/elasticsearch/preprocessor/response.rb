@@ -11,9 +11,9 @@ module Veritas
           # @api private
           #
           def run
+            log
             raise_on_error
             convert_json
-            log
 
             self
           end
@@ -68,7 +68,7 @@ module Veritas
             return unless convert_json?
 
             unless json_content_type?
-              raise "Expected json content type but got: #{content_type}"
+              raise "Expected json content type but got: #{content_type.inspect}"
             end
 
             @env[:body] = JSON.load(body)
@@ -93,7 +93,7 @@ module Veritas
           # @api private
           #
           def content_type
-            response_headers.fetch('content_type',nil)
+            response_headers.fetch('content-type',nil)
           end
 
           # Return response headers
