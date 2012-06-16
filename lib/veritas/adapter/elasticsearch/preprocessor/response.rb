@@ -38,14 +38,14 @@ module Veritas
 
           # Return expected status codes
           #
-          # Returns status in case expected status is not set
+          # Defaults to 200.
           #
           # @return [Array<Integer>]
           #
           # @api private
           #
           def expected_status_codes
-            [*options.fetch(:expect_status,status)]
+            [*options.fetch(:expect_status,200)]
           end
 
           # Return response status

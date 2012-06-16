@@ -1,12 +1,13 @@
 require 'spec_helper'
 
-describe Adapter::Elasticsearch::Connection,'#exist?' do
+describe Adapter::Elasticsearch::Driver,'#exist?' do
   let(:object)     { described_class.new(uri,options) }
-  let(:uri)        { 'http://example.com:9200/index' }
+  let(:name)       { 'test' }
+  let(:uri)        { 'http://example.com:9200' }
 
   let(:options) { { :adapter => [:test,adapter] } }
 
-  subject { object.exist? }
+  subject { object.exist?(name) }
 
   let(:adapter) do 
     Faraday::Adapter::Test::Stubs.new do |stub|
@@ -19,7 +20,7 @@ describe Adapter::Elasticsearch::Connection,'#exist?' do
 
   context 'when index does exist' do
     let(:request) do
-      [:head,"/index",[status,{},'body']]
+      [:head,'/test',[status,{'content-type' => 'application/json; charset=UTF-8'},'{}']]
     end
 
     context 'and request is successful' do
@@ -37,14 +38,14 @@ describe Adapter::Elasticsearch::Connection,'#exist?' do
       let(:status) { 500 }
 
       it 'should raise error' do
-        expect { subject }.to raise_error(RuntimeError,'Remote error: body')
+        expect { subject }.to raise_error(RuntimeError,'Remote error: {}')
       end
     end
   end
 
   context 'when index does NOT exist' do
     let(:request) do
-      [:head,"/index",[404,{},'']]
+      [:head,'/test',[404,{},'']]
     end
 
     it 'should execute requests' do

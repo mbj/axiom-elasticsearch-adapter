@@ -30,12 +30,14 @@ module Veritas
 
         # Check if body should be converted from/to JSON 
         #
+        # Defaults to true.
+        #
         # @return [true|false]
         #
         # @api private
         #
         def convert_json?
-          options.fetch(:convert_json,false)
+          options.fetch(:convert_json,true)
         end
 
         # Return request options

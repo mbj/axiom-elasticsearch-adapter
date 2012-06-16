@@ -4,30 +4,45 @@ module Veritas
   module Adapter
     class Elasticsearch
       # Convert relations into elasticsearch queries
-      class QueryBuilder
+      class Query
+        # Error raised when query on unsupported algebra is created
+        class UnsupportedAlgebraError < StandardError; end
 
         # Return relation converted to elasticsearch query
         #
-        # @return [Array]
+        # @return [Hash]
         #
         # @api private
         #
         def to_query
-          return @query if defined?(@query)
-          dispatch(@relation)
-          @query = build_query
+          query.last
         end
 
+        # Return elasticsearch path to query
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        def path
+          query.first
+        end
 
-        def tuples(result)
-          p result
-
-          []
+        # Execute query on connection
+        #
+        # @param [Driver] driver
+        #
+        # @return [Result]
+        #
+        # @api private
+        #
+        def execute(driver)
+          Result.new(@relation,driver.read(path,to_query))
         end
 
       private
 
-        # Initialize query builder instance
+        # Initialize query instance
         #
         # @param [Veritas::Relation] relation
         #
@@ -58,7 +73,7 @@ module Veritas
         def dispatch(visitable)
           klass = visitable.class
           method = TABLE.fetch(klass) do
-            raise ArgumentError,"Unsupported relation: #{klass}"
+            raise UnsupportedAlgebraError,"Unsupported relation: #{klass}"
           end
           send(method,visitable)
 
@@ -71,8 +86,10 @@ module Veritas
         #
         # @api private
         #
-        def build_query
-          [ type, build_query_inner ]
+        def query
+          return @query if defined?(@query)
+          dispatch(@relation)
+          @query = [ @base_name, build_query_inner ]
         end
 
         # Build inner query from stored fragments
@@ -142,16 +159,16 @@ module Veritas
           @fields || raise("no fields")
         end
 
-        # Return visted type literal or raise
+        # Return relation base name or raise
         #
-        # "Type" refers to elasticsearch indexed type.
+        # The relation base name is the elasticsearch path to query.
         #
-        # @return [Hash|nil]
+        # @return [String]
         #
         # @api private
         #
-        def type
-          @type || raise("no type")
+        def base_name
+          @base_name || raise('no base name was visited')
         end
 
         # Visit an order operation
@@ -163,6 +180,9 @@ module Veritas
         # @api private
         #
         def visit_order_operation(operation)
+          if defined?(@sort)
+            raise UnsupportedAlgebraError,'Nesting order operations is not supported'
+          end
           @sort = Literal.sort(operation)
           dispatch(operation.operand)
 
@@ -178,6 +198,9 @@ module Veritas
         # @api private
         #
         def visit_restriction(operation)
+          if defined?(@filter)
+            raise UnsupportedAlgebraError, 'Nesting restrictions is not supported'
+          end
           @filter = Literal.filter(operation.predicate)
           dispatch(operation.operand)
 
@@ -193,6 +216,9 @@ module Veritas
         # @api private
         #
         def visit_offset_operation(operation)
+          if defined?(@from)
+            raise UnsupportedAlgebraError, 'Nesting offset operations is not supported'
+          end
           @from = Literal.from(operation.offset)
           dispatch(operation.operand)
 
@@ -208,6 +234,9 @@ module Veritas
         # @api private
         #
         def visit_limit_operation(operation)
+          if defined?(@size)
+            raise UnsupportedAlgebraError, 'Nesting limit operations is not supported'
+          end
           @size = Literal.size(operation.limit)
           dispatch(operation.operand)
 
@@ -223,8 +252,8 @@ module Veritas
         # @api private
         #
         def visit_base_relation(relation)
-          @fields = Literal.fields(relation.header.map(&:name))
-          @type = relation.name
+          @base_name = relation.name
+          @fields = Literal.fields(relation.header)
 
           self
         end

@@ -5,7 +5,7 @@ describe Adapter::Elasticsearch::Literal,'.fields' do
 
   subject { object.fields(input) }
 
-  let(:input) { [:foo,:bar] }
+  let(:input) { Veritas::Relation::Header.new([[:foo,String],[:bar,String]]) }
 
   it 'should return fiels literal' do
     should == { :fields => [:foo,:bar] }

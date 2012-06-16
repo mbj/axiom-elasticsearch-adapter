@@ -24,10 +24,6 @@ describe Adapter::Elasticsearch::Preprocessor::Request,'#run' do
   it_should_behave_like 'a command method'
 
   context 'when body conversion to json was requested' do
-    before do
-      options[:convert_json] = true
-    end
-
     it 'should convert body to json' do
       subject
       env[:body].should == '{"foo":"bar"}'
@@ -35,6 +31,10 @@ describe Adapter::Elasticsearch::Preprocessor::Request,'#run' do
   end
 
   context 'when body conversion to json was NOT requested' do
+    before do
+      options[:convert_json] = false
+    end
+
     it 'should NOT convert body to json' do
       subject
       env[:body].should == body
@@ -45,7 +45,7 @@ describe Adapter::Elasticsearch::Preprocessor::Request,'#run' do
     let(:logger) { mock }
 
     it 'should log request' do
-      logger.should_receive(:debug).with("GET http://example.com/index/_search #{body.inspect}")
+      logger.should_receive(:debug).with('GET http://example.com/index/_search {"foo":"bar"}')
       subject
     end
   end

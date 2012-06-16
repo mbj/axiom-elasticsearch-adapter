@@ -166,7 +166,7 @@ begin
 
       # A mutation can trigger the net_http adapter that tries to contact example.com
       # So mutations on 
-      if mod == Veritas::Adapter::Elasticsearch::Connection
+      if mod == Veritas::Adapter::Elasticsearch::Driver
         specs.delete_if { |method, spec_files| method == '#initialize' }
       end
 

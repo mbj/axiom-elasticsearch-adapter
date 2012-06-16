@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 # This is a pice of mocked shit. But im unable to inject the faraday test adapter nicely.
-describe Adapter::Elasticsearch::Connection,'#read' do
+describe Adapter::Elasticsearch::Driver,'#read' do
   let(:object)     { described_class.new(uri,options) }
   let(:uri)        { 'http://example.com:9200/index' }
   let(:data)       { { 'a' => 'b' } }
@@ -24,7 +24,7 @@ describe Adapter::Elasticsearch::Connection,'#read' do
 
   context 'with successful read' do
     let(:request) do
-      [:get,'/index/type/_search', [200,{'content_type' => 'application/json; charset=UTF-8'}, JSON.dump(data)]]
+      [:get,'/index/type/_search', [200,{'content-type' => 'application/json; charset=UTF-8'}, JSON.dump(data)]]
     end
 
     it 'should return data' do
@@ -39,7 +39,7 @@ describe Adapter::Elasticsearch::Connection,'#read' do
 
   context 'with unsuccessful read' do
     let(:request) do
-      [:get,'/index/type/_search', [500,{'content_type' => 'text/html; charset=UTF-8'}, "error"]]
+      [:get,'/index/type/_search', [500,{'content-type' => 'text/html; charset=UTF-8'}, "error"]]
     end
 
     it 'should raise error' do

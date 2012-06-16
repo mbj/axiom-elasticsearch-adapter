@@ -4,14 +4,14 @@ module Veritas
       module Literal
         # Create fields literal
         #
-        # @param [Array] fields
+        # @param [Vertias::Relation::Header] header
         #
         # @return [Hash]
         #
         # @api private
         #
-        def self.fields(fields)
-          { :fields => fields }
+        def self.fields(header)
+          { :fields => header.map(&:name) }
         end
 
         # Create size literal

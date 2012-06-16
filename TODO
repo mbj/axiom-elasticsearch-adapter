@@ -1,3 +1,5 @@
 * Investigate into thrift connection for performance better than http. 
   http://www.elasticsearch.org/guide/reference/modules/thrift.html
 * Raise less generic errors than Runtime Error.
+* Add option to check for remote timeouts in middleware
+* Add option to force local timeouts in faraday.

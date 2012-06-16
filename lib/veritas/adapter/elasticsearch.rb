@@ -2,8 +2,8 @@ require 'json'
 require 'veritas'
 require 'faraday'
 require 'veritas/adapter/elasticsearch/literal'
-require 'veritas/adapter/elasticsearch/query_builder'
-require 'veritas/adapter/elasticsearch/connection'
+require 'veritas/adapter/elasticsearch/query'
+require 'veritas/adapter/elasticsearch/driver'
 require 'veritas/adapter/elasticsearch/middleware'
 require 'veritas/adapter/elasticsearch/preprocessor'
 require 'veritas/adapter/elasticsearch/preprocessor/request'
@@ -37,6 +37,16 @@ module Veritas
         @uri
       end
 
+      # Return options of adapter
+      #
+      # @return [Hash]
+      #
+      # @api private
+      #
+      def options
+        @options
+      end
+
       # Read tuples from relation
       #
       # @param [Relation] relation
@@ -49,22 +59,21 @@ module Veritas
       def read(relation,&block)
         return to_enum(__method__, relation) unless block_given?
 
-        builder = QueryBuilder.new(relation)
+        result = Query.new(relation).execute(driver)
 
-        result = Result.new(relation,connection.read(*builder.to_query))
         result.each(&block)
       end
 
     private
 
-      # Access connection
+      # Return driver
       #
-      # @return [Connection]
+      # @return [Driver]
       #
       # @api private
       #
-      def connection
-        @connection ||= Connection.new(@uri,@options)
+      def driver
+        @driver ||= Driver.new(@uri,@options)
       end
     end
   end

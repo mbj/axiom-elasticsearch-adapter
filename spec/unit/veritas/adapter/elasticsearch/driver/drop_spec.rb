@@ -1,12 +1,13 @@
 require 'spec_helper'
 
-describe Adapter::Elasticsearch::Connection,'#drop' do
+describe Adapter::Elasticsearch::Driver,'#drop' do
   let(:object)     { described_class.new(uri,options) }
-  let(:uri)        { 'http://example.com:9200/index' }
+  let(:name)       { 'test' }
+  let(:uri)        { 'http://example.com:9200' }
 
   let(:options) { { :adapter => [:test,adapter] } }
 
-  subject { object.drop }
+  subject { object.drop(name) }
 
   let(:adapter) do 
     Faraday::Adapter::Test::Stubs.new do |stubs|
@@ -27,7 +28,7 @@ describe Adapter::Elasticsearch::Connection,'#drop' do
 
     let(:requests) do
       [
-        [:delete,'/index',[status,{},'body']]
+        [:delete,'/test',[status,{'content-type' => 'application/json; charset=UTF-8'},'{}']]
       ]
     end
 
@@ -46,7 +47,7 @@ describe Adapter::Elasticsearch::Connection,'#drop' do
       let(:status) { 500 }
 
       it 'should raise error' do
-        expect { subject }.to raise_error(RuntimeError,'Remote error: body')
+        expect { subject }.to raise_error(RuntimeError,'Remote error: {}')
       end
     end
   end

@@ -27,9 +27,8 @@ module Veritas
           # @api private
           #
           def convert_json
-            if convert_json?
-              @env[:body] = JSON.dump(body)
-            end
+            return unless convert_json?
+            @env[:body] = JSON.dump(body)
 
             self
           end

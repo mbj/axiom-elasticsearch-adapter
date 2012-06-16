@@ -1,6 +1,6 @@
 $: << 'lib'
 
-uri = ENV.fetch('ES_URI','http://localhost:9200/test')
+uri = ENV.fetch('ES_URI','http://localhost:9200')
 
 require 'logger'
 require 'veritas-elasticsearch-adapter'
@@ -12,27 +12,25 @@ logger = Logger.new($stdout)
 
 adapter = Veritas::Adapter::Elasticsearch.new(uri,:logger => logger)
 
-base_relation = Veritas::Relation::Base.new('people',
+base_relation = Veritas::Relation::Base.new('test/people',
   [
     [:firstname,String],
     [:lastname,String]
   ]
 )
 
-connection = adapter.send(:connection)
+index = 'test'
 
-connection.drop
-connection.setup
+connection = adapter.send(:driver)
 
-# TODO:
-#
-# Wait for cluster init via cluster health api.
+connection.drop(index)
 
-# This has to be a connection command.
-connection.send(:connection).post("people/_mapping") do |request|
-  request.options[:expect_status]=200
-  request.options[:convert_json]=true
-  request.body = {
+connection.setup(index,
+  :settings => {
+    :number_of_shards => 1,
+    :number_of_replicas => 0,
+  },
+  :mappings => {
     :people => {
       :properties => {
         :firstname => {
@@ -52,12 +50,16 @@ connection.send(:connection).post("people/_mapping") do |request|
       }
     }
   }
-end
+)
 
-# This too.
+connection.wait(index,:timeout => 10)
+
+# TODO:
+#
+# Wait for cluster init via cluster health api.
 
 def add(connection,data)
-  connection.send(:connection).post('people') do |request|
+  connection.send(:connection).post('test/people') do |request|
     request.options[:expect_status]=201
     request.options[:convert_json]=true
     request.body = data
