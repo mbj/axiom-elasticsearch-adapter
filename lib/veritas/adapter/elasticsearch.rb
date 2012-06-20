@@ -9,6 +9,7 @@ require 'veritas/adapter/elasticsearch/preprocessor'
 require 'veritas/adapter/elasticsearch/preprocessor/request'
 require 'veritas/adapter/elasticsearch/preprocessor/response'
 require 'veritas/adapter/elasticsearch/result'
+require 'veritas/adapter/elasticsearch/gateway'
 
 module Veritas
   module Adapter
@@ -47,34 +48,34 @@ module Veritas
         @options
       end
 
-      # Read tuples from relation
-      #
-      # @param [Relation] relation
-      #   the relation to access
-      #
-      # @return [Enumerable]
-      #
-      # @api private
-      #
-      def read(relation,&block)
-        return to_enum(__method__, relation) unless block_given?
+#     # Read tuples from relation
+#     #
+#     # @param [Relation] relation
+#     #   the relation to access
+#     #
+#     # @return [Enumerable]
+#     #
+#     # @api private
+#     #
+#     def read(relation,&block)
+#       return to_enum(__method__, relation) unless block_given?
 
-        result = Query.new(relation).execute(driver)
+#       Query.new(relation).read(driver,&block)
 
-        result.each(&block)
-      end
+#       self
+#     end
 
-    private
+#   private
 
-      # Return driver
-      #
-      # @return [Driver]
-      #
-      # @api private
-      #
-      def driver
-        @driver ||= Driver.new(@uri,@options)
-      end
+#     # Return driver
+#     #
+#     # @return [Driver]
+#     #
+#     # @api private
+#     #
+#     def driver
+#       @driver ||= Driver.new(@uri,@options)
+#     end
     end
   end
 end
