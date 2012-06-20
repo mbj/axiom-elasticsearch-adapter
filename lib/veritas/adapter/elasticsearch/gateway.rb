@@ -3,7 +3,7 @@
 module Veritas
   module Adapter
     class Elasticsearch
-      # A relation backed by an adapter
+      # A relation backed by elasticserach adapter
       class Gateway < ::Veritas::Relation
 
         DECORATED_CLASS = superclass
