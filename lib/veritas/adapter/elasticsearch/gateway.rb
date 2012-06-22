@@ -10,13 +10,37 @@ module Veritas
 
         undef_method *DECORATED_CLASS.public_instance_methods(false).map(&:to_s) - %w[ materialize ]
 
-        [
+        MAP = [
           Relation::Operation::Order,
           Relation::Operation::Offset,
           Relation::Operation::Limit,
           Algebra::Restriction
-        ].each do |operation|
-          undef_method *operation::Methods.public_instance_methods(false)
+        ].each_with_object({}) do |operation,map|
+          operation::Methods.public_instance_methods(false).each do |method|
+            map[method.to_sym]=operation
+          end
+        end
+
+        MAP.each_key do |method|
+          class_eval(<<-RUBY,__FILE__,__LINE__+1)
+            def #{method}(*args,&block)
+              if supported?(:#{method})
+                response = @relation.send(:#{method},*args,&block)
+                classify(response)
+              else
+                super
+              end
+            end
+          RUBY
+        end
+
+        def optimize
+          @relation.optimize
+          self
+        end
+
+        def supported?(method)
+          !@operations.include?(MAP.fetch(method))
         end
 
         # The adapter the gateway will use to fetch results
@@ -47,9 +71,10 @@ module Veritas
         #
         # @api private
         #
-        def initialize(adapter, relation)
+        def initialize(adapter, relation, operations=Set.new)
           @adapter  = adapter
           @relation = relation
+          @operations = operations
         end
 
         # Iterate over each row in the results
@@ -114,12 +139,14 @@ module Veritas
         # @api private
         def forward(*args, &block)
           relation = self.relation
-          response = relation.public_send(*args,&block)
+          relation.public_send(*args,&block)
+        end
 
+        def classify(response)
           if response.equal?(relation)
             self
           elsif response.kind_of?(DECORATED_CLASS)
-            self.class.new(adapter, response)
+            self.class.new(adapter, response, @operations + [response.class])
           else
             response
           end
@@ -134,6 +161,10 @@ module Veritas
         # @api private
         def forwardable?(method)
           relation.respond_to?(method)
+        end
+
+        def inspect
+          "GATEWAY"
         end
 
         # Return a list of tuples to iterate over

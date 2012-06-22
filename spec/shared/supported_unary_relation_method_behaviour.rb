@@ -5,7 +5,7 @@ shared_examples_for 'a supported unary relation method' do
 
   let(:adapter)   { mock('Adapter')                         }
   let(:relation)  { mock('Relation', operation => response) }
-  let(:response)  { mock('New Relation',:kind_of? => true)  }
+  let(:response)  { mock('New Relation',:kind_of? => true, :class => factory)  }
   let!(:object)   { described_class.new(adapter, relation)  }
 
   let(:args)    { stub }
@@ -31,9 +31,8 @@ shared_examples_for 'a supported unary relation method' do
     subject
   end
 
-
   it 'initializes the new gateway with the adapter and response' do
-    described_class.should_receive(:new).with(adapter, response)
+    described_class.should_receive(:new).with(adapter, response, [factory].to_set)
     subject
   end
 end
