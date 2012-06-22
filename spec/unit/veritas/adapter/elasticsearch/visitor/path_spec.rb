@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Adapter::Elasticsearch::Query,'#to_query' do
+describe Adapter::Elasticsearch::Visitor,'#to_query' do
   let(:object) { described_class.new(relation) } 
 
   let(:header) do

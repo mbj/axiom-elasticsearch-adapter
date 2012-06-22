@@ -16,7 +16,7 @@ describe Adapter::Elasticsearch::Literal,'.sort' do
     let(:input) { Relation.new(header,[]).sort_by { |r| [r.id.asc] } }
 
     it 'should return sort literal' do
-      should == { :sort => [{:id => { :order => :asc } }]}
+      should == [{:id => { :order => :asc } }]
     end
   end
 
@@ -24,7 +24,7 @@ describe Adapter::Elasticsearch::Literal,'.sort' do
     let(:input) { Relation.new(header,[]).sort_by { |r| [r.id.desc] } }
 
     it 'should return sort literal' do
-      should == { :sort => [{:id => { :order => :desc } }]}
+      should == [{:id => { :order => :desc } }]
     end
   end
 end

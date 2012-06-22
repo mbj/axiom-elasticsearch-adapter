@@ -24,6 +24,6 @@ describe Adapter::Elasticsearch::Gateway, '#respond_to?' do
   context 'with a known method in the relation' do
     let(:method) { :header }
 
-    it { p object.header ; should be(true) }
+    it { should be(true) }
   end
 end

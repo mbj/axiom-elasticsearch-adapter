@@ -10,7 +10,7 @@ module Veritas
         #
         # @api private
         #
-        # @return [Hash]
+        # @return [Result]
         #
         def read(path,query)
           path = "#{path}/_search"
@@ -18,8 +18,8 @@ module Veritas
           response = connection.get(path) do |request|
             request.body = query
           end
-          # end.body works but is not catched by rcov :(
-          response.body
+
+          Result.new(response.body)
         end
 
         # Drop index if exist
@@ -101,11 +101,6 @@ module Veritas
         end
 
       private
-
-        DEFAULT_READ_OPTIONS = {
-          :expect_status => 200,
-          :convert_json  => true
-        }.freeze
 
         DEFAULT_INDEX_SETTINGS = {
           'settings' => {

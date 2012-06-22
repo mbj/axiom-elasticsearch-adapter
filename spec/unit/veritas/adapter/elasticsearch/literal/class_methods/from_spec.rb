@@ -8,6 +8,6 @@ describe Adapter::Elasticsearch::Literal,'.from' do
   let(:input) { 100 }
 
   it 'should return from literal' do
-    should == { :from => 100 }
+    should == 100
   end
 end

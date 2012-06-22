@@ -27,9 +27,8 @@ describe Adapter::Elasticsearch::Driver,'#read' do
       [:get,'/index/type/_search', [200,{'content-type' => 'application/json; charset=UTF-8'}, JSON.dump(data)]]
     end
 
-    it 'should return data' do
-      should == data
-    end
+    it { should be_kind_of(Adapter::Elasticsearch::Result) }
+    its(:data) { should == data }
 
     it 'should execute requests' do
       subject

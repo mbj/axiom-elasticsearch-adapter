@@ -1,11 +1,22 @@
 module Veritas
   module Adapter
     class Elasticsearch
-      # Elasticsearch query result 
+      # Elasticsearch query result wrapper
       class Result
         include Enumerable
 
-        # Enumerate rows in result
+        # Return wrapped data
+        #
+        # @return [Hash]
+        #   the elasticsearch result body
+        #
+        # @api private
+        #
+        def data
+          @data
+        end
+
+        # Enumerate documents in result
         #
         # @yield [row]
         # @yieldparam [Array] row
@@ -17,12 +28,24 @@ module Veritas
         def each(&block)
           return to_enum(__method__) unless block_given?
 
-          rows.each(&block)
+          documents.each(&block)
 
           self
         end
 
       private
+
+        # Return enumerator on result documents
+        #
+        # @return [Enumerator<Hash>]
+        #
+        # @api private
+        #
+        def documents
+          @documents ||= hits.map do |hit|
+            hit.fetch('fields')
+          end
+        end
 
         # Return hits from result
         #
@@ -34,39 +57,17 @@ module Veritas
           @data.fetch('hits').fetch('hits')
         end
 
+
         # Initialize result
         #
-        # @param [Virtus::Relation] relation
         # @param [Hash] data
         #
         # @return [undefined]
         #
         # @api private
         #
-        def initialize(relation,data)
-          @relation,@data = relation,data
-        end
-
-        # Return enumerator on result rows
-        #
-        # @return [Enumerator<Array>]
-        #
-        # @api private
-        #
-        def rows
-          hits.map do |hit|
-            hit.fetch('fields').values_at(*fields)
-          end
-        end
-
-        # Return field names
-        #
-        # @return [Array<String]
-        #
-        # @api private
-        #
-        def fields
-          @fields ||= @relation.header.map { |attribute| attribute.name.to_s }.to_a
+        def initialize(data)
+          @data = data
         end
       end
     end

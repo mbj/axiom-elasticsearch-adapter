@@ -11,7 +11,7 @@ module Veritas
         # @api private
         #
         def self.fields(header)
-          { :fields => header.map(&:name) }
+          header.map(&:name)
         end
 
         # Create size literal
@@ -22,8 +22,10 @@ module Veritas
         #
         # @api private
         #
+        # TODO: Check for positive numeric value in elasticsearch allowed range
+        #
         def self.size(size)
-          { :size => size }
+          size
         end
 
         # Create from literal
@@ -34,8 +36,10 @@ module Veritas
         #
         # @api private
         #
+        # TODO: Check for positive numeric value in elasticsearch allowed range
+        #
         def self.from(offset)
-          { :from => offset }
+          offset
         end
 
         # Create filter literal
@@ -47,7 +51,7 @@ module Veritas
         # @api private
         #
         def self.filter(function)
-          { :filter => function(function) }
+          function(function)
         end
 
         # Create sort literal
@@ -59,7 +63,7 @@ module Veritas
         # @api private
         #
         def self.sort(operation)
-          { :sort => sort_operations(operation) }
+          sort_operations(operation) 
         end
 
         # Create sort operations literal

@@ -1,6 +1,8 @@
 require 'spec_helper'
 
-describe Adapter::Elasticsearch::Query,'#to_query' do
+describe Adapter::Elasticsearch::Visitor,'#components' do
+  subject { object.components }
+
   let(:object) { described_class.new(relation) } 
 
   let(:header) do
@@ -14,13 +16,11 @@ describe Adapter::Elasticsearch::Query,'#to_query' do
     Veritas::Relation::Base.new(:name,header) 
   end
 
-  subject { object.to_query }
-
   context 'with an unsupported relation' do
     let(:relation) { base_relation.rename(:firstname => :surname) }
 
     it 'should raise error' do
-      expect { subject }.to raise_error(Adapter::Elasticsearch::Query::UnsupportedAlgebraError,"Unsupported relation: #{relation.class}")
+      expect { subject }.to raise_error(Adapter::Elasticsearch::Visitor::UnsupportedAlgebraError,"Unsupported relation: #{relation.class}")
     end
   end
 
@@ -32,7 +32,6 @@ describe Adapter::Elasticsearch::Query,'#to_query' do
     it 'should return correct query' do
       should == 
         {
-          :size   => 100_000,
           :fields => [:firstname,:lastname],
         }
     end
@@ -45,7 +44,7 @@ describe Adapter::Elasticsearch::Query,'#to_query' do
     end
 
     it 'should raise error' do
-      expect { subject }.to raise_error(Adapter::Elasticsearch::Query::UnsupportedAlgebraError,'Nesting restrictions is not supported')
+      expect { subject }.to raise_error(Adapter::Elasticsearch::Visitor::UnsupportedAlgebraError,'Nesting restrictions is not supported')
     end
   end
 
@@ -57,7 +56,6 @@ describe Adapter::Elasticsearch::Query,'#to_query' do
     it 'should return correct query' do
       should ==
         {
-          :size   => 100_000,
           :fields => [:firstname,:lastname],
           :filter => { :term => { :firstname => 'Markus' } }
         }
@@ -72,7 +70,6 @@ describe Adapter::Elasticsearch::Query,'#to_query' do
     it 'should return correct query' do
       should == 
         {
-          :size   => 100_000,
           :fields => [:firstname,:lastname],
           :filter => { :not => { :term => { :firstname => 'Markus' } } }
         }
@@ -87,7 +84,6 @@ describe Adapter::Elasticsearch::Query,'#to_query' do
     it 'should return correct query' do
       should == 
         {
-          :size   => 100_000,
           :fields => [:firstname,:lastname],
           :filter => { :or => [{ :term => { :firstname => 'Markus' } },{:term => { :lastname => 'Schirp' } }] }
         }
@@ -104,7 +100,6 @@ describe Adapter::Elasticsearch::Query,'#to_query' do
     it 'should return correct query' do
       should == 
         {
-          :size   => 100_000,
           :fields => [:firstname,:lastname],
           :sort   => [ { :firstname => { :order => :desc } }, { :lastname => { :order => :asc } } ]
         }
@@ -114,7 +109,7 @@ describe Adapter::Elasticsearch::Query,'#to_query' do
       let(:relation) { ordered_relation.sort_by { |r| [r.firstname.asc, r.lastname ] } }
 
       it 'should raise error' do
-        expect { subject }.to raise_error(Adapter::Elasticsearch::Query::UnsupportedAlgebraError,'Nesting order operations is not supported')
+        expect { subject }.to raise_error(Adapter::Elasticsearch::Visitor::UnsupportedAlgebraError,'Nesting order operations is not supported')
       end
     end
 
@@ -136,7 +131,7 @@ describe Adapter::Elasticsearch::Query,'#to_query' do
         let(:relation) { ordered_relation.take(5).take(5) }
 
         it 'should raise error' do
-          expect { subject }.to raise_error(Adapter::Elasticsearch::Query::UnsupportedAlgebraError,'Nesting limit operations is not supported')
+          expect { subject }.to raise_error(Adapter::Elasticsearch::Visitor::UnsupportedAlgebraError,'Nesting limit operations is not supported')
         end
       end
     end
@@ -149,7 +144,6 @@ describe Adapter::Elasticsearch::Query,'#to_query' do
       it 'should return correct query' do
         should == 
           {
-            :size   => 100_000,
             :fields => [:firstname,:lastname],
             :from   => 5,
             :sort   => [ { :firstname => { :order => :desc } }, { :lastname => { :order => :asc } } ]
@@ -160,7 +154,7 @@ describe Adapter::Elasticsearch::Query,'#to_query' do
         let(:relation) { ordered_relation.drop(5).drop(5) }
 
         it 'should raise error' do
-          expect { subject }.to raise_error(Adapter::Elasticsearch::Query::UnsupportedAlgebraError,'Nesting offset operations is not supported')
+          expect { subject }.to raise_error(Adapter::Elasticsearch::Visitor::UnsupportedAlgebraError,'Nesting offset operations is not supported')
         end
       end
     end
