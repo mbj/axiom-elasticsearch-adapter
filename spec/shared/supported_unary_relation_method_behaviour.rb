@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 shared_examples_for 'a supported unary relation method' do
+  subject { object.public_send(operation,args,&block) }
+
   let(:adapter)   { mock('Adapter')                         }
   let(:relation)  { mock('Relation', operation => response) }
   let(:response)  { mock('New Relation',:kind_of? => true)  }
@@ -9,7 +11,9 @@ shared_examples_for 'a supported unary relation method' do
   let(:args)    { stub }
   let(:gateway) { mock('New Gateway') }
 
-  subject { object.public_send(operation,args) }
+  unless instance_methods.map(&:to_s).include?('block')
+    let(:block) { nil }
+  end
 
   before do
     described_class.stub!(:new).and_return(gateway)
@@ -17,10 +21,16 @@ shared_examples_for 'a supported unary relation method' do
 
   it { should equal(gateway) }
 
-  it 'forwards the arguments to relation' do
-    relation.should_receive(operation).with(args)
+  it 'forwardst the arguemnts to relation' do
+    relation.should_receive(operation).with(args).and_return(response)
     subject
   end
+
+  it 'forwards the block to relation' do
+    relation.stub!(operation) { |_args, proc| proc.should equal(block) }
+    subject
+  end
+
 
   it 'initializes the new gateway with the adapter and response' do
     described_class.should_receive(:new).with(adapter, response)
@@ -30,4 +40,6 @@ end
 
 shared_examples_for 'a supported unary relation method with block' do
   it_should_behave_like 'a supported unary relation method'
+
+  let(:block) { lambda { |context| } }
 end
