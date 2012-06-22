@@ -9,7 +9,15 @@ module Veritas
         DECORATED_CLASS = superclass
 
         undef_method *DECORATED_CLASS.public_instance_methods(false).map(&:to_s) - %w[ materialize ]
-        undef_method :restrict, :sort_by, :drop, :take
+
+        [
+          Relation::Operation::Order,
+          Relation::Operation::Offset,
+          Relation::Operation::Limit,
+          Algebra::Restriction
+        ].each do |operation|
+          undef_method *operation::Methods.public_instance_methods(false)
+        end
 
         # The adapter the gateway will use to fetch results
         #

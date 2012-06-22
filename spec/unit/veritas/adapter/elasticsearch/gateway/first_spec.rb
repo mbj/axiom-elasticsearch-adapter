@@ -2,8 +2,8 @@
 
 require 'spec_helper'
 
-describe Adapter::Elasticsearch::Gateway, '#drop' do
-  let(:operation) { :drop }
+describe Adapter::Elasticsearch::Gateway, '#first' do
+  let(:operation) { :first }
 
   it_should_behave_like 'a supported unary relation method'
 end

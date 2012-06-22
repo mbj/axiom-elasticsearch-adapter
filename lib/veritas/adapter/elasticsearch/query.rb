@@ -58,7 +58,7 @@ module Veritas
         # @api private
         #
         def fields
-          @fields ||= components.fetch(:fields).map(&:to_s)
+          @fields ||= components.fetch(:fields).map { |field| field.to_s }
         end
 
         # Return query components
