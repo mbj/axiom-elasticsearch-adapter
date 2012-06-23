@@ -4,6 +4,9 @@ require 'spec_helper'
 describe Adapter::Elasticsearch::Gateway, '#sort_by' do
   let(:operation) { :sort_by }
   let(:factory)   { Relation::Operation::Order }
+  let(:arguments) { [] }
 
-  it_should_behave_like 'a supported unary relation method with block'
+  let(:block)     { lambda { |r| [r.id.asc] } }
+
+  it_should_behave_like 'a supported unary relation method'
 end

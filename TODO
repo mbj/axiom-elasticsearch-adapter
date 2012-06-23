@@ -5,4 +5,3 @@
 * Add option to force local timeouts in faraday.
 * Use optimizer to collapse nested operations.
 * Add optimizer stage to reorder relation in a way unsupported operations are not done on gateway relation.
-* Make sure gateway does not return new gateway when supported operation is created twice

@@ -6,9 +6,7 @@ gemspec
 
 gem 'backports', '~> 2.6.1'
 
-gem 'veritas',            :git => 'https://github.com/dkubb/veritas'
-# To get Veritas::Relation::Gateway
-gem 'veritas-do-adapter', :git => 'https://github.com/dkubb/veritas-do-adapter'
+gem 'veritas',           :git => 'https://github.com/dkubb/veritas'
 gem 'veritas-optimizer', :git => 'https://github.com/dkubb/veritas-optimizer'
 
 group :development do

@@ -8,7 +8,24 @@ module Veritas
 
         DECORATED_CLASS = superclass
 
-        undef_method *DECORATED_CLASS.public_instance_methods(false).map(&:to_s) - %w[ materialize ]
+        # Poor man forwardable for now.
+        (DECORATED_CLASS.public_instance_methods(false).map(&:to_s) - %w[ materialize ]).each do |method|
+          class_eval(<<-RUBY,__FILE__,__LINE__+1)
+            def #{method}(*args,&block)
+              relation.public_send(:#{method},*args,&block)
+            end
+          RUBY
+        end
+
+        # Return inspected stub to fight against inspect related errors in spec printouts.
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        # TODO: Remove this.
+        #
+        def inspect; 'GATEWAY'; end
 
         MAP = [
           Relation::Operation::Order,
@@ -17,6 +34,8 @@ module Veritas
           Algebra::Restriction
         ].each_with_object({}) do |operation,map|
           operation::Methods.public_instance_methods(false).each do |method|
+            method = method.to_sym
+            next if method == :last
             map[method.to_sym]=operation
           end
         end
@@ -26,21 +45,12 @@ module Veritas
             def #{method}(*args,&block)
               if supported?(:#{method})
                 response = @relation.send(:#{method},*args,&block)
-                classify(response)
+                self.class.new(adapter, response, @operations + [response.class])
               else
                 super
               end
             end
           RUBY
-        end
-
-        def optimize
-          @relation.optimize
-          self
-        end
-
-        def supported?(method)
-          !@operations.include?(MAP.fetch(method))
         end
 
         # The adapter the gateway will use to fetch results
@@ -52,7 +62,7 @@ module Veritas
         attr_reader :adapter
         protected :adapter
 
-        # The relation the gateway will use to generate SQL
+        # The relation the gateway will use to generate Query
         #
         # @return [Relation]
         #
@@ -98,73 +108,18 @@ module Veritas
           self
         end
 
-        # Test if the method is supported on this object
-        #
-        # @param [Symbol] method
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        def respond_to?(method, *)
-          super || forwardable?(method)
-        end
-
       private
 
-        # Proxy the message to the relation
+        # Return if method is supported in this gateway
         #
         # @param [Symbol] method
         #
-        # @param [Array] *args
-        #
-        # @return [self]
-        #   return self for all command methods
-        # @return [Object]
-        #   return response from all query methods
+        # @return [true|false]
         #
         # @api private
-        def method_missing(method, *args, &block)
-          forwardable?(method) ? forward(method, *args, &block) : super
-        end
-
-        # Forward the message to the relation
         #
-        # @param [Array] *args
-        #
-        # @return [self]
-        #   return self for all command methods
-        # @return [Object]
-        #   return response from all query methods
-        #
-        # @api private
-        def forward(*args, &block)
-          relation = self.relation
-          relation.public_send(*args,&block)
-        end
-
-        def classify(response)
-          if response.equal?(relation)
-            self
-          elsif response.kind_of?(DECORATED_CLASS)
-            self.class.new(adapter, response, @operations + [response.class])
-          else
-            response
-          end
-        end
-
-        # Test if the method can be forwarded to the relation
-        #
-        # @param [Symbol] method
-        #
-        # @return [Boolean]
-        #
-        # @api private
-        def forwardable?(method)
-          relation.respond_to?(method)
-        end
-
-        def inspect
-          "GATEWAY"
+        def supported?(method)
+          !@operations.include?(MAP.fetch(method))
         end
 
         # Return a list of tuples to iterate over

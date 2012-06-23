@@ -1,9 +1,8 @@
 # encoding: utf-8
 
 require 'spec_helper'
-require 'veritas/relation/gateway'
 
-describe Relation::Gateway, '#materialize' do
+describe Adapter::Elasticsearch::Gateway, '#materialize' do
   subject { object.materialize }
 
   let(:header)       { mock('Header')                                                                          }
