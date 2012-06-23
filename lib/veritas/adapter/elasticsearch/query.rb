@@ -135,7 +135,7 @@ module Veritas
 
         # Query that is executed when result count is limited
         class Limited < Query
-        protected
+        private
           # Return result count limit
           #
           # @return [Integer]

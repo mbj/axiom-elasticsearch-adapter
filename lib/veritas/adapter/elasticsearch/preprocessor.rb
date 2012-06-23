@@ -16,6 +16,7 @@ module Veritas
 
           self
         end
+
       protected
 
         # Return request method
