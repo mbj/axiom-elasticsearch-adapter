@@ -17,7 +17,7 @@ module Veritas
           RUBY
         end
 
-        # Return inspected stub to fight against inspect related errors in spec printouts.
+        # Return inspected stub to fight against inspect related errors in spec printouts
         #
         # @return [String]
         #

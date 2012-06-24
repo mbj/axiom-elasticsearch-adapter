@@ -114,7 +114,7 @@ module Veritas
         end
         private_class_method :sort_direction
 
-        TABLE = {
+        FUNCTIONS = {
           Veritas::Function::Predicate::Equality             => :equality_predicate,
           Veritas::Function::Predicate::Inequality           => :create_inverse,
           Veritas::Function::Predicate::Inclusion            => :inclusion_predicate,
@@ -139,7 +139,7 @@ module Veritas
         def self.function(function)
           klass = function.class
 
-          method = TABLE.fetch(klass) do
+          method = FUNCTIONS.fetch(klass) do
             raise ArgumentError, "Unsupported function: #{klass}"
           end
 
