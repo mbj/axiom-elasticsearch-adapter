@@ -2,11 +2,10 @@ require 'veritas'
 
 module Veritas
   module Adapter
+    # Comment to make reek happy under 1.9
     class Elasticsearch
       # Visit relations to contstruct query parts
       class Visitor
-        # Error raised when query on unsupported algebra is created
-        class UnsupportedAlgebraError < StandardError; end
 
         # Return query components
         #
@@ -28,6 +27,16 @@ module Veritas
           @base_name
         end
 
+        # Return if query results are limited
+        #
+        # @return [true|false]
+        #
+        # @api private
+        #   
+        def limited?
+          @components.key?(:size)
+        end
+
       private
 
         # Initialize query instance
@@ -43,13 +52,13 @@ module Veritas
           dispatch(relation)
         end
 
-        TABLE = {
-          Veritas::Algebra::Restriction        => :visit_restriction,
-          Veritas::Relation::Base              => :visit_base_relation,
-          Veritas::Relation::Operation::Order  => :visit_order_operation,
-          Veritas::Relation::Operation::Limit  => :visit_limit_operation,
-          Veritas::Relation::Operation::Offset => :visit_offset_operation
-        }.freeze
+        OPERATIONS = Operations.new(
+          Veritas::Relation::Base              => [:visit_base_relation  ],
+          Veritas::Algebra::Restriction        => [:assign, :filter      ],
+          Veritas::Relation::Operation::Order  => [:assign, :sort        ],
+          Veritas::Relation::Operation::Limit  => [:assign, :size        ],
+          Veritas::Relation::Operation::Offset => [:assign, :from        ]
+        )
 
         # Dispatch visitable 
         #
@@ -60,99 +69,27 @@ module Veritas
         # @api private
         #
         def dispatch(visitable)
-          klass = visitable.class
-          method = TABLE.fetch(klass) do
-            raise UnsupportedAlgebraError,"Unsupported relation: #{klass}"
-          end
-          send(method,visitable)
+          call = OPERATIONS.lookup(visitable)
+
+          send(*call)
 
           self
         end
 
-        # Assign component
+        # Assign component from operation
         #
-        # @param [Symbol] name
-        # @param [Object] value
+        # @param [Object] name
+        # @param [Symbol] operation
         #
         # @return [self]
         #
         # @api private
         #
-        def assign(name,value)
+        def assign(name,operation)
           if @components.key?(name)
-            yield
+            raise UnsupportedAlgebraError,"No support for nesting #{operation.class}"
           else
-            @components[name]=value
-          end
-
-          self
-        end
-
-        # Visit an order operation
-        #
-        # @param [Veritas::Relation::Operation::Order] operation
-        #
-        # @return [self]
-        #
-        # @api private
-        #
-        def visit_order_operation(operation)
-          assign(:sort,Literal.sort(operation)) do
-            raise UnsupportedAlgebraError,'Nesting order operations is not supported'
-          end
-
-          dispatch(operation.operand)
-
-          self
-        end
-
-        # Visit an restriction operation
-        #
-        # @param [Veritas::Relation::Operation::Restriction] operation
-        #
-        # @return [self]
-        #
-        # @api private
-        #
-        def visit_restriction(operation)
-          assign(:filter,Literal.filter(operation.predicate)) do
-            raise UnsupportedAlgebraError, 'Nesting restrictions is not supported'
-          end
-
-          dispatch(operation.operand)
-
-          self
-        end
-
-        # Visit an offset operation
-        #
-        # @param [Veritas::Relation::Operation::Offset] operation
-        #
-        # @return [self]
-        #
-        # @api private
-        #
-        def visit_offset_operation(operation)
-          assign(:from,Literal.from(operation.offset)) do
-            raise UnsupportedAlgebraError, 'Nesting offset operations is not supported'
-          end
-
-          dispatch(operation.operand)
-
-          self
-        end
-
-        # Visit a limit operation
-        #
-        # @param [Veritas::Relation::Operation::Limit] operation
-        #
-        # @return [self]
-        #
-        # @api private
-        #
-        def visit_limit_operation(operation)
-          assign(:size,Literal.size(operation.limit)) do
-            raise UnsupportedAlgebraError, 'Nesting limit operations is not supported'
+            @components[name]=Literal.send(name,operation)
           end
 
           dispatch(operation.operand)
@@ -170,7 +107,6 @@ module Veritas
         #
         def visit_base_relation(relation)
           @base_name = relation.name
-
           @components[:fields] = Literal.fields(relation.header)
 
           self

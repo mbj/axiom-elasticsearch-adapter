@@ -1,10 +1,64 @@
 module Veritas
   module Adapter
+    # Comment to make reek happy under 1.9
     class Elasticsearch
       module Literal
+        # Maximum number an signed 32bit integer can take
+        INT_32_MAX = (2**31 - 1).freeze
+
+        # Minimum number an signed 32bit integer can take
+        INT_32_MIN = (-2**31).freeze
+
+        INT_32_RANGE = (INT_32_MIN..INT_32_MAX)
+
+        # Check if object is a positive integer
+        #
+        # @param [Object] object
+        #
+        # @return [Fixnum] 
+        #
+        # @api private
+        #
+        def self.integer(object)
+          unless object.kind_of?(Fixnum) and INT_32_RANGE.include?(object)
+            raise ArgumentError, "Not a valid int32: #{object.inspect}"
+          end
+
+          object
+        end
+
+        # Check if value is postive
+        #
+        # @param [Object] value
+        #
+        # @return [#>=]
+        #
+        # @api private
+        #
+        def self.positive(value)
+          unless value.kind_of?(Numeric) and value >= 0
+            raise ArgumentError, "Not a positive value: #{value.inspect}"
+          end
+
+          value
+        end
+        private_class_method :positive
+
+        # Chef if value is a positive integer
+        #
+        # @param [Object] value
+        #
+        # @return [Fixnum]
+        #
+        # @api private
+        #
+        def self.positive_integer(value)
+          positive(integer(value))
+        end
+
         # Create fields literal
         #
-        # @param [Vertias::Relation::Header] header
+        # @param [Relation::Header] header
         #
         # @return [Hash]
         #
@@ -16,42 +70,42 @@ module Veritas
 
         # Create size literal
         #
-        # @param [Numeric] size
+        # @param [Relation::Operation::Limit] operation
         #
-        # @return [Hash]
+        # @return [Fixnum]
         #
         # @api private
         #
         # TODO: Check for positive numeric value in elasticsearch allowed range
         #
-        def self.size(size)
-          size
+        def self.size(operation)
+          positive_integer(operation.limit)
         end
 
         # Create from literal
         #
-        # @param [Numeric] offset
+        # @param [Relation::Operation::Offset] operation
         #
-        # @return [Hash]
+        # @return [Fixnum]
         #
         # @api private
         #
         # TODO: Check for positive numeric value in elasticsearch allowed range
         #
-        def self.from(offset)
-          offset
+        def self.from(operation)
+          positive_integer(operation.offset)
         end
 
-        # Create filter literal
+        # Create filter literal from restriction
         #
-        # @param [Veritas::Function] function
+        # @param [Algebra::Restriction] restriction
         #
         # @return [Hash]
         #
         # @api private
         #
-        def self.filter(function)
-          function(function)
+        def self.filter(restriction)
+          function(restriction.predicate)
         end
 
         # Create sort literal
@@ -114,7 +168,7 @@ module Veritas
         end
         private_class_method :sort_direction
 
-        FUNCTIONS = {
+        OPERATIONS = Operations.new(
           Veritas::Function::Predicate::Equality             => :equality_predicate,
           Veritas::Function::Predicate::Inequality           => :create_inverse,
           Veritas::Function::Predicate::Inclusion            => :inclusion_predicate,
@@ -125,8 +179,8 @@ module Veritas
           Veritas::Function::Predicate::LessThanOrEqualTo    => :less_than_or_equal_to_predicate,
           Veritas::Function::Connective::Disjunction         => :disjunction, 
           Veritas::Function::Connective::Conjunction         => :conjunction, 
-          Veritas::Function::Connective::Negation            => :create_inverse, 
-        }.freeze
+          Veritas::Function::Connective::Negation            => :create_inverse
+        )
 
         # Create filter literal internals 
         #
@@ -137,13 +191,9 @@ module Veritas
         # @api private
         #
         def self.function(function)
-          klass = function.class
+          call = OPERATIONS.lookup(function)
 
-          method = FUNCTIONS.fetch(klass) do
-            raise ArgumentError, "Unsupported function: #{klass}"
-          end
-
-          send(method,function)
+          send(*call)
         end
         private_class_method :function
 

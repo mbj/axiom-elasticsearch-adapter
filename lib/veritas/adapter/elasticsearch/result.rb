@@ -1,5 +1,6 @@
 module Veritas
   module Adapter
+    # Comment to make reek happy under 1.9
     class Elasticsearch
       # Elasticsearch query result wrapper
       class Result
@@ -33,7 +34,15 @@ module Veritas
           self
         end
 
-      private
+        # Return the number of hits
+        #
+        # @api private
+        #
+        # @return [Integer]
+        #
+        def size
+          hits.size
+        end
 
         # Return enumerator on result documents
         #
@@ -47,6 +56,9 @@ module Veritas
           end
         end
 
+      private
+
+
         # Return hits from result
         #
         # @return [Hash] hits
@@ -56,7 +68,6 @@ module Veritas
         def hits
           @data.fetch('hits').fetch('hits')
         end
-
 
         # Initialize result
         #

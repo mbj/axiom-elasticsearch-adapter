@@ -1,5 +1,6 @@
 module Veritas
   module Adapter
+    # Comment to make reek happy under 1.9
     class Elasticsearch
       # Abstract base class for queries
       class Query
@@ -33,7 +34,6 @@ module Veritas
 
           self
         end
-
 
       private
 
@@ -71,13 +71,43 @@ module Veritas
           @visitor.components
         end
 
-        # Return results to read
+        # Return results enumerator
         #
         # @return [Enumerable<Result>]
         #
         # @api private
         #
         def results
+          Enumerator.new do |yielder|
+            read(yielder)
+          end
+        end
+
+        # Read results into accumulator
+        #
+        # @param [#<<] accumulator
+        #
+        # @return [self]
+        #
+        # @api private
+        #
+        def read(accumulator)
+          bounds.each do |offset,size|
+            result = execute(offset,size)
+            accumulator << result
+            break if result.size < size
+          end
+
+          self
+        end
+
+        # Return bounds enumerator
+        #
+        # @return [Enumerator<Integer,Integer>]
+        #
+        # @api private
+        #
+        def bounds
           raise NotImplementedError,"#{self.class}##{__method__} must be implemented"
         end
 
@@ -92,8 +122,8 @@ module Veritas
         #
         def execute(offset,size)
           query = components.merge(
-            :from => Literal.from(offset),
-            :size => Literal.size(size)
+            :from => Literal.positive_integer(offset),
+            :size => Literal.positive_integer(size)
           )
           @driver.read(@visitor.path,query)
         end
@@ -108,6 +138,16 @@ module Veritas
         #
         def slice_size
           100
+        end
+
+        # Return offset enumerator for queries
+        #
+        # @return [Enumerator<Integer>]
+        #
+        # @api private
+        #
+        def offsets
+          0.step(Literal::INT_32_MAX,slice_size)
         end
 
         # Build query instance from driver and relation
@@ -127,94 +167,6 @@ module Veritas
           visitor = Visitor.new(relation)
           klass = visitor.limited? ? Limited : Unlimited
           klass.new(driver,visitor)
-        end
-
-        # Query that is executed when result count is not limited in size
-        class Unlimited < Query
-        end
-
-        # Query that is executed when result count is limited
-        class Limited < Query
-        private
-          # Return result count limit
-          #
-          # @return [Integer]
-          #
-          # @api private
-          #
-          def limit
-            components.fetch(:size)
-          end
-
-          # Return result enumerator
-          #
-          # @return [Enumerator<Result>]
-          #
-          # @return [self]
-          #
-          # @api private
-          #
-          def results
-            Enumerator.new do |yielder|
-              read_results(yielder)
-            end
-          end
-
-          # Read results into accumulator
-          #
-          # @param [#<<] accumulator
-          #
-          # @return [self]
-          #
-          # @api private
-          #
-          def read_results(accumulator)
-            bounds.each do |offset,size|
-              result = execute(offset,size)
-              accumulator << result
-              break if result.size < size
-            end
-
-            self
-          end
-
-          # Return slice length for give noffset
-          #
-          # @return [Integer] offset
-          #
-          # @api private
-          #
-          def slice_length(offset)
-            maximum = limit
-            upper = offset + slice_size
-            if upper < maximum
-              upper
-            else
-              maximum - offset
-            end
-          end
-
-          # Return bounds enumerator for queries
-          #
-          # @return [Enumerator<Integer,Integer>]
-          #
-          # @api private
-          #
-          def bounds
-            offsets.map do |offset|
-              [offset,slice_length(offset)]
-            end
-          end
-
-          # Return offsets enumerator for queries
-          #
-          # @return [Enumerator<Integer>]
-          # 
-          # @api private
-          #
-          def offsets
-            0.step(limit,slice_size)
-          end
         end
       end
     end

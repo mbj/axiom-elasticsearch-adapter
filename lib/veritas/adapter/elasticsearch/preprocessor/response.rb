@@ -1,6 +1,8 @@
 module Veritas
   module Adapter
+    # Comment to make reek happy under 1.9
     class Elasticsearch
+      # Comment to make reek happy under 1.9
       class Preprocessor
         # Response preprocessor
         class Response < Preprocessor

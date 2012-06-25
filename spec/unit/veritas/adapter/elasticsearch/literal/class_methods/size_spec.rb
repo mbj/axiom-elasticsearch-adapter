@@ -1,11 +1,10 @@
 require 'spec_helper'
 
 describe Adapter::Elasticsearch::Literal,'.size' do
-  let(:object) { Adapter::Elasticsearch::Literal }
+  subject { object.size(operation) }
 
-  subject { object.size(input) }
-
-  let(:input) { 100 }
+  let(:object)    { Adapter::Elasticsearch::Literal  }
+  let(:operation) { mock('Operation', :limit => 100) }
 
   it 'should return size literal' do
     should == 100

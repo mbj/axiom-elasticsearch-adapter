@@ -6,4 +6,6 @@ describe Adapter::Elasticsearch::Query,'#slice_size' do
   let(:object) { described_class.new(mock,mock) }
 
   it { should be(100) }
+
+  it_should_behave_like 'an idempotent method'
 end

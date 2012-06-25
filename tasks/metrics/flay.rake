@@ -2,7 +2,13 @@ begin
   require 'flay'
   require 'yaml'
 
+
   config      = YAML.load_file(File.expand_path('../../../config/flay.yml', __FILE__)).freeze
+
+  key         = RUBY_VERSION.split('.')[0..1].join('.')
+
+  config      = config.fetch(key) { raise "flay configuration for ruby: #{key} not found" }
+
   threshold   = config.fetch('threshold').to_i
   total_score = config.fetch('total_score').to_f
   files       = Flay.expand_dirs_to_files(config.fetch('path', 'lib'))

@@ -1,0 +1,41 @@
+module Veritas
+  module Adapter
+    # Comment to make reek happy under 1.9
+    class Elasticsearch
+      # A container for registring operations
+      class Operations
+        # Lookup operation based on visitable object
+        #
+        # @param [Object] visitable
+        #
+        # @return [Array]
+        #
+        # @api private
+        #
+        def lookup(visitable)
+          klass = visitable.class
+          call = @map.fetch(klass) do
+            raise UnsupportedAlgebraError,"No support for #{klass}"
+          end
+
+          [*call] + [visitable]
+        end
+
+      private
+
+        # Initialize operations
+        #
+        # @param [Hash<Class,Array>] map
+        #
+        # @return [undefined]
+        #
+        # @api private
+        #
+        def initialize(map)
+          @map = map
+          freeze
+        end
+      end
+    end
+  end
+end

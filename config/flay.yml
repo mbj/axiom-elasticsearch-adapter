@@ -1,3 +1,7 @@
 ---
-threshold: 12
-total_score: 256
+'1.8':
+  threshold: 10
+  total_score: 78
+'1.9':
+  threshold: 12
+  total_score: 261

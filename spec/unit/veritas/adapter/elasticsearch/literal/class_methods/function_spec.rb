@@ -9,7 +9,7 @@ describe Adapter::Elasticsearch::Literal, '.function' do
     let(:input) { Object.new }
 
     it 'should raise error' do
-      expect { subject }.to raise_error(ArgumentError,"Unsupported function: Object")
+      expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError,"No support for Object")
     end
   end
 end

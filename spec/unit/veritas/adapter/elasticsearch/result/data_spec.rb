@@ -7,4 +7,6 @@ describe Adapter::Elasticsearch::Result,'#data' do
   let(:data)   { mock('Data') }
 
   it { should equal(data) }
+
+  it_should_behave_like 'an idempotent method'
 end

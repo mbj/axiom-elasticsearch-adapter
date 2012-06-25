@@ -24,9 +24,19 @@ describe Adapter::Elasticsearch::Preprocessor::Request,'#run' do
   it_should_behave_like 'a command method'
 
   context 'when body conversion to json was requested' do
-    it 'should convert body to json' do
-      subject
-      env[:body].should == '{"foo":"bar"}'
+    context 'and body is present' do
+      it 'should convert body to json' do
+        subject
+        env[:body].should == '{"foo":"bar"}'
+      end
+    end
+
+    context 'and body is NOT present' do
+      let(:body) { nil }
+      it 'should not not change body' do
+        subject
+        env[:body].should be_nil
+      end
     end
   end
 

@@ -1,6 +1,8 @@
 module Veritas
   module Adapter
+    # Comment to make reek happy under 1.9
     class Elasticsearch
+      # Comment to make reek happy under 1.9
       class Preprocessor
         # Request preprocessor
         class Request < Preprocessor
@@ -28,7 +30,10 @@ module Veritas
           #
           def convert_json
             return unless convert_json?
-            @env[:body] = JSON.dump(body)
+
+            body = self.body
+
+            @env[:body] = JSON.dump(body) if body
 
             self
           end

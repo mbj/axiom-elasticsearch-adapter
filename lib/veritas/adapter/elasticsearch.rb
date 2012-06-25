@@ -1,9 +1,13 @@
 require 'json'
 require 'veritas'
 require 'faraday'
+require 'veritas/adapter/elasticsearch/support'
+require 'veritas/adapter/elasticsearch/operations'
 require 'veritas/adapter/elasticsearch/literal'
 require 'veritas/adapter/elasticsearch/visitor'
 require 'veritas/adapter/elasticsearch/query'
+require 'veritas/adapter/elasticsearch/query/limited'
+require 'veritas/adapter/elasticsearch/query/unlimited'
 require 'veritas/adapter/elasticsearch/driver'
 require 'veritas/adapter/elasticsearch/middleware'
 require 'veritas/adapter/elasticsearch/preprocessor'
@@ -16,6 +20,9 @@ module Veritas
   module Adapter
     # An adapter for elasticsearch
     class Elasticsearch
+      # Error raised when query on unsupported algebra is created
+      class UnsupportedAlgebraError < StandardError; end
+
       # Initialize elasticsearch adapter
       #
       # @param [URI] uri
@@ -49,34 +56,35 @@ module Veritas
         @options
       end
 
-#     # Read tuples from relation
-#     #
-#     # @param [Relation] relation
-#     #   the relation to access
-#     #
-#     # @return [Enumerable]
-#     #
-#     # @api private
-#     #
-#     def read(relation,&block)
-#       return to_enum(__method__, relation) unless block_given?
+      # Read tuples from relation
+      #
+      # @param [Relation] relation
+      #   the relation to access
+      #
+      # @return [Enumerable]
+      #
+      # @api private
+      #
+      def read(relation,&block)
 
-#       Query.new(relation).read(driver,&block)
+        return to_enum(__method__, relation) unless block_given?
 
-#       self
-#     end
+        Query.build(driver,relation).each(&block)
 
-#   private
+        self
+      end
 
-#     # Return driver
-#     #
-#     # @return [Driver]
-#     #
-#     # @api private
-#     #
-#     def driver
-#       @driver ||= Driver.new(@uri,@options)
-#     end
+    private
+
+      # Return driver
+      #
+      # @return [Driver]
+      #
+      # @api private
+      #
+      def driver
+        @driver ||= Driver.new(@uri,@options)
+      end
     end
   end
 end

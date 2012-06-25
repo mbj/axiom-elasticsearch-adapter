@@ -165,7 +165,6 @@ begin
       end
 
       # A mutation can trigger the net_http adapter that tries to contact example.com
-      # So mutations on 
       if mod == Veritas::Adapter::Elasticsearch::Driver
         specs.delete_if { |method, spec_files| method == '#initialize' }
       end
@@ -210,7 +209,7 @@ begin
     end
   end
 rescue LoadError
-  task :heckle do
-    abort 'Heckle or mspec is not available. In order to run heckle, you must: gem install heckle mspec'
+  task :heckle => :spec do
+    $stderr.puts 'Heckle or mspec is not available. In order to run heckle, you must: gem install heckle mspec'
   end
 end

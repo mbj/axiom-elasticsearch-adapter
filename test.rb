@@ -5,9 +5,6 @@ uri = ENV.fetch('ES_URI','http://localhost:9200')
 require 'logger'
 require 'veritas-elasticsearch-adapter'
 
-# To get Veritas::Relation::Gateway
-require 'veritas-do-adapter'
-
 logger = Logger.new($stdout)
 
 adapter = Veritas::Adapter::Elasticsearch.new(uri,:logger => logger)
@@ -54,10 +51,6 @@ connection.setup(index,
 
 connection.wait(index,:timeout => 10)
 
-# TODO:
-#
-# Wait for cluster init via cluster health api.
-
 def add(connection,data)
   connection.send(:connection).post('test/people') do |request|
     request.options[:expect_status]=201
@@ -73,8 +66,9 @@ add(connection,:firstname => 'Sue',:lastname => 'Doe')
 connection.refresh
 
 
-gateway_relation = Veritas::Relation::Gateway.new(adapter,base_relation).restrict { |r| r.lastname.eq("Doe").and(r.firstname.include(["John"])) }
+gateway_relation = Veritas::Adapter::Elasticsearch::Gateway.new(adapter,base_relation) #.restrict { |r| r.lastname.eq("Doe").and(r.firstname.include(["John"])) }
 
 require 'pp'
+
 data = gateway_relation.map(&:to_ary)
 pp data
