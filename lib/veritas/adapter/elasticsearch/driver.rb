@@ -6,11 +6,15 @@ module Veritas
         # Return tuples from query
         #
         # @param [String] path
+        #   the elasticsearch path to query most likely a string with the index name
+        #
         # @param [Hash] query
+        #   the query in elasticsearch format as a hash
         #
         # @api private
         #
         # @return [Result]
+        #   returns a result instance wrapping the decoded json body 
         #
         def read(path,query)
           path = "#{path}/_search"
@@ -23,6 +27,9 @@ module Veritas
         end
 
         # Drop index if exist
+        #
+        # @param [String] index
+        #   the name of the index to drop
         #
         # @return [self]
         #
@@ -39,7 +46,10 @@ module Veritas
         # Wait for index to be fully initialized
         #
         # @param [String] index
+        #   the name of the index to wait for
+        #
         # @param [Hash] options
+        #   the options for this wait operation. 
         #
         # @return [self]
         #
@@ -59,7 +69,11 @@ module Veritas
 
         # Check if index does exist
         #
-        # @return [true|false]
+        # @return [true]
+        #   returns true when index does exist
+        #
+        # @return [false]
+        #   returns false when index does NOT exist
         #
         # @api private
         #
@@ -70,6 +84,12 @@ module Veritas
         end
 
         # Trigger refresh on index
+        #
+        # This syncs the latest write operations. 
+        # Read docs before use.
+        #
+        # @param [String] index
+        #   the index to refresh if empty refreshes all indexes
         #
         # @return [self]
         #
@@ -86,7 +106,10 @@ module Veritas
         # Setup index
         #
         # @param [String] index
+        #   the name of the index to crate
+        #
         # @param [Hash] settings
+        #   the settings used when creating the index
         #
         # @return [self]
         #
@@ -112,8 +135,12 @@ module Veritas
         # Initialize connection
         #
         # @param [String] uri
+        #   the uri of the elasticsearch node to connect
+        #
+        # @return [undefined]
         #
         # @api private
+        #
         #
         def initialize(uri,options={})
           @uri     = uri

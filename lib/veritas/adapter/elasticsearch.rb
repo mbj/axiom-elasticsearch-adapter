@@ -66,7 +66,8 @@ module Veritas
       # @param [Relation] relation
       #   the relation to access
       #
-      # @return [Enumerable]
+      # @return [Enumerable<Array>]
+      #   returns enumerable for each tuple in result 
       #
       # @api private
       #
