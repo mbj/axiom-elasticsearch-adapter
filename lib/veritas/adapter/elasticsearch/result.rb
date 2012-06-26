@@ -1,6 +1,7 @@
 module Veritas
   module Adapter
     class Elasticsearch
+      # Wrap an elasticsearch result hash of hashes into poro world
       class Result
         include Enumerable
 

@@ -31,7 +31,7 @@ module Veritas
         # @api private
         #   
         def limited?
-          @components.key?(:size)
+          components.key?(:size)
         end
 
       private
@@ -81,10 +81,12 @@ module Veritas
         # @api private
         #
         def assign(name,operation)
-          if @components.key?(name)
+          components = self.components
+
+          if components.key?(name)
             raise UnsupportedAlgebraError,"No support for nesting #{operation.class}"
           else
-            @components[name]=Literal.send(name,operation)
+            components[name]=Literal.send(name,operation)
           end
 
           dispatch(operation.operand)
@@ -102,7 +104,7 @@ module Veritas
         #
         def visit_base_relation(relation)
           @base_name = relation.name
-          @components[:fields] = Literal.fields(relation.header)
+          components[:fields] = Literal.fields(relation.header)
 
           self
         end
