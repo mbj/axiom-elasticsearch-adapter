@@ -69,11 +69,12 @@ module Veritas
           def slice_length(offset)
             maximum = limit
             upper = offset + slice_size
+
             if upper < maximum
-              upper
-            else
-              maximum - offset
+              return upper
             end
+
+            maximum - offset
           end
         end
       end

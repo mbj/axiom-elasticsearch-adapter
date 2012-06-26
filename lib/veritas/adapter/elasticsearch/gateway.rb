@@ -43,12 +43,12 @@ module Veritas
         MAP.each_key do |method|
           class_eval(<<-RUBY,__FILE__,__LINE__+1)
             def #{method}(*args,&block)
-              if supported?(:#{method})
-                response = @relation.send(:#{method},*args,&block)
-                self.class.new(adapter, response, @operations + [response.class])
-              else
-                super
+              unless supported?(:#{method})
+                return super
               end
+
+              response = @relation.send(:#{method},*args,&block)
+              self.class.new(adapter, response, @operations + [response.class])
             end
           RUBY
         end
@@ -130,11 +130,10 @@ module Veritas
         #
         def tuples
           relation = self.relation
-          if materialized?
-            relation
-          else
-            DECORATED_CLASS.new(header, adapter.read(relation))
-          end
+
+          return relation if materialized?
+
+          DECORATED_CLASS.new(header, adapter.read(relation))
         end
       end
     end # class Gateway
