@@ -190,9 +190,7 @@ module Veritas
         # @api private
         #
         def self.function(function)
-          call = OPERATIONS.lookup(function)
-
-          send(*call)
+          send(*OPERATIONS.lookup(function))
         end
         private_class_method :function
 

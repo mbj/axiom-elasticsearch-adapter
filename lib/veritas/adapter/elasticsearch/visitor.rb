@@ -66,9 +66,7 @@ module Veritas
         # @api private
         #
         def dispatch(visitable)
-          call = OPERATIONS.lookup(visitable)
-
-          send(*call)
+          send(*OPERATIONS.lookup(visitable))
 
           self
         end
