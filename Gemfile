@@ -10,7 +10,6 @@ gem 'veritas',           :git => 'https://github.com/dkubb/veritas'
 gem 'veritas-optimizer', :git => 'https://github.com/dkubb/veritas-optimizer'
 
 group :development do
-  gem 'jeweler', '~> 1.8.3'
   gem 'rake',    '~> 0.9.2'
   gem 'rspec',   '~> 1.3.2'
   gem 'yard',    '~> 0.8.1'
