@@ -1,6 +1,5 @@
 module Veritas
   module Adapter
-    # Comment to make reek happy under 1.9
     class Elasticsearch
       # Augment a faraday connection with elasticsearch specific operations
       class Driver 

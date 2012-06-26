@@ -1,8 +1,6 @@
 module Veritas
   module Adapter
-    # Comment to make reek happy under 1.9
     class Elasticsearch
-      # Comment to make reek happy under 1.9
       class Query
         # A query where possible amount of results is unlimted
         class Unlimited < Query

@@ -1,8 +1,5 @@
-require 'veritas'
-
 module Veritas
   module Adapter
-    # Comment to make reek happy under 1.9
     class Elasticsearch
       # Visit relations to contstruct query parts
       class Visitor

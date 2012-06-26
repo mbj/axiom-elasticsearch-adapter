@@ -1,6 +1,5 @@
 module Veritas
   module Adapter
-    # Comment to make reek happy under 1.9
     class Elasticsearch
       # Abstract base class for queries
       class Query
