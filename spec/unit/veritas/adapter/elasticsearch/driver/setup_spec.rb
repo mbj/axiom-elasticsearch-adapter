@@ -43,7 +43,7 @@ describe Adapter::Elasticsearch::Driver,'#setup' do
     let(:status) { 500 }
 
     it 'should raise error' do
-      expect { subject }.to raise_error(RuntimeError,'Remote error: {}')
+      expect { subject }.to raise_error(Adapter::Elasticsearch::RemoteError,'{}')
     end
   end
 
@@ -52,7 +52,7 @@ describe Adapter::Elasticsearch::Driver,'#setup' do
 
     it 'should raise error' do
       pending
-      expect { subject }.to raise_error(RuntimeError,"Remote error: #{res_body}")
+      expect { subject }.to raise_error(Adapter::Elasticsearch::RemoteError,res_body)
     end
   end
 end

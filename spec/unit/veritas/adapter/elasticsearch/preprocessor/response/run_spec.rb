@@ -57,7 +57,7 @@ describe Adapter::Elasticsearch::Preprocessor::Response,'#run' do
       let(:status) { 201 }
 
       it 'should raise error' do
-        expect { subject }.to raise_error(RuntimeError,'Remote error: error')
+        expect { subject }.to raise_error(Adapter::Elasticsearch::RemoteError,'error')
       end
     end
 
@@ -78,7 +78,7 @@ describe Adapter::Elasticsearch::Preprocessor::Response,'#run' do
       let(:status) { 200 }
 
       it 'should raise error' do
-        expect { subject }.to raise_error(RuntimeError,'Remote error: error')
+        expect { subject }.to raise_error(Adapter::Elasticsearch::RemoteError,'error')
       end
     end
 
@@ -105,7 +105,7 @@ describe Adapter::Elasticsearch::Preprocessor::Response,'#run' do
       let(:status) { 404 }
 
       it 'should raise error' do
-        expect { subject }.to raise_error(RuntimeError,'Remote error: {"foo":"bar"}')
+        expect { subject }.to raise_error(Adapter::Elasticsearch::RemoteError,'{"foo":"bar"}')
       end
     end
   end

@@ -30,7 +30,7 @@ module Veritas
           #
           def raise_on_error
             unless expected_status_codes.include?(status)
-              raise "Remote error: #{body}"
+              raise RemoteError, body
             end
 
             self

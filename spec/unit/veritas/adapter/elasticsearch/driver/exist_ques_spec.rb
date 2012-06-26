@@ -38,7 +38,7 @@ describe Adapter::Elasticsearch::Driver,'#exist?' do
       let(:status) { 500 }
 
       it 'should raise error' do
-        expect { subject }.to raise_error(RuntimeError,'Remote error: {}')
+        expect { subject }.to raise_error(Adapter::Elasticsearch::RemoteError,'{}')
       end
     end
   end

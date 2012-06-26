@@ -42,7 +42,7 @@ describe Adapter::Elasticsearch::Driver,'#read' do
     end
 
     it 'should raise error' do
-      expect { subject }.to raise_error(RuntimeError,'Remote error: error')
+      expect { subject }.to raise_error(Adapter::Elasticsearch::RemoteError,'error')
     end
   end
 end
