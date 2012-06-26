@@ -60,7 +60,7 @@ module Veritas
             components.fetch(:size)
           end
 
-          # Return slice length for give noffset
+          # Return slice length for given offset
           #
           # @return [Integer] offset
           #
