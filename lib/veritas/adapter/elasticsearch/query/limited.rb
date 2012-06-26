@@ -70,11 +70,11 @@ module Veritas
             maximum = limit
             upper = offset + slice_size
 
-            if upper < maximum
-              return upper
+            if maximum < upper
+              return maximum - offset
             end
 
-            maximum - offset
+            upper
           end
         end
       end
