@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
   gem.require_paths    = [ 'lib' ]
   gem.files            = `git ls-files`.split("\n")
   gem.test_files       = `git ls-files -- spec`.split("\n")
-  gem.extra_rdoc_files = %w[LICENSE README.md TODO]
+  gem.extra_rdoc_files = %w[TODO]
 
   gem.add_runtime_dependency('backports', '~> 2.6.1')
   gem.add_runtime_dependency('faraday',   '~> 0.8.1')
