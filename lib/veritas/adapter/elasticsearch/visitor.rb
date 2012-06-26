@@ -85,10 +85,9 @@ module Veritas
 
           if components.key?(name)
             raise UnsupportedAlgebraError,"No support for nesting #{operation.class}"
-          else
-            components[name]=Literal.send(name,operation)
           end
 
+          components[name]=Literal.send(name,operation)
           dispatch(operation.operand)
 
           self
