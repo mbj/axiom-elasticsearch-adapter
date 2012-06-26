@@ -15,6 +15,7 @@ require 'veritas/adapter/elasticsearch/preprocessor/request'
 require 'veritas/adapter/elasticsearch/preprocessor/response'
 require 'veritas/adapter/elasticsearch/result'
 require 'veritas/adapter/elasticsearch/gateway'
+require 'veritas/adapter/elasticsearch/null_logger'
 
 module Veritas
   module Adapter

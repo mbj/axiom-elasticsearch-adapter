@@ -129,7 +129,7 @@ module Veritas
         def connection
           @connection ||= Faraday.new(@uri) do |builder|
             adapter = [*@options.fetch(:adapter,:net_http)]
-            logger  = @options.fetch(:logger,nil)
+            logger  = @options.fetch(:logger,NullLogger)
             builder.use(Middleware,logger)
             builder.adapter(*adapter)
           end

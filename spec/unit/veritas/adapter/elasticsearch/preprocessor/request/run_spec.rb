@@ -5,7 +5,7 @@ describe Adapter::Elasticsearch::Preprocessor::Request,'#run' do
 
   subject { object.run }
 
-  let(:logger) { nil }
+  let(:logger) { Adapter::Elasticsearch::NullLogger }
   
   let(:body) { { :foo => :bar } }
 
@@ -52,8 +52,6 @@ describe Adapter::Elasticsearch::Preprocessor::Request,'#run' do
   end
 
   context 'with logger present' do
-    let(:logger) { mock }
-
     it 'should log request' do
       logger.should_receive(:debug).with('GET http://example.com/index/_search {"foo":"bar"}')
       subject

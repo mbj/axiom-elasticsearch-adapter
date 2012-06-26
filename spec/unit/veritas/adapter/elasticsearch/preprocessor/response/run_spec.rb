@@ -22,7 +22,7 @@ describe Adapter::Elasticsearch::Preprocessor::Response,'#run' do
   let(:body) { '{"foo":"bar"}' }
   let(:method) { :get }
 
-  let(:logger) { nil }
+  let(:logger) { Adapter::Elasticsearch::NullLogger }
 
   let(:status) { 200 }
   let(:response_headers) { { 'content-type' => content_type } }
@@ -111,8 +111,6 @@ describe Adapter::Elasticsearch::Preprocessor::Response,'#run' do
   end
 
   context 'with logger present' do
-    let(:logger) { mock }
-
     it 'should log response' do
       logger.should_receive(:debug).with('200')
       subject

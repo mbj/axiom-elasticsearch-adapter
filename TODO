@@ -6,4 +6,3 @@
 * Add option to force local timeouts in faraday.
 * Use optimizer to collapse nested operations.
 * Add optimizer stage to reorder relation in a way unsupported operations are not done on gateway relation.
-* Add a NULLLogger to remove conditional logic in preprocessors

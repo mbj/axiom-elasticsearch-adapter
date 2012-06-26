@@ -43,11 +43,7 @@ module Veritas
           # @api private
           #
           def log
-            logger = self.logger
-
-            if logger
-              logger.debug("#{method.upcase} #{url} #{body}")
-            end
+            logger.debug("#{method.upcase} #{url} #{body}")
 
             self
           end
