@@ -42,7 +42,7 @@ describe Adapter::Elasticsearch::Preprocessor::Response,'#run' do
       let(:content_type) { 'text/plain' }
 
       it 'should raise error' do
-        expect { subject }.to raise_error(RuntimeError,'Expected json content type but got: "text/plain"')
+        expect { subject }.to raise_error(Adapter::Elasticsearch::ProtocolError,'Expected json content type but got: "text/plain"')
       end
     end
   end

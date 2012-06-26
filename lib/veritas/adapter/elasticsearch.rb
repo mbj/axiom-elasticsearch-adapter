@@ -22,6 +22,8 @@ module Veritas
     class Elasticsearch
       # Error raised when query on unsupported algebra is created
       class UnsupportedAlgebraError < StandardError; end
+      # Error raised when elasticsearch http protocol is violated
+      class ProtocolError < StandardError; end
 
       # Initialize elasticsearch adapter
       #
