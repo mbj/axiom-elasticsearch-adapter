@@ -1,3 +1,5 @@
+# This is a dirty integration spec.
+# Need to be refactored to be rspec ready.
 $: << 'lib'
 
 uri = ENV.fetch('ES_URI','http://localhost:9200')
@@ -51,6 +53,7 @@ connection.setup(index,
 
 connection.wait(index,:timeout => 10)
 
+# Driver does not support writes (yet)
 def add(connection,data)
   connection.send(:connection).post('test/people') do |request|
     request.options[:expect_status]=201
@@ -62,11 +65,11 @@ end
 add(connection,:firstname => 'John',:lastname => 'Doe')
 add(connection,:firstname => 'Sue',:lastname => 'Doe')
 
-# Sync.
+# Ensure documents are searchable
 connection.refresh
 
 
-gateway_relation = Veritas::Adapter::Elasticsearch::Gateway.new(adapter,base_relation) #.restrict { |r| r.lastname.eq("Doe").and(r.firstname.include(["John"])) }
+gateway_relation = Veritas::Adapter::Elasticsearch::Gateway.new(adapter,base_relation).restrict { |r| r.lastname.eq("Doe").and(r.firstname.include(["John"])) }
 
 require 'pp'
 
