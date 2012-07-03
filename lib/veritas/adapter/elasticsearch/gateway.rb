@@ -9,7 +9,7 @@ module Veritas
         DECORATED_CLASS = superclass
 
         # Poor man forwardable for now.
-        (DECORATED_CLASS.public_instance_methods(false).map(&:to_s) - %w[ materialize ]).each do |method|
+        (DECORATED_CLASS.public_instance_methods(false).map(&:to_s) - %w[ materialize one ]).each do |method|
           class_eval(<<-RUBY,__FILE__,__LINE__+1)
             def #{method}(*args,&block)
               relation.public_send(:#{method},*args,&block)
