@@ -1,6 +1,7 @@
 module Veritas
   module Adapter
     class Elasticsearch
+      # JRuby specific overrides.
       class Query
         # Override implementation for jruby since it 
         # cannot break on nested iterations.
