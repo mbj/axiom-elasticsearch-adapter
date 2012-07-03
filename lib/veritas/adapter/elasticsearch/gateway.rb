@@ -55,7 +55,7 @@ module Veritas
 
         # The adapter the gateway will use to fetch results
         #
-        # @return [Adapter::DataObjects]
+        # @return [Adapter::Elasticsearch]
         #
         # @api private
         #

@@ -6,4 +6,5 @@
 * Use optimizer to collapse nested operations.
 * Add optimizer stage to reorder relation in a way unsupported operations are not done on gateway relation.
 * Add write support once veritas has writable relations
-* Use Veritas::Immutable instead of @ivar ||=
+* Use Veritas::Immutable instead of @ivar ||= expression
+* Use Veritas::Proxy to simplify gateway
