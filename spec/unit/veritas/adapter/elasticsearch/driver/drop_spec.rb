@@ -19,15 +19,10 @@ describe Adapter::Elasticsearch::Driver,'#drop' do
     end
   end
 
-  before do
-    object.stub(:exist? => exist)
-  end
-
   context 'when index does exist' do
-    let(:exist) { true }
-
     let(:requests) do
       [
+        [:head,'/test',  [200,{},'{}']],
         [:delete,'/test',[status,{'content-type' => 'application/json; charset=UTF-8'},'{}']]
       ]
     end
@@ -53,9 +48,11 @@ describe Adapter::Elasticsearch::Driver,'#drop' do
   end
 
   context 'when index does not exists' do
-    let(:exist) { false }
-
-    let(:requests) { [] }
+    let(:requests) do
+      [
+        [:head,'/test',  [404,{},'{}']]
+      ]
+    end
 
     it 'should execute requests' do
       subject

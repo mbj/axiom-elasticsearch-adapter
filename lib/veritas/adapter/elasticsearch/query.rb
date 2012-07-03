@@ -3,7 +3,7 @@ module Veritas
     class Elasticsearch
       # Abstract base class for queries
       class Query
-        include Enumerable
+        include Enumerable, Immutable
 
         # Initialize query
         #
@@ -18,11 +18,19 @@ module Veritas
           @driver,@visitor = driver,visitor
         end
 
+        private
+
         # Read results
         #
         # @return [Result]
         #
         # @api private
+        #
+        # This method is intentionally at private scope.
+        # Its scope is set to public in subclasses. 
+        #
+        # This frees us from the need to heckle this method
+        # on instances of the abstract query class.
         #
         def each(&block)
           return to_enum(__method__) unless block_given?
@@ -33,8 +41,6 @@ module Veritas
 
           self
         end
-
-      private
 
         # Return enumerator for tuples in result
         #
@@ -57,7 +63,7 @@ module Veritas
         # @api private
         #
         def fields
-          @fields ||= components.fetch(:fields).map { |field| field.to_s }
+          components.fetch(:fields).map { |field| field.to_s }
         end
 
         # Return query components
@@ -136,7 +142,7 @@ module Veritas
         # TODO: Should be configurable. Maybe with adding Driver#slice_size?
         #
         def slice_size
-          100
+          @driver.slice_size
         end
 
         # Return offset enumerator for queries
@@ -167,6 +173,8 @@ module Veritas
           klass = visitor.limited? ? Limited : Unlimited
           klass.new(driver,visitor)
         end
+
+        memoize :fields
       end
     end
   end

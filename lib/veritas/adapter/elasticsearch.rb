@@ -31,38 +31,16 @@ module Veritas
       # Error raised when elasticsearch reports error
       class RemoteError < StandardError; end
 
-      # Initialize elasticsearch adapter
-      #
-      # @param [URI] uri
-      #   the uri of elasticsearch node to access
-      #
-      # @return [undefined]
-      #
-      # @api private
-      #
-      def initialize(uri,options)
-        @uri,@options = uri,options
-      end
+      include Immutable
 
-      # Return URI of elasticsearch node
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      def uri
-        @uri
-      end
 
-      # Return options of adapter
+      # Return driver
       #
-      # @return [Hash]
+      # @return [Driver]
       #
       # @api private
       #
-      def options
-        @options
-      end
+      attr_reader :driver
 
       # Read tuples from relation
       #
@@ -78,21 +56,24 @@ module Veritas
 
         return to_enum(__method__, relation) unless block_given?
 
-        Query.build(driver,relation).each(&block)
+        Query.build(@driver,relation).each(&block)
 
         self
       end
 
     private
 
-      # Return driver
+      # Initialize elasticsearch adapter
       #
-      # @return [Driver]
+      # @param [URI] uri
+      #   the uri of elasticsearch node to access
+      #
+      # @return [undefined]
       #
       # @api private
       #
-      def driver
-        @driver ||= Driver.new(@uri,@options)
+      def initialize(uri,options)
+        @driver = Driver.new(uri,options)
       end
     end
   end

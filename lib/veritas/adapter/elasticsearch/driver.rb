@@ -3,6 +3,8 @@ module Veritas
     class Elasticsearch
       # Augment a faraday connection with elasticsearch specific operations
       class Driver 
+        include Immutable
+
         # Return tuples from query
         #
         # @param [String] path
@@ -19,7 +21,7 @@ module Veritas
         def read(path,query)
           path = "#{path}/_search"
 
-          response = connection.get(path) do |request|
+          response = @connection.get(path) do |request|
             request.body = query
           end
 
@@ -123,6 +125,26 @@ module Veritas
           self
         end
 
+        # Return connection
+        #
+        # @return [Faraday::Connection]
+        #
+        # @api private
+        #
+        def connection
+          @connection
+        end
+
+        # Return slice length
+        #
+        # @return [Fixnum]
+        #
+        # @api private
+        #
+        def slice_size
+          @options.fetch(:slice_size,100)
+        end
+
       private
 
         DEFAULT_INDEX_SETTINGS = {
@@ -145,16 +167,7 @@ module Veritas
         def initialize(uri,options={})
           @uri     = uri
           @options = options
-        end
-
-        # Return http connection
-        #
-        # @return [Faraday::Connection]
-        #
-        # @api private
-        #
-        def connection
-          @connection ||= Faraday.new(@uri) do |builder|
+          @connection = Faraday.new(@uri) do |builder|
             adapter = [*@options.fetch(:adapter,:net_http)]
             logger  = @options.fetch(:logger,NullLogger)
             builder.use(Middleware,logger)

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-shared_examples_for 'it uses the elasticsearch driver' do
+shared_examples_for 'a method that uses the elasticsearch driver' do
   let(:connection) { mock('Connection') }
 
   before do
@@ -14,8 +14,8 @@ shared_examples_for 'it uses the elasticsearch driver' do
 end
 
 describe Adapter::Elasticsearch, '#read' do
-  let(:uri)       { stub                             }
-  let(:options)   { stub                             }
+  let(:uri)       { 'http://example.com:9200'        }
+  let(:options)   { {}                               }
   let(:object)    { described_class.new(uri,options) }
   let(:relation)  { mock('Relation')                 }
   let(:query)     { mock('Query')                }
@@ -32,7 +32,7 @@ describe Adapter::Elasticsearch, '#read' do
   context 'with a block' do
     subject { object.read(relation) { |row| yields << row } }
 
-    it_should_behave_like 'it uses the elasticsearch driver'
+    it_should_behave_like 'a method that uses the elasticsearch driver'
     it_should_behave_like 'a command method'
 
     it 'yields each row' do

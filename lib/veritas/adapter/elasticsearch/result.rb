@@ -3,7 +3,7 @@ module Veritas
     class Elasticsearch
       # Wrap an elasticsearch result hash of hashes into poro world
       class Result
-        include Enumerable
+        include Enumerable, Immutable
 
         # Return wrapped data
         #
@@ -50,7 +50,7 @@ module Veritas
         # @api private
         #
         def documents
-          @documents ||= hits.map do |hit|
+          hits.map do |hit|
             hit.fetch('fields')
           end
         end
@@ -79,6 +79,8 @@ module Veritas
         def initialize(data)
           @data = data
         end
+
+        memoize :documents
       end
     end
   end

@@ -5,14 +5,10 @@ describe Adapter::Elasticsearch::Query::Unlimited,'#bounds' do
 
   let(:object)      { described_class.new(driver,relation) }
   let(:relation)    { mock('Relation')                     }
-  let(:driver)      { mock('Driver')                       }
+  let(:driver)      { mock('Driver', :slice_size => 2**30) }
 
   let(:slice_size) do
      object.send(:slice_size)
-  end
-
-  before do
-    object.stub(:slice_size => 2**30)
   end
 
   it { should be_kind_of(Enumerator) }

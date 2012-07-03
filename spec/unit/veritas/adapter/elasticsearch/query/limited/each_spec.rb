@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Adapter::Elasticsearch::Query::Limited,'#each' do
   let(:relation)   { Relation::Base.new('name',[[:id,Integer]]).sort_by { |r| [r.id.desc] }.take(limit) }
 
-  let(:slice_length) { 3 }
+  let(:slice_size) { 3 }
 
   context 'when limit is greather than slice size' do
     let(:limit)        { 4 }

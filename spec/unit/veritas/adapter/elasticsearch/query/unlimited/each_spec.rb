@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Adapter::Elasticsearch::Query::Unlimited,'#each' do
   let(:relation)     { Relation::Base.new('name',[[:id,Integer]]) }
-  let(:slice_length) { 3 }
+  let(:slice_size) { 3 }
 
   context 'when result count is lower than slice length' do
     let(:expected_reads) do

@@ -3,6 +3,7 @@ module Veritas
     class Elasticsearch
       # Visit relations to contstruct query parts
       class Visitor
+        include Immutable
 
         # Return query components
         #
