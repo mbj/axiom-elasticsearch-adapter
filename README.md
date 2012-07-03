@@ -9,7 +9,9 @@ This is an [elasticsearch](http://elasticsearch.org) adapter for
 It does currently feature basic read support with the ability to push 
 restriction/limit and offsets to the database.
 
-As only basic read operation is implemented it is only tested against the git version of veritas.
+As only basic read operations are implemented. Also it is only tested against the git version of veritas currently.
+
+Do not expect a gem release soon.
 
 Installation
 ------------
