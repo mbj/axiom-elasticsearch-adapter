@@ -19,16 +19,6 @@ group :guard do
   gem 'guard-rspec',   '~> 0.7.3'
 end
 
-group :benchmarks do
-  gem 'rbench', '~> 0.2.3'
-end
-
-platform :jruby do
-  group :jruby do
-    gem 'jruby-openssl', '~> 0.7.4'
-  end
-end
-
 group :metrics do
   gem 'flay',            '~> 1.4.2'
   gem 'flog',            '~> 2.5.1'
