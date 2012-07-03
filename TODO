@@ -8,3 +8,4 @@
 * Add write support once veritas has writable relations
 * Use Veritas::Immutable instead of @ivar ||= expression
 * Use Veritas::Proxy to simplify gateway
+* Fix/Workaround coredump in jruby-19mode http://travis-ci.org/#!/mbj/veritas-elasticsearch-adapter/jobs/1768119
