@@ -9,3 +9,4 @@
 * Use Veritas::Proxy to simplify gateway
 * Fix/Workaround coredump in jruby-19mode http://travis-ci.org/#!/mbj/veritas-elasticsearch-adapter/jobs/1768119
 * Push a bugreport to yard or yardstick to fix def each; super; end in Query::Unlimited and Query::Limited
+* Support a wait_for_connection method in driver.
