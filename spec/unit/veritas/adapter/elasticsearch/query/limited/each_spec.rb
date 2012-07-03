@@ -13,7 +13,7 @@ describe Adapter::Elasticsearch::Query::Limited,'#each' do
         [ 
           [ 
             visitor.path, 
-            { :from => 0,:size => 3, :sort => [:id => { :order => :desc } ], :fields => [:id] },
+            { :from => 0,:size => 3, :sort => [:id => { :order => :desc } ], :fields => ['id'] },
             [ { 'id' => 1 } ]
           ]
         ]
@@ -27,12 +27,12 @@ describe Adapter::Elasticsearch::Query::Limited,'#each' do
         [ 
           [ 
             visitor.path, 
-            { :from => 0,:size => 3, :sort => [:id => { :order => :desc } ], :fields => [:id] },
+            { :from => 0,:size => 3, :sort => [:id => { :order => :desc } ], :fields => ['id'] },
             [ { 'id' => 1 } ] * 3
           ],
           [ 
             visitor.path, 
-            { :from => 3,:size => 1, :sort => [:id => { :order => :desc } ], :fields => [:id] },
+            { :from => 3,:size => 1, :sort => [:id => { :order => :desc } ], :fields => ['id'] },
             []
           ]
         ]
@@ -46,12 +46,12 @@ describe Adapter::Elasticsearch::Query::Limited,'#each' do
         [ 
           [ 
             visitor.path, 
-            { :from => 0,:size => 3, :sort => [:id => { :order => :desc } ], :fields => [:id] },
+            { :from => 0,:size => 3, :sort => [:id => { :order => :desc } ], :fields => ['id'] },
             [ { 'id' => 1 } ] * 3
           ],
           [ 
             visitor.path, 
-            { :from => 3,:size => 1, :sort => [:id => { :order => :desc } ], :fields => [:id] },
+            { :from => 3,:size => 1, :sort => [:id => { :order => :desc } ], :fields => ['id'] },
             [ { 'id' => 1 } ] 
           ]
         ]
@@ -68,7 +68,7 @@ describe Adapter::Elasticsearch::Query::Limited,'#each' do
       [ 
         [ 
           visitor.path, 
-          { :from => 0,:size => 2, :sort => [:id => { :order => :desc } ], :fields => [:id] },
+          { :from => 0,:size => 2, :sort => [:id => { :order => :desc } ], :fields => ['id'] },
           [ { 'id' => 1 } ]
         ],
       ]

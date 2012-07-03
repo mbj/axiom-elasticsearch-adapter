@@ -55,7 +55,7 @@ module Veritas
           positive(integer(value))
         end
 
-        # Create fields literal
+        # Create fields selection literal
         #
         # @param [Relation::Header] header
         #
@@ -64,8 +64,23 @@ module Veritas
         # @api private
         #
         def self.fields(header)
-          header.map(&:name)
+          header.map do |head|
+            field(head.name)
+          end
         end
+
+        # Create field literal
+        #
+        # @param [#to_s] field
+        #
+        # @return [String]
+        #
+        # @api private
+        #
+        def self.field(field)
+          field.to_s
+        end
+        private_class_method :field
 
         # Create size literal
         #

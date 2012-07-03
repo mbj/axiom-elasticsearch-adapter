@@ -32,7 +32,7 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
     it 'should return correct query' do
       should == 
         {
-          :fields => [:firstname,:lastname],
+          :fields => ['firstname','lastname'],
         }
     end
   end
@@ -56,7 +56,7 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
     it 'should return correct query' do
       should ==
         {
-          :fields => [:firstname,:lastname],
+          :fields => ['firstname','lastname'],
           :filter => { :term => { :firstname => 'Markus' } }
         }
     end
@@ -70,7 +70,7 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
     it 'should return correct query' do
       should == 
         {
-          :fields => [:firstname,:lastname],
+          :fields => ['firstname','lastname'],
           :filter => { :not => { :term => { :firstname => 'Markus' } } }
         }
     end
@@ -84,7 +84,7 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
     it 'should return correct query' do
       should == 
         {
-          :fields => [:firstname,:lastname],
+          :fields => ['firstname','lastname'],
           :filter => { :or => [{ :term => { :firstname => 'Markus' } },{:term => { :lastname => 'Schirp' } }] }
         }
     end
@@ -100,7 +100,7 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
     it 'should return correct query' do
       should == 
         {
-          :fields => [:firstname,:lastname],
+          :fields => ['firstname','lastname'],
           :sort   => [ { :firstname => { :order => :desc } }, { :lastname => { :order => :asc } } ]
         }
     end
@@ -121,7 +121,7 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
       it 'should return correct query' do
         should == 
           {
-            :fields => [:firstname,:lastname],
+            :fields => ['firstname','lastname'],
             :size   => 5,
             :sort   => [ { :firstname => { :order => :desc } }, { :lastname => { :order => :asc } } ]
           }
@@ -144,7 +144,7 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
       it 'should return correct query' do
         should == 
           {
-            :fields => [:firstname,:lastname],
+            :fields => ['firstname','lastname'],
             :from   => 5,
             :sort   => [ { :firstname => { :order => :desc } }, { :lastname => { :order => :asc } } ]
           }

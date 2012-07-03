@@ -9,7 +9,7 @@ describe Adapter::Elasticsearch::Query::Unlimited,'#each' do
       [ 
         [ 
           visitor.path, 
-          { :from => 0,:size => 3, :fields => [:id] },
+          { :from => 0,:size => 3, :fields => ['id'] },
           [ { 'id' => 1 } ]
         ]
       ]
@@ -23,12 +23,12 @@ describe Adapter::Elasticsearch::Query::Unlimited,'#each' do
       [ 
         [ 
           visitor.path, 
-          { :from => 0,:size => 3, :fields => [:id] },
+          { :from => 0,:size => 3, :fields => ['id'] },
           [ { 'id' => 1 } ] * 3
         ],
         [ 
           visitor.path, 
-          { :from => 3,:size => 3, :fields => [:id] },
+          { :from => 3,:size => 3, :fields => ['id'] },
           [ { 'id' => 1 } ] 
         ]
       ]
@@ -42,12 +42,12 @@ describe Adapter::Elasticsearch::Query::Unlimited,'#each' do
       [ 
         [ 
           visitor.path, 
-          { :from => 0,:size => 3, :fields => [:id] },
+          { :from => 0,:size => 3, :fields => ['id'] },
           [ { 'id' => 1 } ] * 3
         ],
         [ 
           visitor.path, 
-          { :from => 3,:size => 3, :fields => [:id] },
+          { :from => 3,:size => 3, :fields => ['id'] },
           [ { 'id' => 1 } ] * 2
         ]
       ]
