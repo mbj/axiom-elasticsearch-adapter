@@ -20,7 +20,7 @@ module Veritas
           # a method. So adjusting metric up here will hide a 
           # badness increase in other places.
           #
-          class_eval(<<-RUBY,__FILE__,__LINE__,+1)
+          class_eval(<<-RUBY,__FILE__,__LINE__+1)
             def read(accumulator)
               bounds.each do |offset,size|
                 result = execute(offset,size)
