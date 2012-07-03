@@ -1,4 +1,4 @@
-require 'json'
+require 'multi_json'
 require 'veritas'
 require 'faraday'
 require 'veritas/adapter/elasticsearch/support'

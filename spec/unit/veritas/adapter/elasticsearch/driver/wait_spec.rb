@@ -40,7 +40,7 @@ describe Adapter::Elasticsearch::Driver,'#wait' do
   end
 
   context 'when remote timeout occurs' do
-    let(:body) { JSON.dump(:timeout => true) }
+    let(:body) { MultiJson.dump(:timeout => true) }
 
     it 'should raise error' do
       pending

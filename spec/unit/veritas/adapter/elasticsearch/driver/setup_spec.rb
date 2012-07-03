@@ -17,7 +17,7 @@ describe Adapter::Elasticsearch::Driver,'#setup' do
   end
 
   let(:verb)         { :put }
-  let(:req_body)     { JSON.dump(expected_settings) }
+  let(:req_body)     { MultiJson.dump(expected_settings) }
   let(:content_type) { 'application/json; charset=UTF-8' }
   let(:res_body)     { '{}' }
   let(:path)         { '/test' }
@@ -48,7 +48,7 @@ describe Adapter::Elasticsearch::Driver,'#setup' do
   end
 
   context 'when remote timeout occurs' do
-    let(:res_body) { JSON.dump(:timeout => true) }
+    let(:res_body) { MultiJson.dump(:timeout => true) }
 
     it 'should raise error' do
       pending

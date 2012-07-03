@@ -31,7 +31,7 @@ module Veritas
 
             body = self.body
 
-            @env[:body] = JSON.dump(body) if body
+            @env[:body] = MultiJson.dump(body) if body
 
             self
           end

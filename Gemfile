@@ -4,8 +4,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'backports', '~> 2.6.1'
-
 gem 'veritas',           :git => 'https://github.com/dkubb/veritas'
 gem 'veritas-optimizer', :git => 'https://github.com/dkubb/veritas-optimizer'
 

@@ -7,7 +7,7 @@ describe Adapter::Elasticsearch::Preprocessor::Request,'#run' do
 
   let(:logger) { Adapter::Elasticsearch::NullLogger }
   
-  let(:body) { { :foo => :bar } }
+  let(:body) { { :foo => 'bar'} }
 
   let(:env) do
     {

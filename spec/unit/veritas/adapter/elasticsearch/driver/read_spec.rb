@@ -24,7 +24,7 @@ describe Adapter::Elasticsearch::Driver,'#read' do
 
   context 'with successful read' do
     let(:request) do
-      [:get,'/index/type/_search', [200,{'content-type' => 'application/json; charset=UTF-8'}, JSON.dump(data)]]
+      [:get,'/index/type/_search', [200,{'content-type' => 'application/json; charset=UTF-8'}, MultiJson.dump(data)]]
     end
 
     it { should be_kind_of(Adapter::Elasticsearch::Result) }

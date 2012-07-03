@@ -19,6 +19,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('backports', '~> 2.6.1')
   gem.add_runtime_dependency('faraday',   '~> 0.8.1')
   gem.add_runtime_dependency('veritas',   '~> 0.0.7')
+  gem.add_runtime_dependency('multi_json', '~> 1.3.6')
 
   gem.add_development_dependency('rake',        '~> 0.9.2')
   gem.add_development_dependency('rspec',       '~> 1.3.2')

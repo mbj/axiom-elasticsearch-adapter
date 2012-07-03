@@ -71,7 +71,7 @@ module Veritas
               raise ProtocolError,"Expected json content type but got: #{content_type.inspect}"
             end
 
-            @env[:body] = JSON.load(body)
+            @env[:body] = MultiJson.load(body)
 
             self
           end
