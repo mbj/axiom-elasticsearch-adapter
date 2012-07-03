@@ -1,4 +1,4 @@
---exclude-only "spec/,^/"
+--exclude-only "lib/veritas/adapter/elasticsearch/jruby.rb,spec/,^/"
 --sort coverage
 --callsites
 --xrefs

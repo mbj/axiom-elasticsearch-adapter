@@ -1,12 +1,12 @@
 begin
   require 'reek/rake/task'
 
-  unless defined?(Rubinius)
-    Reek::Rake::Task.new
-  else
+  if defined?(RUBY_ENGINE) and RUBY_ENGINE == 'rbx'
     task :reek do
       $stderr.puts 'Reek fails under rubinius, fix rubinius and remove guard'
     end
+  else
+    Reek::Rake::Task.new
   end
 rescue LoadError
   task :reek do

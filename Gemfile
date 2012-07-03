@@ -13,6 +13,12 @@ group :development do
   gem 'yard',    '~> 0.8.1'
 end
 
+platform :jruby do
+  group :jruby do
+    gem 'jruby-openssl', '~> 0.7.4'
+  end
+end
+
 group :guard do
   gem 'guard',         '~> 1.1.1'
   gem 'guard-bundler', '~> 0.1.3'

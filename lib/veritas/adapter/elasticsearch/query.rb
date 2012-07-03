@@ -95,7 +95,7 @@ module Veritas
             result = execute(offset,size)
             accumulator << result
             break if result.size < size
-          end
+          end 
 
           self
         end

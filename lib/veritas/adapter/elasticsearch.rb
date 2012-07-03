@@ -17,6 +17,9 @@ require 'veritas/adapter/elasticsearch/result'
 require 'veritas/adapter/elasticsearch/gateway'
 require 'veritas/adapter/elasticsearch/null_logger'
 
+# jRuby specific overrides. 
+require 'veritas/adapter/elasticsearch/jruby'
+
 module Veritas
   module Adapter
     # An adapter for elasticsearch
