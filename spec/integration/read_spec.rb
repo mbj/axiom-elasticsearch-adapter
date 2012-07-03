@@ -37,17 +37,17 @@ describe Adapter::Elasticsearch, 'reading' do
         :people => {
           :properties => {
             :firstname => {
-              :type => :multi_field,
+              :type => 'multi_field',
               :fields => {
-                :firstname => { :type => :string, :index => :not_analyzed },
-                :search_firstname => { :type => :string, :index => :analyzed }
+                :firstname => { :type => 'string', :index => 'not_analyzed' },
+                :search_firstname => { :type => 'string', :index => 'analyzed' }
               }
             },
             :lastname => {
-              :type => :multi_field,
+              :type => 'multi_field',
               :fields => {
-                :lastname => { :type => :string, :index => :not_analyzed },
-                :search_lastname => { :type => :string, :index => :analyzed }
+                :lastname => { :type => 'string', :index => 'not_analyzed' },
+                :search_lastname => { :type => 'string', :index => 'analyzed' }
               }
             }
           }
