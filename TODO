@@ -1,8 +1,9 @@
 * Investigate into thrift connection for performance better than http. 
   http://www.elasticsearch.org/guide/reference/modules/thrift.html
 * Check if faraday lowercases all headers.
-* Raise less generic errors than Runtime Error.
 * Add option to check for remote timeouts in middleware
 * Add option to force local timeouts in faraday.
 * Use optimizer to collapse nested operations.
 * Add optimizer stage to reorder relation in a way unsupported operations are not done on gateway relation.
+* Add write support once veritas has writable relations
+* Use Veritas::Immutable instead of @ivar ||=
