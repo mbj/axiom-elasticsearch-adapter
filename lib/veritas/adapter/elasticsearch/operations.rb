@@ -3,6 +3,8 @@ module Veritas
     class Elasticsearch
       # A container for registring operations
       class Operations
+        include Immutable
+
         # Lookup operation based on visitable object
         #
         # @param [Object] visitable
@@ -32,7 +34,6 @@ module Veritas
         #
         def initialize(map)
           @map = map
-          freeze
         end
       end
     end
