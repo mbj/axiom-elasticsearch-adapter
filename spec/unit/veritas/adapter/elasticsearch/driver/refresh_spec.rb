@@ -12,7 +12,7 @@ describe Adapter::Elasticsearch::Driver,'#refresh' do
       end
     end
   end
- 
+
   let(:verb) { :post }
   let(:content_type) { 'application/json; charset=UTF-8' }
   let(:body) { '{}' }

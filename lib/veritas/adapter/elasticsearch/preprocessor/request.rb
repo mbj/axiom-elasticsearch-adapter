@@ -21,7 +21,7 @@ module Veritas
         private
 
           # Convert body to json
-          # 
+          #
           # @return [self]
           #
           # @api private

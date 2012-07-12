@@ -30,7 +30,7 @@ module Veritas
         # @return [true|false]
         #
         # @api private
-        # 
+        #
         def limited?
           components.key?(:size)
         end

@@ -60,7 +60,7 @@ describe Adapter::Elasticsearch::Query::Limited, '#each' do
       it_should_behave_like 'a query #each method'
     end
   end
- 
+
   context 'when limit is lower than slice size' do
     let(:limit) { 2 }
 
