@@ -32,7 +32,7 @@ describe Adapter::Elasticsearch::Literal,'.filter' do
     let(:predicate) { Function::Connective::Disjunction.new(left,right) }
 
     it 'should return filter literal' do
-      should == { :or => [{ :term => { :id => 1 } },{:term => { :id => 2} } ] } 
+      should == { :or => [{ :term => { :id => 1 } },{:term => { :id => 2} } ] }
     end
   end
 
@@ -42,7 +42,7 @@ describe Adapter::Elasticsearch::Literal,'.filter' do
     let(:predicate) { Function::Connective::Conjunction.new(left,right) }
 
     it 'should return filter literal' do
-      should == { :and => [{ :term => { :id => 1 } },{:term => { :id => 2} } ] } 
+      should == { :and => [{ :term => { :id => 1 } },{:term => { :id => 2} } ] }
     end
   end
 
@@ -83,7 +83,7 @@ describe Adapter::Elasticsearch::Literal,'.filter' do
     let(:predicate) { Function::Predicate::GreaterThanOrEqualTo.new(attribute,1) }
 
     it 'should return filter literal' do
-      should == { :range => { :id => { :gte => 1 } } } 
+      should == { :range => { :id => { :gte => 1 } } }
     end
   end
 

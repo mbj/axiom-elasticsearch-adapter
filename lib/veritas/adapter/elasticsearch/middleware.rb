@@ -1,7 +1,7 @@
 module Veritas
   module Adapter
     class Elasticsearch
-      # Faraday middleware 
+      # Faraday middleware
       class Middleware
         # Middleware call from faraday
         #

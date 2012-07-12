@@ -3,19 +3,18 @@ require 'spec_helper'
 require 'logger'
 
 describe Adapter::Elasticsearch, 'reading' do
-  let(:uri)           { ENV.fetch('ES_URI','http://localhost:9200')                       }
+  let(:uri)           { ENV.fetch('ES_URI', 'http://localhost:9200')                       }
   let(:logger)        { Logger.new($stdout)                                               }
-                     
-  let(:adapter)       { Adapter::Elasticsearch.new(uri,:logger => logger)                 }
-  let(:header)        { Relation::Header.new([ [:firstname,String], [:lastname,String] ]) }
-  let(:base_relation) { Relation::Base.new('test/people',header)                          }
+  let(:adapter)       { Adapter::Elasticsearch.new(uri, :logger => logger)                 }
+  let(:header)        { Relation::Header.new([ [:firstname, String], [:lastname, String] ]) }
+  let(:base_relation) { Relation::Base.new('test/people', header)                          }
 
   let(:index_name)    { 'test'                                                            }
 
   let(:driver)        { adapter.driver                                                    }
   let(:connection)    { driver.connection                                                 }
 
-  let(:relation)      { Adapter::Elasticsearch::Gateway.new(adapter,base_relation)        }
+  let(:relation)      { Adapter::Elasticsearch::Gateway.new(adapter, base_relation)        }
 
   # Driver does not allow writes currently
   def add(data)
@@ -55,12 +54,12 @@ describe Adapter::Elasticsearch, 'reading' do
       }
     )
 
-    driver.wait(index_name,:timeout => 10)
+    driver.wait(index_name, :timeout => 10)
 
     # Driver does not support writes (yet)
 
-    add(:firstname => 'John',:lastname => 'Doe')
-    add(:firstname => 'Sue',:lastname => 'Doe')
+    add(:firstname => 'John', :lastname => 'Doe')
+    add(:firstname => 'Sue', :lastname => 'Doe')
 
     # Ensure documents are searchable
     driver.refresh

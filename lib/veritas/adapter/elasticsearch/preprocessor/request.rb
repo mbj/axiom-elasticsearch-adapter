@@ -5,7 +5,7 @@ module Veritas
         # Request preprocessor
         class Request < Preprocessor
 
-          # Do preprocessing on request 
+          # Do preprocessing on request
           #
           # @return [self]
           #

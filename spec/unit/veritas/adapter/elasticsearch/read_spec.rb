@@ -8,7 +8,7 @@ shared_examples_for 'a method that uses the elasticsearch driver' do
   end
 
   it 'opens a connection' do
-    Adapter::Elasticsearch::Driver.should_receive(:new).with(uri,options).and_return(connection)
+    Adapter::Elasticsearch::Driver.should_receive(:new).with(uri, options).and_return(connection)
     subject
   end
 end
@@ -16,7 +16,7 @@ end
 describe Adapter::Elasticsearch, '#read' do
   let(:uri)       { 'http://example.com:9200'        }
   let(:options)   { {}                               }
-  let(:object)    { described_class.new(uri,options) }
+  let(:object)    { described_class.new(uri, options) }
   let(:relation)  { mock('Relation')                 }
   let(:query)     { mock('Query')                }
   let(:rows)      { [ [ 1 ], [ 2 ], [ 3 ] ]          }

@@ -1,4 +1,4 @@
-require 'spec_helper' 
+require 'spec_helper'
 
 describe Adapter::Elasticsearch::Middleware,'#call' do
   let(:object) { described_class.new(*arguments) }

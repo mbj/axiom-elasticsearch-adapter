@@ -10,11 +10,11 @@ module Veritas
         #
         # @api private
         #
-        def self.lazy_map(enumerable,&block)
+        def self.lazy_map(enumerable, &block)
           raise ArgumentError, 'required block not given' unless block_given?
 
           Enumerator.new do |yielder|
-            map(enumerable,yielder,&block)
+            map(enumerable, yielder, &block)
           end
         end
 
@@ -27,7 +27,7 @@ module Veritas
         #
         # @api private
         #
-        def self.map(enumerable,accumulator)
+        def self.map(enumerable, accumulator)
           enumerable.each do |value|
             accumulator << yield(value)
           end

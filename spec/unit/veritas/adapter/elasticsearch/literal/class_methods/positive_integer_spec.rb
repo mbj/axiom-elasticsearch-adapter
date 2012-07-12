@@ -11,7 +11,7 @@ describe Veritas::Adapter::Elasticsearch::Literal,'#positive_integer' do
     it_should_behave_like 'an idempotent method'
 
     it 'should return value' do
-      should equal(value) 
+      should equal(value)
     end
   end
 
@@ -21,7 +21,7 @@ describe Veritas::Adapter::Elasticsearch::Literal,'#positive_integer' do
     it_should_behave_like 'an idempotent method'
 
     it 'should return value' do
-      should equal(value) 
+      should equal(value)
     end
   end
 

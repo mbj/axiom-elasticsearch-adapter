@@ -45,7 +45,7 @@ module Veritas
           # @api private
           #
           def expected_status_codes
-            [*options.fetch(:expect_status,200)]
+            [*options.fetch(:expect_status, 200)]
           end
 
           # Return response status
@@ -68,7 +68,7 @@ module Veritas
             return unless convert_json?
 
             unless json_content_type?
-              raise ProtocolError,"Expected json content type but got: #{content_type.inspect}"
+              raise ProtocolError, "Expected json content type but got: #{content_type.inspect}"
             end
 
             @env[:body] = MultiJson.load(body)
@@ -101,7 +101,7 @@ module Veritas
           # @return [Hash]
           #
           # @api private
-          # 
+          #
           def response_headers
             @env.fetch(:response_headers)
           end

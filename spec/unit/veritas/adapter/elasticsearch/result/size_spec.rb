@@ -6,7 +6,7 @@ describe Adapter::Elasticsearch::Result,'#size' do
   let(:object)   { described_class.new(data)        }
   let(:data)     { { 'hits' => { 'hits' => hits } } }
 
-  let(:hits) do 
+  let(:hits) do
     [
       { 'fields' => { 'id' => 1 } },
       { 'fields' => { 'id' => 2 } }

@@ -7,7 +7,7 @@ describe Adapter::Elasticsearch::Driver,'#wait' do
   let(:uri)        { 'http://example.com:9200' }
   let(:options)    { { :adapter => [:test,adapter] } }
   let(:name)       { :test }
-  let(:adapter) do 
+  let(:adapter) do
     Faraday::Adapter::Test::Stubs.new do |stub|
       stub.send(verb,path) do
         [status,{'content-type' => content_type},body]

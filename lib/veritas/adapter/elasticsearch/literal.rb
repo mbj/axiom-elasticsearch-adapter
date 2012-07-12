@@ -14,7 +14,7 @@ module Veritas
         #
         # @param [Object] object
         #
-        # @return [Fixnum] 
+        # @return [Fixnum]
         #
         # @api private
         #
@@ -124,28 +124,16 @@ module Veritas
 
         # Create sort literal
         #
-        # @param [Veritas::Relation::Operation::Order] operation
-        #
-        # @return [Hash]
-        #
-        # @api private
-        #
-        def self.sort(operation)
-          sort_operations(operation) 
-        end
-
-        # Create sort operations literal
-        #
         # @param [Veritas::Relation::Operation::Order] order
         #
         # @return [Hash]
         #
         # @api private
         #
-        def self.sort_operations(order)
+        def self.sort(order)
           directions = order.directions.map do |operation|
             sort_operation(operation)
-          end 
+          end
         end
         private_class_method :sort_operations
 
@@ -177,7 +165,7 @@ module Veritas
           when ::Veritas::Relation::Operation::Order::Ascending
             :asc
           else
-            raise ArgumentError,"Unsupported operation: #{operation.class}"
+            raise ArgumentError, "Unsupported operation: #{operation.class}"
           end
         end
         private_class_method :sort_direction
@@ -191,12 +179,12 @@ module Veritas
           Veritas::Function::Predicate::GreaterThanOrEqualTo => :greater_than_or_equal_to_predicate,
           Veritas::Function::Predicate::LessThan             => :less_than_predicate,
           Veritas::Function::Predicate::LessThanOrEqualTo    => :less_than_or_equal_to_predicate,
-          Veritas::Function::Connective::Disjunction         => :disjunction, 
-          Veritas::Function::Connective::Conjunction         => :conjunction, 
+          Veritas::Function::Connective::Disjunction         => :disjunction,
+          Veritas::Function::Connective::Conjunction         => :conjunction,
           Veritas::Function::Connective::Negation            => :create_inverse
         )
 
-        # Create filter literal internals 
+        # Create filter literal internals
         #
         # @param [Veritas::Function] function
         #
@@ -209,7 +197,7 @@ module Veritas
         end
         private_class_method :function
 
-        # Create filter literal internals from disjunction 
+        # Create filter literal internals from disjunction
         #
         # @param [Veritas::Function::Predicate::Disjunction] disjunction
         #
@@ -218,11 +206,11 @@ module Veritas
         # @api private
         #
         def self.disjunction(disjunction)
-          create_connective(disjunction,:or)
+          create_connective(disjunction, :or)
         end
         private_class_method :disjunction
 
-        # Create filter literal internals from conjunction 
+        # Create filter literal internals from conjunction
         #
         # @param [Veritas::Function::Predicate::Disjunction] conjunction
         #
@@ -231,7 +219,7 @@ module Veritas
         # @api private
         #
         def self.conjunction(conjunction)
-          create_connective(conjunction,:and)
+          create_connective(conjunction, :and)
         end
         private_class_method :conjunction
 
@@ -244,8 +232,8 @@ module Veritas
         #
         # @api private
         #
-        def self.create_connective(connective,operator)
-          { operator => [function(connective.left),function(connective.right)] }
+        def self.create_connective(connective, operator)
+          { operator => [function(connective.left), function(connective.right)] }
         end
         private_class_method :create_connective
 
@@ -258,7 +246,7 @@ module Veritas
         # @api private
         #
         def self.equality_predicate(predicate)
-          create_filter(predicate,:term)
+          create_filter(predicate, :term)
         end
         private_class_method :equality_predicate
 
@@ -271,7 +259,7 @@ module Veritas
         # @api private
         #
         def self.inclusion_predicate(predicate)
-          create_filter(predicate,:terms)
+          create_filter(predicate, :terms)
         end
         private_class_method :inclusion_predicate
 
@@ -284,7 +272,7 @@ module Veritas
         # @api private
         #
         def self.less_than_predicate(predicate)
-          create_filter_operator(predicate,:range,:lt)
+          create_filter_operator(predicate, :range, :lt)
         end
         private_class_method :less_than_predicate
 
@@ -297,7 +285,7 @@ module Veritas
         # @api private
         #
         def self.less_than_or_equal_to_predicate(predicate)
-          create_filter_operator(predicate,:range,:lte)
+          create_filter_operator(predicate, :range, :lte)
         end
         private_class_method :less_than_or_equal_to_predicate
 
@@ -310,7 +298,7 @@ module Veritas
         # @api private
         #
         def self.greater_than_predicate(predicate)
-          create_filter_operator(predicate,:range,:gt)
+          create_filter_operator(predicate, :range, :gt)
         end
         private_class_method :greater_than_predicate
 
@@ -323,7 +311,7 @@ module Veritas
         # @api private
         #
         def self.greater_than_or_equal_to_predicate(predicate)
-          create_filter_operator(predicate,:range,:gte)
+          create_filter_operator(predicate, :range, :gte)
         end
         private_class_method :greater_than_or_equal_to_predicate
 
@@ -336,8 +324,8 @@ module Veritas
         #
         # @api private
         #
-        def self.create_filter(predicate,type)
-          create_filter_operand(predicate,type,predicate.right)
+        def self.create_filter(predicate, type)
+          create_filter_operand(predicate, type, predicate.right)
         end
         private_class_method :create_filter
 
@@ -351,8 +339,8 @@ module Veritas
         #
         # @api private
         #
-        def self.create_filter_operator(predicate,type,operator)
-          create_filter_operand(predicate,type,operator => predicate.right)
+        def self.create_filter_operator(predicate, type, operator)
+          create_filter_operand(predicate, type, operator => predicate.right)
         end
         private_class_method :create_filter_operator
 
@@ -366,7 +354,7 @@ module Veritas
         #
         # @api private
         #
-        def self.create_filter_operand(predicate,type,operand)
+        def self.create_filter_operand(predicate, type, operand)
           { type => { predicate.left.name => operand } }
         end
         private_class_method :create_filter_operand

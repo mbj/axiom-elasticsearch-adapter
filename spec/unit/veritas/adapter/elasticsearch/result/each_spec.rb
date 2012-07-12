@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Adapter::Elasticsearch::Result,'#each' do
+describe Adapter::Elasticsearch::Result, '#each' do
   subject { object.each { |tuple| yields << tuple } }
 
   let(:object)   { described_class.new(data)        }
@@ -9,7 +9,7 @@ describe Adapter::Elasticsearch::Result,'#each' do
 
   it_should_behave_like 'an #each method'
 
-  let(:hits) do 
+  let(:hits) do
     [
       { 'fields' => { 'id' => 1 } },
       { 'fields' => { 'id' => 2 } }

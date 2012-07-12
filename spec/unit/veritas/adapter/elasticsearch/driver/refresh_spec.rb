@@ -5,14 +5,14 @@ describe Adapter::Elasticsearch::Driver,'#refresh' do
   let(:uri)        { 'http://example.com:9200' }
   let(:options)    { { :adapter => [:test,adapter] } }
 
-  let(:adapter) do 
+  let(:adapter) do
     Faraday::Adapter::Test::Stubs.new do |stub|
       stub.send(verb,path) do
         [status,{'content-type' => content_type},body]
       end
     end
   end
-  
+ 
   let(:verb) { :post }
   let(:content_type) { 'application/json; charset=UTF-8' }
   let(:body) { '{}' }

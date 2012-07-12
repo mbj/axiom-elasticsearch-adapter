@@ -14,8 +14,8 @@ module Veritas
         #
         # @api private
         #
-        def initialize(driver,visitor)
-          @driver,@visitor = driver,visitor
+        def initialize(driver, visitor)
+          @driver, @visitor = driver, visitor
         end
 
         private
@@ -27,7 +27,7 @@ module Veritas
         # @api private
         #
         # This method is intentionally at private scope.
-        # Its scope is set to public in subclasses. 
+        # Its scope is set to public in subclasses.
         #
         # This frees us from the need to heckle this method
         # on instances of the abstract query class.
@@ -97,26 +97,26 @@ module Veritas
         # @api private
         #
         def read(accumulator)
-          bounds.each do |offset,size|
-            result = execute(offset,size)
+          bounds.each do |offset, size|
+            result = execute(offset, size)
             accumulator << result
             break if result.size < size
-          end 
+          end
 
           self
         end
 
         # Return bounds enumerator
         #
-        # @return [Enumerator<Integer,Integer>]
+        # @return [Enumerator<Integer, Integer>]
         #
         # @api private
         #
         def bounds
-          raise NotImplementedError,"#{self.class}##{__method__} must be implemented"
+          raise NotImplementedError, "#{self.class}##{__method__} must be implemented"
         end
 
-        # Return results for offset and size 
+        # Return results for offset and size
         #
         # @param [Integer] offset
         # @param [Integer] size
@@ -125,12 +125,12 @@ module Veritas
         #
         # @api private
         #
-        def execute(offset,size)
+        def execute(offset, size)
           query = components.merge(
             :from => Literal.positive_integer(offset),
             :size => Literal.positive_integer(size)
           )
-          @driver.read(@visitor.path,query)
+          @driver.read(@visitor.path, query)
         end
 
         # Return slice size
@@ -152,7 +152,7 @@ module Veritas
         # @api private
         #
         def offsets
-          0.step(Literal::INT_32_MAX,slice_size)
+          0.step(Literal::INT_32_MAX, slice_size)
         end
 
         # Build query instance from driver and relation
@@ -161,17 +161,17 @@ module Veritas
         # @param [Relation] relation
         #
         # @return [Query::Limited]
-        #   in case result count is limited 
+        #   in case result count is limited
         #
         # @return [Query::Unlimited]
-        #   in case result count is unlimited 
+        #   in case result count is unlimited
         #
         # @api private
         #
-        def self.build(driver,relation)
+        def self.build(driver, relation)
           visitor = Visitor.new(relation)
           klass = visitor.limited? ? Limited : Unlimited
-          klass.new(driver,visitor)
+          klass.new(driver, visitor)
         end
 
         memoize :fields

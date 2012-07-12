@@ -8,7 +8,7 @@ describe Adapter::Elasticsearch::Driver,'#setup' do
   let(:options)    { { :adapter => [:test,adapter] } }
   let(:name)       { :test }
 
-  let(:adapter) do 
+  let(:adapter) do
     Faraday::Adapter::Test::Stubs.new do |stub|
       stub.send(verb,path,req_body) do
         [status,{'content-type' => content_type},res_body]

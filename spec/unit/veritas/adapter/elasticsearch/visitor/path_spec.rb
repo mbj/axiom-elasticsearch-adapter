@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Adapter::Elasticsearch::Visitor,'#to_query' do
-  let(:object) { described_class.new(relation) } 
+  let(:object) { described_class.new(relation) }
 
   let(:header) do
     [
@@ -11,7 +11,7 @@ describe Adapter::Elasticsearch::Visitor,'#to_query' do
   end
 
   let(:relation) do
-    Veritas::Relation::Base.new(:name,header) 
+    Veritas::Relation::Base.new(:name,header)
   end
 
   subject { object.path }

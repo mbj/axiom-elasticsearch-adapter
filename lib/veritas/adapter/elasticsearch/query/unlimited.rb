@@ -11,8 +11,8 @@ module Veritas
           #
           # @api private
           #
-          # Yarddoc/Yardstick blows up with a single 
-          #   public :each 
+          # Yarddoc/Yardstick blows up with a single
+          #   public :each
           #
           # For this reason this super is present :(
           #

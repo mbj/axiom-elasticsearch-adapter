@@ -11,8 +11,8 @@ module Veritas
           #
           # @api private
           #
-          # Yarddoc/Yardstick blows up with a single 
-          #   public :each 
+          # Yarddoc/Yardstick blows up with a single
+          #   public :each
           #
           # For this reason this super is present :(
           #
@@ -23,13 +23,13 @@ module Veritas
         private
           # Return bounds enumerator for queries
           #
-          # @return [Enumerator<Integer,Integer>]
+          # @return [Enumerator<Integer, Integer>]
           #
           # @api private
           #
           def bounds
             Support.lazy_map(offsets) do |offset|
-              [offset,slice_length(offset)]
+              [offset, slice_length(offset)]
             end
           end
 
@@ -41,7 +41,7 @@ module Veritas
           #
           def results
             Enumerator.new do |yielder|
-              read_to_maximum(super,yielder)
+              read_to_maximum(super, yielder)
             end
           end
 
@@ -54,8 +54,8 @@ module Veritas
           #
           # @api private
           #
-          def read_to_maximum(results,accumulator)
-            count,maximum = 0, limit
+          def read_to_maximum(results, accumulator)
+            count, maximum = 0, limit
 
             results.each do |result|
               count+=result.size

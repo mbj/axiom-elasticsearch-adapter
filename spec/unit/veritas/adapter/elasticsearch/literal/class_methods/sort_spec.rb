@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Adapter::Elasticsearch::Literal,'.sort' do
+describe Adapter::Elasticsearch::Literal, '.sort' do
   let(:object) { Adapter::Elasticsearch::Literal }
 
   let(:header) do
@@ -13,7 +13,7 @@ describe Adapter::Elasticsearch::Literal,'.sort' do
 
 
   context 'when sorting asc' do
-    let(:input) { Relation.new(header,[]).sort_by { |r| [r.id.asc] } }
+    let(:input) { Relation.new(header, []).sort_by { |r| [r.id.asc] } }
 
     it 'should return sort literal' do
       should == [{:id => { :order => :asc } }]
@@ -21,7 +21,7 @@ describe Adapter::Elasticsearch::Literal,'.sort' do
   end
 
   context 'when sorting desc' do
-    let(:input) { Relation.new(header,[]).sort_by { |r| [r.id.desc] } }
+    let(:input) { Relation.new(header, []).sort_by { |r| [r.id.desc] } }
 
     it 'should return sort literal' do
       should == [{:id => { :order => :desc } }]

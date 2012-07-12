@@ -1,26 +1,26 @@
 require 'spec_helper'
 
-describe Adapter::Elasticsearch::Visitor,'#components' do
+describe Adapter::Elasticsearch::Visitor, '#components' do
   subject { object.components }
 
-  let(:object) { described_class.new(relation) } 
+  let(:object) { described_class.new(relation) }
 
   let(:header) do
     [
-      [:firstname,String],
-      [:lastname,String]
+      [:firstname, String],
+      [:lastname, String]
     ]
   end
 
   let(:base_relation) do
-    Veritas::Relation::Base.new(:name,header) 
+    Veritas::Relation::Base.new(:name, header)
   end
 
   context 'with an unsupported relation' do
     let(:relation) { base_relation.rename(:firstname => :surname) }
 
     it 'should raise error' do
-      expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError,"No support for #{relation.class}")
+      expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, "No support for #{relation.class}")
     end
   end
 
@@ -30,21 +30,21 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
     it_should_behave_like 'an idempotent method'
 
     it 'should return correct query' do
-      should == 
+      should ==
         {
-          :fields => ['firstname','lastname'],
+          :fields => ['firstname', 'lastname'],
         }
     end
   end
 
   context 'with nested restrictions' do
-    let(:relation) do 
+    let(:relation) do
       base_relation.restrict { |r| r.firstname.eq('Markus') }.
                     restrict { |r| r.lastname.eq('Schirp') }
     end
 
     it 'should raise error' do
-      expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError,'No support for nesting Veritas::Algebra::Restriction')
+      expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, 'No support for nesting Veritas::Algebra::Restriction')
     end
   end
 
@@ -56,7 +56,7 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
     it 'should return correct query' do
       should ==
         {
-          :fields => ['firstname','lastname'],
+          :fields => ['firstname', 'lastname'],
           :filter => { :term => { :firstname => 'Markus' } }
         }
     end
@@ -68,9 +68,9 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
     it_should_behave_like 'an idempotent method'
 
     it 'should return correct query' do
-      should == 
+      should ==
         {
-          :fields => ['firstname','lastname'],
+          :fields => ['firstname', 'lastname'],
           :filter => { :not => { :term => { :firstname => 'Markus' } } }
         }
     end
@@ -82,10 +82,10 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
     it_should_behave_like 'an idempotent method'
 
     it 'should return correct query' do
-      should == 
+      should ==
         {
-          :fields => ['firstname','lastname'],
-          :filter => { :or => [{ :term => { :firstname => 'Markus' } },{:term => { :lastname => 'Schirp' } }] }
+          :fields => ['firstname', 'lastname'],
+          :filter => { :or => [{ :term => { :firstname => 'Markus' } }, {:term => { :lastname => 'Schirp' } }] }
         }
     end
   end
@@ -98,9 +98,9 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
     let(:relation) { ordered_relation }
 
     it 'should return correct query' do
-      should == 
+      should ==
         {
-          :fields => ['firstname','lastname'],
+          :fields => ['firstname', 'lastname'],
           :sort   => [ { :firstname => { :order => :desc } }, { :lastname => { :order => :asc } } ]
         }
     end
@@ -109,7 +109,7 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
       let(:relation) { ordered_relation.sort_by { |r| [r.firstname.asc, r.lastname ] } }
 
       it 'should raise error' do
-        expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError,'No support for nesting Veritas::Relation::Operation::Order')
+        expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, 'No support for nesting Veritas::Relation::Operation::Order')
       end
     end
 
@@ -119,9 +119,9 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
       it_should_behave_like 'an idempotent method'
 
       it 'should return correct query' do
-        should == 
+        should ==
           {
-            :fields => ['firstname','lastname'],
+            :fields => ['firstname', 'lastname'],
             :size   => 5,
             :sort   => [ { :firstname => { :order => :desc } }, { :lastname => { :order => :asc } } ]
           }
@@ -131,7 +131,7 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
         let(:relation) { ordered_relation.take(5).take(5) }
 
         it 'should raise error' do
-          expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError,'No support for nesting Veritas::Relation::Operation::Limit')
+          expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, 'No support for nesting Veritas::Relation::Operation::Limit')
         end
       end
     end
@@ -142,9 +142,9 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
       it_should_behave_like 'an idempotent method'
 
       it 'should return correct query' do
-        should == 
+        should ==
           {
-            :fields => ['firstname','lastname'],
+            :fields => ['firstname', 'lastname'],
             :from   => 5,
             :sort   => [ { :firstname => { :order => :desc } }, { :lastname => { :order => :asc } } ]
           }
@@ -154,7 +154,7 @@ describe Adapter::Elasticsearch::Visitor,'#components' do
         let(:relation) { ordered_relation.drop(5).drop(5) }
 
         it 'should raise error' do
-          expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError,'No support for nesting Veritas::Relation::Operation::Offset')
+          expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, 'No support for nesting Veritas::Relation::Operation::Offset')
         end
       end
     end

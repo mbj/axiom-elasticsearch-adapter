@@ -17,7 +17,7 @@ require 'veritas/adapter/elasticsearch/result'
 require 'veritas/adapter/elasticsearch/gateway'
 require 'veritas/adapter/elasticsearch/null_logger'
 
-# jRuby specific overrides. 
+# jRuby specific overrides.
 require 'veritas/adapter/elasticsearch/jruby'
 
 module Veritas
@@ -47,16 +47,18 @@ module Veritas
       # @param [Relation] relation
       #   the relation to access
       #
+      # @return [self]
+      #   returns self when block given
+      #
       # @return [Enumerable<Array>]
-      #   returns enumerable for each tuple in result 
+      #   returns enumerable when no block given
       #
       # @api private
       #
-      def read(relation,&block)
-
+      def read(relation, &block)
         return to_enum(__method__, relation) unless block_given?
 
-        Query.build(@driver,relation).each(&block)
+        Query.build(@driver, relation).each(&block)
 
         self
       end
@@ -72,8 +74,8 @@ module Veritas
       #
       # @api private
       #
-      def initialize(uri,options)
-        @driver = Driver.new(uri,options)
+      def initialize(uri, options)
+        @driver = Driver.new(uri, options)
       end
     end
   end

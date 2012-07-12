@@ -8,6 +8,6 @@ describe Adapter::Elasticsearch::Literal,'.fields' do
   let(:input) { Veritas::Relation::Header.new([[:foo,String],[:bar,String]]) }
 
   it 'should return fiels literal' do
-    should == ['foo','bar'] 
+    should == ['foo','bar']
   end
 end

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Adapter::Elasticsearch::Query::Unlimited,'#bounds' do
+describe Adapter::Elasticsearch::Query::Unlimited, '#bounds' do
   subject { object.send(:bounds) }
 
-  let(:object)      { described_class.new(driver,relation) }
+  let(:object)      { described_class.new(driver, relation) }
   let(:relation)    { mock('Relation')                     }
   let(:driver)      { mock('Driver', :slice_size => 2**30) }
 

@@ -9,7 +9,7 @@ describe Adapter::Elasticsearch::Driver,'#exist?' do
 
   subject { object.exist?(name) }
 
-  let(:adapter) do 
+  let(:adapter) do
     Faraday::Adapter::Test::Stubs.new do |stub|
       method,path,result = request
       stub.send(method,path) do

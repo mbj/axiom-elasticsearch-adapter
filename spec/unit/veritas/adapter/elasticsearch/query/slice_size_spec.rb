@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 # See comment in Query#slice_size in case of objections
-describe Adapter::Elasticsearch::Query,'#slice_size' do
+describe Adapter::Elasticsearch::Query, '#slice_size' do
   subject { object.send(:slice_size) }
 
-  let(:object) { described_class.new(driver,relation) }
+  let(:object) { described_class.new(driver, relation) }
 
   let(:driver)     { mock('Driver', :slice_size => slice_size) }
   let(:relation)   { mock('Relation') }

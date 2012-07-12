@@ -2,7 +2,7 @@ module Veritas
   module Adapter
     class Elasticsearch
       # Augment a faraday connection with elasticsearch specific operations
-      class Driver 
+      class Driver
         include Immutable
 
         # Return tuples from query
@@ -16,9 +16,9 @@ module Veritas
         # @api private
         #
         # @return [Result]
-        #   returns a result instance wrapping the decoded json body 
+        #   returns a result instance wrapping the decoded json body
         #
-        def read(path,query)
+        def read(path, query)
           path = "#{path}/_search"
 
           response = @connection.get(path) do |request|
@@ -39,7 +39,7 @@ module Veritas
         #
         def drop(index)
           if exist?(index)
-            connection.delete(index) 
+            connection.delete(index)
           end
 
           self
@@ -51,20 +51,20 @@ module Veritas
         #   the name of the index to wait for
         #
         # @param [Hash] options
-        #   the options for this wait operation. 
+        #   the options for this wait operation.
         #
         # @return [self]
         #
         # @api private
         #
-        def wait(index,options={})
+        def wait(index, options={})
           defaults = {
             :wait_for_status => :green,
             :timeout => 60,
             :level => :index
           }
 
-          connection.get("_cluster/health/#{index}", defaults.merge(options)) 
+          connection.get("_cluster/health/#{index}", defaults.merge(options))
 
           self
         end
@@ -81,13 +81,13 @@ module Veritas
         #
         def exist?(index)
           connection.head(index) do |request|
-            request.options.merge!(:convert_json => false, :expect_status => [200,404])
+            request.options.merge!(:convert_json => false, :expect_status => [200, 404])
           end.status == 200
         end
 
         # Trigger refresh on index
         #
-        # This syncs the latest write operations. 
+        # This syncs the latest write operations.
         # Read docs before use.
         #
         # @param [String] index
@@ -100,7 +100,7 @@ module Veritas
         def refresh(index=nil)
           path = "#{index}/_refresh"
 
-          connection.post(path) 
+          connection.post(path)
 
           self
         end
@@ -117,7 +117,7 @@ module Veritas
         #
         # @api private
         #
-        def setup(index,settings=DEFAULT_INDEX_SETTINGS)
+        def setup(index, settings=DEFAULT_INDEX_SETTINGS)
           connection.put("#{index}") do |request|
             request.body = settings
           end
@@ -142,7 +142,7 @@ module Veritas
         # @api private
         #
         def slice_size
-          @options.fetch(:slice_size,100)
+          @options.fetch(:slice_size, 100)
         end
 
       private
@@ -164,13 +164,13 @@ module Veritas
         # @api private
         #
         #
-        def initialize(uri,options={})
+        def initialize(uri, options={})
           @uri     = uri
           @options = options
           @connection = Faraday.new(@uri) do |builder|
-            adapter = [*@options.fetch(:adapter,:net_http)]
-            logger  = @options.fetch(:logger,NullLogger)
-            builder.use(Middleware,logger)
+            adapter = [*@options.fetch(:adapter, :net_http)]
+            logger  = @options.fetch(:logger, NullLogger)
+            builder.use(Middleware, logger)
             builder.adapter(*adapter)
           end
         end

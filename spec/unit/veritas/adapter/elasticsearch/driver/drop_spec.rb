@@ -1,18 +1,18 @@
 require 'spec_helper'
 
-describe Adapter::Elasticsearch::Driver,'#drop' do
-  let(:object)     { described_class.new(uri,options) }
+describe Adapter::Elasticsearch::Driver, '#drop' do
+  let(:object)     { described_class.new(uri, options) }
   let(:name)       { 'test' }
   let(:uri)        { 'http://example.com:9200' }
 
-  let(:options) { { :adapter => [:test,adapter] } }
+  let(:options) { { :adapter => [:test, adapter] } }
 
   subject { object.drop(name) }
 
-  let(:adapter) do 
+  let(:adapter) do
     Faraday::Adapter::Test::Stubs.new do |stubs|
-      requests.each do |method,path,result|
-        stubs.send(method,path) do
+      requests.each do |method, path, result|
+        stubs.send(method, path) do
           result
         end
       end
@@ -22,8 +22,8 @@ describe Adapter::Elasticsearch::Driver,'#drop' do
   context 'when index does exist' do
     let(:requests) do
       [
-        [:head,'/test',  [200,{},'{}']],
-        [:delete,'/test',[status,{'content-type' => 'application/json; charset=UTF-8'},'{}']]
+        [:head, '/test',  [200, {}, '{}']],
+        [:delete, '/test', [status, {'content-type' => 'application/json; charset=UTF-8'}, '{}']]
       ]
     end
 
@@ -42,7 +42,7 @@ describe Adapter::Elasticsearch::Driver,'#drop' do
       let(:status) { 500 }
 
       it 'should raise error' do
-        expect { subject }.to raise_error(Adapter::Elasticsearch::RemoteError,'{}')
+        expect { subject }.to raise_error(Adapter::Elasticsearch::RemoteError, '{}')
       end
     end
   end
@@ -50,7 +50,7 @@ describe Adapter::Elasticsearch::Driver,'#drop' do
   context 'when index does not exists' do
     let(:requests) do
       [
-        [:head,'/test',  [404,{},'{}']]
+        [:head, '/test',  [404, {}, '{}']]
       ]
     end
 

@@ -16,7 +16,7 @@ shared_examples_for 'a query #each method' do
     end
 
     def each(&block)
-      @documents.each(&block) 
+      @documents.each(&block)
     end
 
     def documents
@@ -41,7 +41,7 @@ shared_examples_for 'a query #each method' do
   end
 
   let(:expected_tuples) do
-    expected_reads.each_with_object([]) do |expectation,accumulator| 
+    expected_reads.each_with_object([]) do |expectation,accumulator|
       _,_,documents = expectation
       tuples = documents.map { |document| document.values_at('id') }
       accumulator.concat(tuples)
@@ -57,7 +57,7 @@ shared_examples_for 'a query #each method' do
         2
       when 'returns self'
         1
-      else 
+      else
         1
       end
 

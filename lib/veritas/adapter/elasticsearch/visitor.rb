@@ -12,7 +12,7 @@ module Veritas
         # @api private
         #
         def components
-          @components 
+          @components
         end
 
         # Return elasticsearch path to query
@@ -30,7 +30,7 @@ module Veritas
         # @return [true|false]
         #
         # @api private
-        #   
+        # 
         def limited?
           components.key?(:size)
         end
@@ -58,7 +58,7 @@ module Veritas
           Veritas::Relation::Operation::Offset => [:assign, :from        ]
         )
 
-        # Dispatch visitable 
+        # Dispatch visitable
         #
         # @param [Object] visitable
         #
@@ -81,14 +81,14 @@ module Veritas
         #
         # @api private
         #
-        def assign(name,operation)
+        def assign(name, operation)
           components = self.components
 
           if components.key?(name)
-            raise UnsupportedAlgebraError,"No support for nesting #{operation.class}"
+            raise UnsupportedAlgebraError, "No support for nesting #{operation.class}"
           end
 
-          components[name]=Literal.send(name,operation)
+          components[name]=Literal.send(name, operation)
           dispatch(operation.operand)
 
           self

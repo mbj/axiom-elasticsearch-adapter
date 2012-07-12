@@ -8,7 +8,7 @@ module Veritas
         # @param [Hash] env
         #
         # @api private
-        # 
+        #
         # @return [self]
         #
         def self.run(env)
@@ -20,7 +20,7 @@ module Veritas
       protected
 
         # Return request method
-        # 
+        #
         # @return [Symbol]
         #
         # @api private
@@ -29,7 +29,7 @@ module Veritas
           @env.fetch(:method)
         end
 
-        # Check if body should be converted from/to JSON 
+        # Check if body should be converted from/to JSON
         #
         # Defaults to true.
         #
@@ -64,7 +64,7 @@ module Veritas
         # Return request or response body
         #
         # @return [Object]
-        # 
+        #
         # @api private
         #
         def body

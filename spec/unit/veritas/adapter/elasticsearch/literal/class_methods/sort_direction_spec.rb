@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-# This method is private and this spec only exists to get coverage 
+# This method is private and this spec only exists to get coverage
 # for branch that must be present but will never be executed.
 describe Adapter::Elasticsearch::Literal, '.sort_direction' do
   let(:object) { Adapter::Elasticsearch::Literal }
