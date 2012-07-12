@@ -135,7 +135,6 @@ module Veritas
             sort_operation(operation)
           end
         end
-        private_class_method :sort
 
         # Create sort operation literal
         #
