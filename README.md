@@ -2,14 +2,14 @@ veritas-elasticsearch-adapter
 =============================
 
 [![Build Status](https://secure.travis-ci.org/mbj/veritas-elasticsearch-adapter.png?branch=master)](http://travis-ci.org/mbj/veritas-elastisearch-adapter)
+[![Dependency Status](https://gemnasium.com/mbj/veritas-elasticsearch-adapter.png)](https://gemnasium.com/mbj/veritas-elasticsearch-adapter)
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/mbj/veritas-elasticsearch-adapter)
 
-This is an [elasticsearch](http://elasticsearch.org) adapter for 
-[veritas](http://github.com/dkubb/veritas).
+This is an [elasticsearch](http://elasticsearch.org) adapter for [veritas](http://github.com/dkubb/veritas).
 
-It does currently feature basic read support with the ability to push 
-restriction/limit and offsets to the database.
+It does currently feature basic read support with the ability to push restriction/limit and offsets to the database.
 
-As only basic read operations are implemented. Also it is only tested against the git version of veritas currently.
+This project is only tested against the git version of veritas.
 
 Do not expect a gem release soon.
 
