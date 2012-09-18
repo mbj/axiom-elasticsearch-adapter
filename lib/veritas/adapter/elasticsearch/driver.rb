@@ -1,7 +1,7 @@
 module Veritas
   module Adapter
     class Elasticsearch
-      # Augment a faraday connection with elasticsearch specific operations
+      # Driver for elasticsearch 
       class Driver
         include Immutable
 
@@ -30,16 +30,16 @@ module Veritas
 
         # Drop index if exist
         #
-        # @param [String] index
+        # @param [String] name
         #   the name of the index to drop
         #
         # @return [self]
         #
         # @api private
         #
-        def drop(index)
-          if exist?(index)
-            connection.delete(index)
+        def drop(name)
+          if exist?(name)
+            connection.delete(name)
           end
 
           self
@@ -47,7 +47,7 @@ module Veritas
 
         # Wait for index to be fully initialized
         #
-        # @param [String] index
+        # @param [String] name
         #   the name of the index to wait for
         #
         # @param [Hash] options
@@ -57,14 +57,14 @@ module Veritas
         #
         # @api private
         #
-        def wait(index, options={})
+        def wait(name, options={})
           defaults = {
             :wait_for_status => :green,
             :timeout => 60,
             :level => :index
           }
 
-          connection.get("_cluster/health/#{index}", defaults.merge(options))
+          connection.get("_cluster/health/#{name}", defaults.merge(options))
 
           self
         end
