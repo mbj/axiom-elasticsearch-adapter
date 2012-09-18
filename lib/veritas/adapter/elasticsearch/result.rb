@@ -43,9 +43,9 @@ module Veritas
           hits.size
         end
 
-        # Return enumerator on result documents
+        # Return results 
         #
-        # @return [Enumerator<Hash>]
+        # @return [Enumerable<Hash>]
         #
         # @api private
         #
@@ -55,18 +55,18 @@ module Veritas
           end
         end
 
-      private
-
-
-        # Return hits from result
+        # Return hits
         #
-        # @return [Hash] hits
+        # @return [Enumerable<Hash>]
         #
         # @api private
         #
         def hits
           @data.fetch('hits').fetch('hits')
         end
+
+      private
+
 
         # Initialize result
         #
