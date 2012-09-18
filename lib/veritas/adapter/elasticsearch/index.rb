@@ -97,7 +97,7 @@ module Veritas
         #   returns a result instance wrapping the decoded json body
         #
         def read(query)
-          driver.read("#{name}/_search")
+          driver.read("#{name}/_search", query)
         end
 
       private
