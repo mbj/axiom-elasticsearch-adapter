@@ -21,6 +21,17 @@ module Veritas
         #
         attr_reader :driver
 
+        # Refresh index
+        #
+        # @api private
+        #
+        # @return [self]
+        #
+        def refresh
+          driver.refresh(name)
+          self
+        end
+
         # Drop index
         #
         # @return [self]
@@ -98,6 +109,18 @@ module Veritas
         #
         def read(query)
           driver.read(name, query)
+        end
+
+        # Return type for index
+        #
+        # @param [String] name
+        #
+        # @return [Type]
+        #
+        # @api private
+        #
+        def type(name)
+          Type.new(self, name)
         end
 
       private

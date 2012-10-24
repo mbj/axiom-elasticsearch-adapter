@@ -12,9 +12,7 @@ module Veritas
         #
         # @api private
         #
-        def data
-          @data
-        end
+        attr_reader :data
 
         # Enumerate documents in result
         #
@@ -43,6 +41,16 @@ module Veritas
           hits.size
         end
 
+        # Return number of matched documents
+        #
+        # @api private
+        #
+        # @return [Fixnum]
+        #
+        def total_hits
+          body.fetch('total')
+        end
+
         # Return results 
         #
         # @return [Enumerable<Hash>]
@@ -50,6 +58,7 @@ module Veritas
         # @api private
         #
         def documents
+          p data
           hits.map do |hit|
             hit.fetch('fields')
           end
@@ -62,11 +71,21 @@ module Veritas
         # @api private
         #
         def hits
-          @data.fetch('hits').fetch('hits')
+          body.fetch('hits')
         end
 
-      private
+        # Return body of result
+        #
+        # @return [Hash]
+        #
+        # @api private
+        #
+        def body
+          @data.fetch('hits')
+        end
+        memoize :body
 
+      private
 
         # Initialize result
         #
