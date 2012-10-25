@@ -58,7 +58,6 @@ module Veritas
         # @api private
         #
         def documents
-          p data
           hits.map do |hit|
             hit.fetch('fields')
           end
