@@ -5,6 +5,7 @@ module Veritas
     class Elasticsearch
       # A relation backed by elasticserach adapter
       class Gateway < ::Veritas::Relation
+        include Adamantium::Flat
 
         DECORATED_CLASS = superclass
 

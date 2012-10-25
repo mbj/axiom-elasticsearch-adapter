@@ -4,8 +4,13 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'veritas',           :git => 'https://github.com/dkubb/veritas'
-gem 'veritas-optimizer', :git => 'https://github.com/dkubb/veritas-optimizer'
+gem 'veritas',             :git => 'https://github.com/mbj/veritas',       :branch => 'freeze-config-adaption'
+gem 'veritas-optimizer',   :git => 'https://github.com/dkubb/veritas-optimizer'
+gem 'elasticsearch',       :git => 'https://github.com/mbj/elasticsearch'
+gem 'descendants_tracker', :git => 'https://github.com/dkubb/descendants_tracker.git'
+gem 'abstract_class',      :git => 'https://github.com/dkubb/abstract_class.git'
+gem 'equalizer',           :git => 'https://github.com/dkubb/equalizer.git'
+gem 'adamantium',          :git => 'https://github.com/mbj/adamantium.git', :branch => 'configurable-freezers'
 
 group :development do
   gem 'rake',    '~> 0.9.2'

@@ -3,22 +3,22 @@ module Veritas
     class Elasticsearch
       # Abstract base class for queries
       class Query
-        include Enumerable, Immutable
+        include Enumerable, Adamantium::Flat
 
         # Initialize query
         #
-        # @param [Driver] driver
+        # @param [Connection] connection
         # @param [Visitor] visitor
         #
         # @return [undefined]
         #
         # @api private
         #
-        def initialize(driver, visitor)
-          @driver, @visitor = driver, visitor
+        def initialize(connection, visitor)
+          @connection, @visitor = connection, visitor
         end
 
-        private
+      private
 
         # Read results
         #
@@ -130,7 +130,7 @@ module Veritas
             :from => Literal.positive_integer(offset),
             :size => Literal.positive_integer(size)
           )
-          @driver.read(@visitor.path, query)
+          @connection.read(@visitor.path, query)
         end
 
         # Return slice size
@@ -142,7 +142,7 @@ module Veritas
         # TODO: Should be configurable. Maybe with adding Driver#slice_size?
         #
         def slice_size
-          @driver.slice_size
+          @connection.slice_size
         end
 
         # Return offset enumerator for queries
@@ -155,9 +155,9 @@ module Veritas
           0.step(Literal::INT_32_MAX, slice_size)
         end
 
-        # Build query instance from driver and relation
+        # Build query instance from connection and relation
         #
-        # @param [Driver] driver
+        # @param [Driver] connection
         # @param [Relation] relation
         #
         # @return [Query::Limited]
@@ -168,10 +168,10 @@ module Veritas
         #
         # @api private
         #
-        def self.build(driver, relation)
+        def self.build(connection, relation)
           visitor = Visitor.new(relation)
           klass = visitor.limited? ? Limited : Unlimited
-          klass.new(driver, visitor)
+          klass.new(connection, visitor)
         end
 
         memoize :fields

@@ -3,7 +3,7 @@ module Veritas
     class Elasticsearch
       # A container for registring operations
       class Operations
-        include Immutable
+        include Adamantium
 
         # Lookup operation based on visitable object
         #
@@ -33,7 +33,7 @@ module Veritas
         # @api private
         #
         def initialize(map)
-          @map = map
+          @map = map.dup.freeze
         end
       end
     end

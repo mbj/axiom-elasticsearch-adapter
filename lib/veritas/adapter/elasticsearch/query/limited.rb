@@ -21,6 +21,7 @@ module Veritas
           end
 
         private
+
           # Return bounds enumerator for queries
           #
           # @return [Enumerator<Integer, Integer>]
