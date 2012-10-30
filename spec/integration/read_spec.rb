@@ -3,18 +3,14 @@ require 'spec_helper'
 require 'logger'
 
 describe Adapter::Elasticsearch, 'reading' do
-  let(:uri)           { ENV.fetch('ES_URI', 'http://localhost:9200')                       }
-  let(:logger)        { Logger.new($stdout)                                               }
-  let(:adapter)       { Adapter::Elasticsearch.new(uri, :logger => logger)                 }
+  let(:uri)           { ENV.fetch('ES_URI', 'http://localhost:9200')                        }
+  let(:logger)        { Logger.new($stdout)                                                 }
+  let(:adapter)       { Adapter::Elasticsearch.new(connection)                              }
   let(:header)        { Relation::Header.new([ [:firstname, String], [:lastname, String] ]) }
-  let(:base_relation) { Relation::Base.new('test/people', header)                          }
-
-  let(:index_name)    { 'test'                                                            }
-
-  let(:driver)        { adapter.driver                                                    }
-  let(:connection)    { driver.connection                                                 }
-
-  let(:relation)      { Adapter::Elasticsearch::Gateway.new(adapter, base_relation)        }
+  let(:base_relation) { Relation::Base.new('test/people', header)                           }
+  let(:connection)    { Elasticsearch::Connection.new(uri, :logger => logger)               }
+  let(:index_name)    { 'test'                                                              }
+  let(:relation)      { Adapter::Elasticsearch::Gateway.new(adapter, base_relation)         }
 
   # Driver does not allow writes currently
   def add(data)
@@ -26,8 +22,8 @@ describe Adapter::Elasticsearch, 'reading' do
   end
 
   before :all do
-    driver.drop(index_name)
-    driver.setup(index_name,
+    connection.drop(index_name)
+    connection.setup(index_name,
       :settings => {
         :number_of_shards => 1,
         :number_of_replicas => 0,
@@ -54,7 +50,7 @@ describe Adapter::Elasticsearch, 'reading' do
       }
     )
 
-    driver.wait(index_name, :timeout => 10)
+    connection.wait(index_name, :timeout => 10)
 
     # Driver does not support writes (yet)
 
@@ -62,7 +58,7 @@ describe Adapter::Elasticsearch, 'reading' do
     add(:firstname => 'Sue', :lastname => 'Doe')
 
     # Ensure documents are searchable
-    driver.refresh
+    connection.refresh
   end
 
   specify 'it allows to receive all records' do
