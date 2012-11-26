@@ -7,7 +7,6 @@ gemspec
 gem 'veritas',             :git => 'https://github.com/mbj/veritas',       :branch => 'freeze-config-adaption'
 gem 'veritas-optimizer',   :git => 'https://github.com/dkubb/veritas-optimizer'
 gem 'elasticsearch',       :git => 'https://github.com/mbj/elasticsearch'
-gem 'abstract_class',      :git => 'https://github.com/dkubb/abstract_class.git'
 
 group :development do
   gem 'rake',    '~> 0.9.2'
