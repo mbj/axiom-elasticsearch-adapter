@@ -1,0 +1,3 @@
+---
+name: veritas-elasticsearch-adapter
+namespace: Veritas::Adapter::Elasticsearch

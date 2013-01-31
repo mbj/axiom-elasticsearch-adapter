@@ -16,7 +16,8 @@ Gem::Specification.new do |gem|
   gem.test_files       = `git ls-files -- spec`.split("\n")
   gem.extra_rdoc_files = %w[TODO]
 
-  gem.add_runtime_dependency('backports',     '~> 2.6.1')
-  gem.add_runtime_dependency('elasticsearch', '~> 0.0.1')
+  gem.add_runtime_dependency('backports',     '~> 2.7.1')
   gem.add_runtime_dependency('veritas',       '~> 0.0.7')
+  gem.add_runtime_dependency('adamantium',    '~> 0.0.5')
+  gem.add_runtime_dependency('elasticsearch', '~> 0.0.1')
 end
