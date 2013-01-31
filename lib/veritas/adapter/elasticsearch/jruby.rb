@@ -14,7 +14,6 @@ module Veritas
         #
         if defined?(RUBY_ENGINE) and RUBY_ENGINE == 'jruby'
           # Use class eval to hide code from metrics tools.
-          # @dkubb I hear you complaing while writing this :D
           #
           # With flog I do not have the option to exclude
           # a method. So adjusting metric up here will hide a

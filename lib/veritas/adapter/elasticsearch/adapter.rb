@@ -1,6 +1,7 @@
 module Veritas
   module Adapter
     module Elasticsearch
+      # Adapter to read tuples from remote elasticsearch database
       class Adapter
         include Adamantium::Flat
 
