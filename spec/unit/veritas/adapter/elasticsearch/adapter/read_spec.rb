@@ -1,6 +1,7 @@
 require 'spec_helper'
 
-describe Adapter::Elasticsearch, '#read' do
+describe Adapter::Elasticsearch::Adapter, '#read' do
+
   let(:uri)        { 'http://example.com:9200'        }
   let(:options)    { {}                               }
   let(:object)     { described_class.new(connection)  }
@@ -14,7 +15,7 @@ describe Adapter::Elasticsearch, '#read' do
     expectation = query.stub(:each)
     rows.each { |row| expectation.and_yield(row) }
 
-    described_class::Query.stub!(:build).and_return(query)
+    Adapter::Elasticsearch::Query.stub(:build => query)
   end
 
   context 'with a block' do
@@ -29,7 +30,7 @@ describe Adapter::Elasticsearch, '#read' do
     end
 
     it 'initializes a query' do
-      described_class::Query.should_receive(:build).with(connection, relation).and_return(query)
+      Adapter::Elasticsearch::Query.should_receive(:build).with(connection, relation).and_return(query)
       subject
     end
   end

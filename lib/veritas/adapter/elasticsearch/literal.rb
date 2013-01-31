@@ -1,6 +1,6 @@
 module Veritas
   module Adapter
-    class Elasticsearch
+    module Elasticsearch
       module Literal
         # Maximum number an signed 32bit integer can take
         INT_32_MAX = (2**31 - 1).freeze

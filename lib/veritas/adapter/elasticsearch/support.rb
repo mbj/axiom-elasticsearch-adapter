@@ -1,6 +1,6 @@
 module Veritas
   module Adapter
-    class Elasticsearch
+    module Elasticsearch
       module Support
         # Lazy map an enumerable
         #

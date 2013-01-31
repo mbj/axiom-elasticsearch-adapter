@@ -1,6 +1,6 @@
 module Veritas
   module Adapter
-    class Elasticsearch
+    module Elasticsearch
       # Abstract base class for queries
       class Query
         include Enumerable, Adamantium::Flat

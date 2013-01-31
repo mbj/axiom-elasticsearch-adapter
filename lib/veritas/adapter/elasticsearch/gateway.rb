@@ -2,7 +2,7 @@
 
 module Veritas
   module Adapter
-    class Elasticsearch
+    module Elasticsearch
       # A relation backed by elasticserach adapter
       class Gateway < ::Veritas::Relation
         include Adamantium::Flat, AbstractType

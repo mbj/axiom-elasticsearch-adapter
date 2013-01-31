@@ -1,6 +1,6 @@
 module Veritas
   module Adapter
-    class Elasticsearch
+    module Elasticsearch
       # Visit relations to contstruct query parts
       class Visitor
         include Adamantium::Flat

@@ -1,6 +1,6 @@
 module Veritas
   module Adapter
-    class Elasticsearch
+    module Elasticsearch
       class Query
         # A query where amount of possible results is limited
         class Limited < Query

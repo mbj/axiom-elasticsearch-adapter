@@ -1,6 +1,6 @@
 module Veritas
   module Adapter
-    class Elasticsearch
+    module Elasticsearch
       class Query
         # A query where possible amount of results is unlimted
         class Unlimited < Query
