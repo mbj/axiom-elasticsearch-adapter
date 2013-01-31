@@ -131,10 +131,9 @@ module Veritas
         #
         def tuples
           relation = self.relation
-
           return relation if materialized?
 
-          DECORATED_CLASS.new(header, adapter.read(relation))
+          adapter.read(relation)
         end
       end
     end # class Gateway
