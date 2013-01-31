@@ -49,6 +49,7 @@ shared_examples_for 'a query #each method' do
   end
 
   before do
+    description = self.class.description
     read_count =
       case description
       when 'returns instance of Enumerator'

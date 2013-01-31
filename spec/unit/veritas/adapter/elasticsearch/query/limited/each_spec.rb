@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Adapter::Elasticsearch::Query::Limited, '#each' do
+  before do
+    pending "Will go away with the use of mbj/elasticsearch"
+  end
+
   let(:relation)   { Relation::Base.new('name', [[:id, Integer]]).sort_by { |r| [r.id.desc] }.take(limit) }
 
   let(:slice_size) { 3 }

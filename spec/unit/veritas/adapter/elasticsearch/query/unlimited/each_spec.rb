@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Adapter::Elasticsearch::Query::Unlimited, '#each' do
+  before do
+    pending "Will go away with the use of mbj/elasticsearch"
+  end
+
   let(:relation)     { Relation::Base.new('name', [[:id, Integer]]) }
   let(:slice_size) { 3 }
 
