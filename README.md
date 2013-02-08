@@ -3,7 +3,7 @@ veritas-elasticsearch-adapter
 
 [![Build Status](https://secure.travis-ci.org/mbj/veritas-elasticsearch-adapter.png?branch=master)](http://travis-ci.org/mbj/veritas-elastisearch-adapter)
 [![Dependency Status](https://gemnasium.com/mbj/veritas-elasticsearch-adapter.png)](https://gemnasium.com/mbj/veritas-elasticsearch-adapter)
-[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/mbj/veritas-elasticsearch-adapter)
+[![Code Climate](https://codeclimate.com/github/mbj/veritas-elasticsearch-adapter.png)](https://codeclimate.com/github/mbj/veritas-elasticsearch-adapter)
 
 This is an [elasticsearch](http://elasticsearch.org) adapter for [veritas](http://github.com/dkubb/veritas).
 
