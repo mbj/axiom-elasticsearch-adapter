@@ -4,9 +4,9 @@ require File.expand_path('../lib/veritas/adapter/elasticsearch/version.rb', __FI
 
 Gem::Specification.new do |gem|
   gem.name        = 'veritas-elasticsearch-adapter'
-  gem.version     = Veritas::Adapter::Elasticsearch::VERSION.dup
+  gem.version     = '0.0.1'
   gem.authors     = [ 'Markus Schirp' ]
-  gem.email       = [ 'mbj@seonic.net' ]
+  gem.email       = [ 'mbj@schirp-dso.com' ]
   gem.description = 'Elasticsearch adapter for veritas'
   gem.summary     = gem.description
   gem.homepage    = 'https://github.com/mbj/veritas-elasticsearch-adapter'
