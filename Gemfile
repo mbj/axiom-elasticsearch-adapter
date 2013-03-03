@@ -4,9 +4,10 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'veritas',             :git => 'https://github.com/dkubb/veritas'
-gem 'veritas-optimizer',   :git => 'https://github.com/dkubb/veritas-optimizer'
-gem 'elasticsearch',       :git => 'https://github.com/mbj/elasticsearch'
+gem 'veritas',           :git => 'https://github.com/dkubb/veritas.git'
+gem 'veritas-optimizer', :git => 'https://github.com/dkubb/veritas-optimizer.git'
+gem 'elasticsearch',     :git => 'https://github.com/mbj/elasticsearch.git'
+gem 'composition',       :git => 'https://github.com/mbj/composition.git'
 
 gem 'devtools', :git => 'https://github.com/datamapper/devtools.git'
 eval File.read('Gemfile.devtools')
