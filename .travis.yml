@@ -1,17 +1,25 @@
-before_install:
-  - gem install bundler
-  - sudo service elasticsearch start
-  - sleep 3 # remove this once we have Driver#wait_for_connection
 language: ruby
-script: 'bundle exec rake spec'
+before_script: spec/setup/arangodb.sh
+script: 'bundle exec rake ci'
 rvm:
+  - ree
   - 1.8.7
   - 1.9.2
   - 1.9.3
-  # - jruby-18mode Disabled for core dump on travis http://travis-ci.org/#!/mbj/veritas-elasticsearch-adapter/jobs/1769741
-  # - jruby-19mode Disabled for core dump on travis http://travis-ci.org/#!/mbj/veritas-elasticsearch-adapter/jobs/1768119
+  - 2.0.0
+  - ruby-head
+  - jruby-18mode
+  - jruby-19mode
+  - jruby-head
   - rbx-18mode
-  - rbx-19mode
+matrix:
+  allow_failures:
+    - rvm: 1.8.7
+    - rvm: ree
+    - rvm: rbx-18mode
+    - rvm: jruby-18mode
+    - rvm: rbx-19mode
 notifications:
+  irc: "irc.freenode.org#datamapper"
   email:
     - mbj@seonic.net
