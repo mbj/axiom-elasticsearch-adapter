@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
 
-require File.expand_path('../lib/veritas/adapter/elasticsearch/version.rb', __FILE__)
-
 Gem::Specification.new do |gem|
   gem.name        = 'veritas-elasticsearch-adapter'
   gem.version     = '0.0.1'
