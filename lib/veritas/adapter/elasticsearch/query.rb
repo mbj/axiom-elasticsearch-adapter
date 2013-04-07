@@ -58,6 +58,7 @@ module Veritas
         def fields
           components.fetch(:fields).map { |field| field.to_s }
         end
+        memoize :fields
 
         # Return query components
         #

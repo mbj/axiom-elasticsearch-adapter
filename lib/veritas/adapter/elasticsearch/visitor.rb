@@ -3,7 +3,7 @@ module Veritas
     module Elasticsearch
       # Visit relations to contstruct query parts
       class Visitor
-        include Adamantium::Flat
+        include Adamantium
 
         # Return query components
         #
