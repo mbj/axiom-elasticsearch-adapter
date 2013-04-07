@@ -7,10 +7,10 @@ UncommunicativeParameterName:
   - !ruby/regexp /^.$/
   - !ruby/regexp /[0-9]$/
   - !ruby/regexp /[A-Z]/
-LargeClass:
+TooManyMethods:
   max_methods: 10
   # Query needs to be broken up into a builder and executor
-  exclude: [ "Veritas::Adapter::Elasticsearch::Query" ]
+  exclude: [ "Axiom::Adapter::Elasticsearch::Query" ]
   enabled: true
   max_instance_variables: 3
 UncommunicativeMethodName:
@@ -27,7 +27,8 @@ LongParameterList:
   enabled: true
   overrides: {}
 FeatureEnvy:
-  exclude: []
+  exclude:
+  - Axiom::Adapter::Elasticsearch::Query::Limited#read_to_maximum
   enabled: true
 ClassVariable:
   exclude: []
@@ -47,14 +48,17 @@ UncommunicativeModuleName:
   - !ruby/regexp /[0-9]$/
 NestedIterators:
   ignore_iterators: []
-  exclude: []
+  exclude: 
+  - Axiom::Adapter::Elasticsearch::Query#results
+  - Axiom::Adapter::Elasticsearch::Query::Limited#bounds
+  - Axiom::Adapter::Elasticsearch::Query::Unlimited#bound
   enabled: true
   max_allowed_nesting: 1
-LongMethod:
+TooManyStatements:
   max_statements: 6
   exclude: []
   enabled: true
-Duplication:
+DuplicateMethodCall:
   allow_calls: []
   exclude: []
   enabled: true
@@ -74,7 +78,7 @@ UncommunicativeVariableName:
   - !ruby/regexp /^.$/
   - !ruby/regexp /[0-9]$/
   - !ruby/regexp /[A-Z]/
-SimulatedPolymorphism:
+RepeatedConditional:
   exclude: []
   enabled: true
   max_ifs: 1
@@ -83,7 +87,7 @@ DataClump:
   enabled: true
   max_copies: 2
   min_clump_size: 2
-ControlCouple:
+ControlParameter:
   exclude: []
   enabled: true
 LongYieldList:

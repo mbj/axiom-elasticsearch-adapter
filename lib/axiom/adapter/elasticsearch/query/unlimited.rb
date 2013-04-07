@@ -1,4 +1,4 @@
-module Veritas
+module Axiom
   module Adapter
     module Elasticsearch
       class Query
@@ -31,7 +31,7 @@ module Veritas
           def bounds
             Enumerator.new do |yielder|
               offsets.each do |offset|
-                yielder << [offset, SLICE_SIZE]
+                yielder << [offset, batch_size]
               end
             end
           end

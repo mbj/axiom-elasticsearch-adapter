@@ -1,15 +1,15 @@
-veritas-elasticsearch-adapter
+axiom-elasticsearch-adapter
 =============================
 
-[![Build Status](https://secure.travis-ci.org/mbj/veritas-elasticsearch-adapter.png?branch=master)](http://travis-ci.org/mbj/veritas-elastisearch-adapter)
-[![Dependency Status](https://gemnasium.com/mbj/veritas-elasticsearch-adapter.png)](https://gemnasium.com/mbj/veritas-elasticsearch-adapter)
-[![Code Climate](https://codeclimate.com/github/mbj/veritas-elasticsearch-adapter.png)](https://codeclimate.com/github/mbj/veritas-elasticsearch-adapter)
+[![Build Status](https://secure.travis-ci.org/mbj/axiom-elasticsearch-adapter.png?branch=master)](http://travis-ci.org/mbj/veritas-elastisearch-adapter)
+[![Dependency Status](https://gemnasium.com/mbj/axiom-elasticsearch-adapter.png)](https://gemnasium.com/mbj/veritas-elasticsearch-adapter)
+[![Code Climate](https://codeclimate.com/github/mbj/axiom-elasticsearch-adapter.png)](https://codeclimate.com/github/mbj/veritas-elasticsearch-adapter)
 
-This is an [elasticsearch](http://elasticsearch.org) adapter for [veritas](http://github.com/dkubb/veritas).
+This is an [elasticsearch](http://elasticsearch.org) adapter for [axiom](http://github.com/dkubb/veritas).
 
 It does currently feature basic read support with the ability to push restriction/limit and offsets to the database.
 
-This project is only tested against the git version of veritas.
+This project is only tested against the git version of axiom.
 
 Do not expect a gem release soon.
 
@@ -19,8 +19,8 @@ Installation
 In your **Gemfile**
 
 ``` ruby
-gem 'veritas',                       :git => 'https://github.com/dkubb/veritas'
-gem 'veritas-elasticsearch-adapter', :git => 'https://github.com/mbj/veritas-elasticsearch-adapter'
+gem 'axiom',                       :git => 'https://github.com/dkubb/veritas'
+gem 'axiom-elasticsearch-adapter', :git => 'https://github.com/mbj/veritas-elasticsearch-adapter'
 ```
 
 Examples
