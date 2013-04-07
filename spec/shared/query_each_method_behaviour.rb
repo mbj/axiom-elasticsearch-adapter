@@ -1,13 +1,15 @@
 shared_examples_for 'a query #each method' do
   subject { object.each { |tuple| yields << tuple } }
 
-  let(:object)     { described_class.new(driver,visitor) }
-  let(:components) { { :size => limit } }
-  let(:visitor)    { Adapter::Elasticsearch::Visitor.new(relation) }
-  let(:driver)     { mock('Driver',:slice_size => slice_size)   }
-  let(:tuple)      { [ 1 ]            }
-  let(:document)   { { "id" => 1 }    }
-  let(:header)     { mock('Header')   }
+  let(:object)     { described_class.new(visitor) }
+
+  let(:components) { { :size => limit }                                   }
+  let(:visitor)    { Adapter::Elasticsearch::Visitor.new(relation, index) }
+  let(:index)      { mock('ES Index', :type => type)                      }
+  let(:type)       { FakeType.new(expected_reads)                         }
+  let(:tuple)      { [ 1 ]                                                }
+  let(:document)   { { "id" => 1 }                                        }
+  let(:header)     { mock('Header')                                       }
   let(:yields)     { [] }
 
   class FakeResult

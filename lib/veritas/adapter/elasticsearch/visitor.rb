@@ -19,9 +19,15 @@ module Veritas
         #
         # @api private
         #
-        def path
-          @base_name
-        end
+        attr_reader :type
+
+        # Return index
+        #
+        # @return [Elasticsearch::Index]
+        #
+        # @api private
+        #
+        attr_reader :index
 
         # Test if amount of tuples  is limited
         #
@@ -47,8 +53,8 @@ module Veritas
         #
         # @api private
         #
-        def initialize(relation)
-          @components = {}
+        def initialize(relation, index)
+          @index, @components = index, {}
           dispatch(relation)
         end
 
@@ -62,14 +68,14 @@ module Veritas
 
         # Dispatch visitable
         #
-        # @param [Object] visitable
+        # @param [Relation] relation
         #
         # @return [self]
         #
         # @api private
         #
-        def dispatch(visitable)
-          send(*OPERATIONS.lookup(visitable))
+        def dispatch(relation)
+          send(*OPERATIONS.lookup(relation))
 
           self
         end
@@ -105,7 +111,7 @@ module Veritas
         # @api private
         #
         def visit_base_relation(relation)
-          @base_name = relation.name
+          @type = index.type(relation.name)
           components[:fields] = Literal.fields(relation.header)
 
           self

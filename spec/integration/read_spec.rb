@@ -4,28 +4,23 @@ require 'logger'
 
 describe Adapter::Elasticsearch, 'reading' do
 
-  let(:uri)           { ENV.fetch('ES_URI', 'http://localhost:9200')                        }
-  let(:logger)        { Logger.new($stdout)                                                 }
-  let(:adapter)       { Adapter::Elasticsearch.new(connection)                              }
-  let(:header)        { Relation::Header.new([ [:firstname, String], [:lastname, String] ]) }
-  let(:base_relation) { Relation::Base.new('test/people', header)                           }
-  let(:connection)    { Elasticsearch::Connection.new(uri, :logger => logger)               }
-  let(:index_name)    { 'test'                                                              }
-  let(:relation)      { Adapter::Elasticsearch::Gateway.new(adapter, base_relation)         }
+  let(:uri)           { ENV.fetch('ES_URI', 'http://localhost:9200')                           }
+  let(:logger)        { Logger.new($stdout)                                                    }
+  let(:adapter)       { Adapter::Elasticsearch::Adapter.new(index)                             }
+  let(:header)        { Relation::Header.coerce([ [:firstname, String], [:lastname, String] ]) }
+  let(:base_relation) { Relation::Base.new('test/people', header)                              }
+  let(:cluster)       { Elasticsearch::Cluster.connect(uri, logger)                            }
+  let(:index)         { cluster.index(index_name)                                              }
+  let(:index_name)    { 'test'                                                                 }
+  let(:relation)      { Adapter::Elasticsearch::Gateway.new(adapter, base_relation)            }
 
-  # Driver does not allow writes currently
   def add(data)
-    connection.post('test/people') do |request|
-      request.options[:expect_status]=201
-      request.options[:convert_json]=true
-      request.body = data
-    end
+    index.type('people').index_create(data)
   end
 
   before do
-    pending 'While refactoring to use mbj/elasticsearch'
-    connection.drop(index_name)
-    connection.setup(index_name,
+    index.delete if index.exist?
+    index.create(
       :settings => {
         :number_of_shards => 1,
         :number_of_replicas => 0,
@@ -52,15 +47,13 @@ describe Adapter::Elasticsearch, 'reading' do
       }
     )
 
-    connection.wait(index_name, :timeout => 10)
-
-    # Driver does not support writes (yet)
+    cluster.health(:wait_for_status => :green)
 
     add(:firstname => 'John', :lastname => 'Doe')
     add(:firstname => 'Sue', :lastname => 'Doe')
 
     # Ensure documents are searchable
-    connection.refresh
+    index.refresh
   end
 
   specify 'it allows to receive all records' do

@@ -16,5 +16,5 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency('veritas',       '~> 0.0.7')
   gem.add_runtime_dependency('adamantium',    '~> 0.0.7')
-  gem.add_runtime_dependency('elasticsearch', '~> 0.0.1')
+  gem.add_runtime_dependency('elasticsearch', '~> 0.1.0')
 end

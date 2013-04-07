@@ -3,7 +3,10 @@ require 'spec_helper'
 describe Adapter::Elasticsearch::Visitor, '#components' do
   subject { object.components }
 
-  let(:object) { described_class.new(relation) }
+  let(:object) { described_class.new(relation, index) }
+
+  let(:index) { mock('Index', :type => type) }
+  let(:type)  { mock('Type')                 }
 
   let(:header) do
     [

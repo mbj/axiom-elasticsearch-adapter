@@ -3,9 +3,11 @@ require 'spec_helper'
 describe Adapter::Elasticsearch::Visitor,'limited?' do
   subject { object.limited? }
 
-  let(:object)        { described_class.new(relation)             }
+  let(:object)        { described_class.new(relation, index) }
+  let(:index)         { mock('ES Index', :type => type)      }
+  let(:type)          { mock('ES Type')                      }
 
-  let(:base_relation) { Relation::Base.new(:name,[[:id,Integer]]) }
+  let(:base_relation) { Relation::Base.new(:name, [[:id,Integer]]) }
   let(:sort_relation) { base_relation.sort_by { |r| [r.id.asc] }  }
 
   context 'when relation is limited' do
