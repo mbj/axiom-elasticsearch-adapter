@@ -50,7 +50,7 @@ module Axiom
         #
         def tuples(result)
           result.hits.map do |hit|
-            hit.raw.fetch('fields').values_at(*fields)
+            hit.fields.values_at(*fields)
           end
         end
 
