@@ -85,7 +85,7 @@ module Axiom
           # @api private
           #
           def slice_length(offset)
-            maximum, slice_length = limit, SLICE_SIZE
+            maximum, slice_length = limit, batch_size
             upper = offset + slice_length
 
             if upper > maximum

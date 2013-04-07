@@ -9,7 +9,7 @@ module Axiom
         include AbstractType, Enumerable, Adamantium::Flat, Concord.new(:visitor)
 
         # TODO: Should be configurable!
-        SLICE_SIZE = 100
+        BATCH_SIZE = 100
 
       private
 
@@ -111,6 +111,16 @@ module Axiom
           @visitor.type.search(query)
         end
 
+        # Return batch size
+        #
+        # @return [Integer]
+        #
+        # @api private
+        #
+        def batch_size
+          self.class::BATCH_SIZE
+        end
+
         # Return offset enumerator for queries
         #
         # @return [Enumerator<Integer>]
@@ -122,7 +132,7 @@ module Axiom
             current = 0
             while current <= Literal::INT_32_MAX
               yielder << current
-              current += SLICE_SIZE
+              current += batch_size
             end
             raise "Cannot read mor than #{Literal::INT_32_MAX} records!"
           end

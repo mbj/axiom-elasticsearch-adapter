@@ -31,7 +31,7 @@ module Axiom
           def bounds
             Enumerator.new do |yielder|
               offsets.each do |offset|
-                yielder << [offset, SLICE_SIZE]
+                yielder << [offset, batch_size]
               end
             end
           end
