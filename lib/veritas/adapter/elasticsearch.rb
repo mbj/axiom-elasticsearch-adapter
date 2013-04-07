@@ -1,6 +1,5 @@
 require 'veritas'
 require 'elasticsearch'
-require 'veritas/adapter/elasticsearch/support'
 require 'veritas/adapter/elasticsearch/operations'
 require 'veritas/adapter/elasticsearch/literal'
 require 'veritas/adapter/elasticsearch/visitor'
