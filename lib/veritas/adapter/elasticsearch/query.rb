@@ -22,7 +22,7 @@ module Veritas
         # This method is intentionally at private scope.
         # Its scope is set to public in subclasses.
         #
-        # This frees us from the need to heckle this method
+        # This saves the need to mutation cover this method
         # on instances of the abstract query class.
         #
         def each(&block)

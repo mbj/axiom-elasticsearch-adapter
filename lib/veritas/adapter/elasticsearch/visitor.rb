@@ -11,13 +11,11 @@ module Veritas
         #
         # @api private
         #
-        def components
-          @components
-        end
+        attr_reader :components
 
-        # Return elasticsearch path to query
+        # Return elasticsearch type to read from
         #
-        # @return [String]
+        # @return [Elasticsearch::Type]
         #
         # @api private
         #
@@ -25,9 +23,13 @@ module Veritas
           @base_name
         end
 
-        # Return if query results are limited
+        # Test if amount of tuples  is limited
         #
-        # @return [true|false]
+        # @return [true]
+        #   if amount of tuples is limited
+        #
+        # @return [false]
+        #   otherwise
         #
         # @api private
         #
