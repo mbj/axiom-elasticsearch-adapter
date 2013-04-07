@@ -8,7 +8,7 @@ describe Adapter::Elasticsearch, 'reading' do
   let(:logger)        { Logger.new($stdout)                                                    }
   let(:adapter)       { Adapter::Elasticsearch::Adapter.new(index)                             }
   let(:header)        { Relation::Header.coerce([ [:firstname, String], [:lastname, String] ]) }
-  let(:base_relation) { Relation::Base.new('test/people', header)                              }
+  let(:base_relation) { Relation::Base.new('people', header)                                   }
   let(:cluster)       { Elasticsearch::Cluster.connect(uri, logger)                            }
   let(:index)         { cluster.index(index_name)                                              }
   let(:index_name)    { 'test'                                                                 }
