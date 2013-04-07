@@ -44,13 +44,26 @@ module Axiom
           #
           def results
             Enumerator.new do |yielder|
-              count, maximum = 0, limit
+              read_to_maximum(super, yielder)
+            end
+          end
 
-              super.each do |result|
-                count += result.size
-                yielder << result
-                break if count == maximum
-              end
+          # Read to maximum
+          #
+          # @param [Enumerator<Result>] results
+          # @param [#<<] accumulator
+          #
+          # @return [undefined]
+          #
+          # @api private
+          #
+          def read_to_maximum(results, accumulator)
+            count, maximum = 0, limit
+
+            results.each do |result|
+              count += result.size
+              accumulator << result
+              break if count == maximum
             end
           end
 
