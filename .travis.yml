@@ -1,4 +1,6 @@
 language: ruby
+services:
+  - elasticsearch
 script: 'bundle exec rake spec'
 rvm:
   - ree
