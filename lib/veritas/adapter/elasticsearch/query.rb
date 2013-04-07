@@ -2,21 +2,14 @@ module Veritas
   module Adapter
     module Elasticsearch
       # Abstract base class for queries
+      #
+      # TODO: Move all batch reading to elasticsearch gem
+      #
       class Query
         include AbstractType, Enumerable, Adamantium::Flat, Concord.new(:visitor)
 
-        # Initialize query
-        #
-        # @param [Connection] connection
-        # @param [Visitor] visitor
-        #
-        # @return [undefined]
-        #
-        # @api private
-        #
-        def initialize(connection, visitor)
-          @connection, @visitor = connection, visitor
-        end
+        # TODO: Should be configurable!
+        SLICE_SIZE = 100
 
       private
 
@@ -84,26 +77,12 @@ module Veritas
         #
         def results
           Enumerator.new do |yielder|
-            read(yielder)
+            bounds.each do |offset, size|
+              result = read_slice(offset, size)
+              yielder << result
+              break if result.size < size
+            end
           end
-        end
-
-        # Read results into accumulator
-        #
-        # @param [#<<] accumulator
-        #
-        # @return [self]
-        #
-        # @api private
-        #
-        def read(accumulator)
-          bounds.each do |offset, size|
-            result = execute(offset, size)
-            accumulator << result
-            break if result.size < size
-          end
-
-          self
         end
 
         # Return bounds enumerator
@@ -123,24 +102,12 @@ module Veritas
         #
         # @api private
         #
-        def execute(offset, size)
+        def read_slice(offset, size)
           query = components.merge(
             :from => Literal.positive_integer(offset),
             :size => Literal.positive_integer(size)
           )
-          @connection.read(@visitor.path, query)
-        end
-
-        # Return slice size
-        #
-        # @return [Integer]
-        #
-        # @api private
-        #
-        # TODO: Should be configurable. Maybe with adding Driver#slice_size?
-        #
-        def slice_size
-          @connection.slice_size
+          @visitor.type.search(query)
         end
 
         # Return offset enumerator for queries
@@ -150,12 +117,19 @@ module Veritas
         # @api private
         #
         def offsets
-          0.step(Literal::INT_32_MAX, slice_size)
+          Enumerator.new do |yielder|
+            current = 0
+            while current <= Literal::INT_32_MAX
+              yielder << current
+              current += SLICE_SIZE
+            end
+            raise "Cannot read mor than #{Literal::INT_32_MAX} records!"
+          end
         end
 
-        # Build query instance from connection and relation
+        # Build query instance from index and relation
         #
-        # @param [Driver] connection
+        # @param [Elasticsearch::Index] index
         # @param [Relation] relation
         #
         # @return [Query::Limited]
@@ -166,10 +140,10 @@ module Veritas
         #
         # @api private
         #
-        def self.build(connection, relation)
-          visitor = Visitor.new(relation)
+        def self.build(index, relation)
+          visitor = Visitor.new(relation, index)
           klass = visitor.limited? ? Limited : Unlimited
-          klass.new(connection, visitor)
+          klass.new(visitor)
         end
 
         memoize :fields

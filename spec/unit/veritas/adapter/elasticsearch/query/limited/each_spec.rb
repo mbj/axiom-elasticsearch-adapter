@@ -1,25 +1,19 @@
 require 'spec_helper'
 
 describe Adapter::Elasticsearch::Query::Limited, '#each' do
-  before do
-    pending "Will go away with the use of mbj/elasticsearch"
-  end
 
   let(:relation)   { Relation::Base.new('name', [[:id, Integer]]).sort_by { |r| [r.id.desc] }.take(limit) }
 
-  let(:slice_size) { 3 }
-
   context 'when limit is greather than slice size' do
-    let(:limit)        { 4 }
+    let(:limit)        { 200 }
 
     context 'and result count is less than slice size' do
       let(:expected_reads) do
         [
           [
-            visitor.path,
-            { :from => 0, :size => 3, :sort => [:id => { :order => :desc } ], :fields => ['id'] },
+            { :size => 100, :sort => [:id => { :order => :desc } ], :fields => ['id'], :from => 0 },
             [ { 'id' => 1 } ]
-          ]
+          ],
         ]
       end
 
@@ -30,13 +24,11 @@ describe Adapter::Elasticsearch::Query::Limited, '#each' do
       let(:expected_reads) do
         [
           [
-            visitor.path,
-            { :from => 0, :size => 3, :sort => [:id => { :order => :desc } ], :fields => ['id'] },
-            [ { 'id' => 1 } ] * 3
+            { :size => 100, :sort => [:id => { :order => :desc } ], :fields => ['id'], :from => 0 },
+            [ { 'id' => 1 } ] * 100
           ],
           [
-            visitor.path,
-            { :from => 3, :size => 1, :sort => [:id => { :order => :desc } ], :fields => ['id'] },
+            { :size => 100, :sort => [:id => { :order => :desc } ], :fields => ['id'], :from => 100 },
             []
           ]
         ]
@@ -49,13 +41,11 @@ describe Adapter::Elasticsearch::Query::Limited, '#each' do
       let(:expected_reads) do
         [
           [
-            visitor.path,
-            { :from => 0, :size => 3, :sort => [:id => { :order => :desc } ], :fields => ['id'] },
-            [ { 'id' => 1 } ] * 3
+            { :size => 100, :sort => [:id => { :order => :desc } ], :fields => ['id'], :from => 0 },
+            [ { 'id' => 1 } ] * 100
           ],
           [
-            visitor.path,
-            { :from => 3, :size => 1, :sort => [:id => { :order => :desc } ], :fields => ['id'] },
+            { :size => 100, :sort => [:id => { :order => :desc } ], :fields => ['id'], :from => 100 },
             [ { 'id' => 1 } ]
           ]
         ]
@@ -71,8 +61,7 @@ describe Adapter::Elasticsearch::Query::Limited, '#each' do
     let(:expected_reads) do
       [
         [
-          visitor.path,
-          { :from => 0, :size => 2, :sort => [:id => { :order => :desc } ], :fields => ['id'] },
+          { :size => 2, :sort => [:id => { :order => :desc } ], :fields => ['id'], :from => 0 },
           [ { 'id' => 1 } ]
         ],
       ]
@@ -80,4 +69,5 @@ describe Adapter::Elasticsearch::Query::Limited, '#each' do
 
     it_should_behave_like 'a query #each method'
   end
+
 end

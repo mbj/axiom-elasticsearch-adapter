@@ -1,19 +1,15 @@
 require 'spec_helper'
 
 describe Adapter::Elasticsearch::Query::Unlimited, '#each' do
-  before do
-    pending "Will go away with the use of mbj/elasticsearch"
-  end
 
-  let(:relation)     { Relation::Base.new('name', [[:id, Integer]]) }
+  let(:relation)   { Relation::Base.new('name', [[:id, Integer]]) }
   let(:slice_size) { 3 }
 
   context 'when result count is lower than slice length' do
     let(:expected_reads) do
       [
         [
-          visitor.path,
-          { :from => 0, :size => 3, :fields => ['id'] },
+          { :from => 0, :size => 100, :fields => ['id'] },
           [ { 'id' => 1 } ]
         ]
       ]
@@ -26,14 +22,12 @@ describe Adapter::Elasticsearch::Query::Unlimited, '#each' do
     let(:expected_reads) do
       [
         [
-          visitor.path,
-          { :from => 0, :size => 3, :fields => ['id'] },
-          [ { 'id' => 1 } ] * 3
+          { :from => 0, :size => 100, :fields => ['id'] },
+          [ { 'id' => 1 } ] * 100
         ],
         [
-          visitor.path,
-          { :from => 3, :size => 3, :fields => ['id'] },
-          [ { 'id' => 1 } ]
+          { :from => 100, :size => 100, :fields => ['id'] },
+          []
         ]
       ]
     end
@@ -45,13 +39,11 @@ describe Adapter::Elasticsearch::Query::Unlimited, '#each' do
     let(:expected_reads) do
       [
         [
-          visitor.path,
-          { :from => 0, :size => 3, :fields => ['id'] },
-          [ { 'id' => 1 } ] * 3
+          { :from => 0, :size => 100, :fields => ['id'] },
+          [ { 'id' => 1 } ] * 100
         ],
         [
-          visitor.path,
-          { :from => 3, :size => 3, :fields => ['id'] },
+          { :from => 100, :size => 100, :fields => ['id'] },
           [ { 'id' => 1 } ] * 2
         ]
       ]

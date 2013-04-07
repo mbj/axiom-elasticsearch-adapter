@@ -28,10 +28,13 @@ module Veritas
           # @api private
           #
           def bounds
-            Support.lazy_map(offsets) do |offset|
-              [offset,slice_size]
+            Enumerator.new do |yielder|
+              offsets.each do |offset|
+                yielder << [offset, SLICE_SIZE]
+              end
             end
           end
+
         end
       end
     end

@@ -29,8 +29,10 @@ module Veritas
           # @api private
           #
           def bounds
-            Support.lazy_map(offsets) do |offset|
-              [offset, slice_length(offset)]
+            Enumerator.new do |yielder|
+              offsets.each do |offset|
+                yielder << [offset, slice_length(offset)]
+              end
             end
           end
 
@@ -42,29 +44,14 @@ module Veritas
           #
           def results
             Enumerator.new do |yielder|
-              read_to_maximum(super, yielder)
+              count, maximum = 0, limit
+
+              super.each do |result|
+                count += result.size
+                yielder << result
+                break if count == maximum
+              end
             end
-          end
-
-          # Read results into accumulator until maximum amount of results is read
-          #
-          # @param [Enumerator<Result>] results
-          # @param [#<<] accumulator
-          #
-          # @return [self]
-          #
-          # @api private
-          #
-          def read_to_maximum(results, accumulator)
-            count, maximum = 0, limit
-
-            results.each do |result|
-              count+=result.size
-              accumulator << result
-              break if count == maximum
-            end
-
-            self
           end
 
           # Return result count limit
@@ -76,6 +63,7 @@ module Veritas
           def limit
             components.fetch(:size)
           end
+          memoize :limit
 
           # Return slice length for given offset
           #
@@ -84,15 +72,16 @@ module Veritas
           # @api private
           #
           def slice_length(offset)
-            maximum = limit
-            upper = offset + slice_size
+            maximum, slice_length = limit, SLICE_SIZE
+            upper = offset + slice_length
 
-            if maximum < upper
-              return maximum - offset
+            if upper > maximum
+              slice_length = maximum - offset
             end
 
-            upper
+            slice_length
           end
+
         end
       end
     end
