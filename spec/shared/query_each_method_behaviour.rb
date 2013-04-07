@@ -12,25 +12,23 @@ shared_examples_for 'a query #each method' do
   let(:header)     { mock('Header')                                       }
   let(:yields)     { [] }
 
+  class FakeHit
+    include Concord.new(:raw)
+  end
+
   class FakeResult
     def initialize(documents)
       @documents = documents
     end
 
-    def each(&block)
-      @documents.each(&block)
-    end
-
-    def documents
-      @documents
+    def hits
+      @documents.map do |document|
+        FakeHit.new('fields' => document)
+      end
     end
 
     def size
       @documents.size
-    end
-
-    def empty?
-      @documents.empty?
     end
   end
 

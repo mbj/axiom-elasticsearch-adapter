@@ -37,6 +37,11 @@ module Axiom
 
         # Return enumerator for tuples in result
         #
+        # TODO: 
+        #
+        #   Many other hit / tuple mappings are possible.
+        #   No need to rely on 'fields'
+        #
         # @param [Result] result
         #
         # @return [Enumerator<Array>]
@@ -44,8 +49,8 @@ module Axiom
         # @api private
         #
         def tuples(result)
-          result.documents.map do |document|
-            document.values_at(*fields)
+          result.hits.map do |hit|
+            hit.raw.fetch('fields').values_at(*fields)
           end
         end
 
@@ -81,7 +86,7 @@ module Axiom
             bounds.each do |offset, size|
               result = read_slice(offset, size)
               yielder << result
-              break if result.size < size
+              break if result.hits.size < size
             end
           end
         end
