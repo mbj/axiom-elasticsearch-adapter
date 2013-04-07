@@ -1,4 +1,4 @@
-module Veritas
+module Axiom
   module Adapter
     module Elasticsearch
       # Visit relations to contstruct query parts
@@ -47,7 +47,7 @@ module Veritas
 
         # Initialize query instance
         #
-        # @param [Veritas::Relation] relation
+        # @param [Axiom::Relation] relation
         #
         # @return [undefined]
         #
@@ -59,11 +59,11 @@ module Veritas
         end
 
         OPERATIONS = Operations.new(
-          Veritas::Relation::Base              => [:visit_base_relation  ],
-          Veritas::Algebra::Restriction        => [:assign, :filter      ],
-          Veritas::Relation::Operation::Order  => [:assign, :sort        ],
-          Veritas::Relation::Operation::Limit  => [:assign, :size        ],
-          Veritas::Relation::Operation::Offset => [:assign, :from        ]
+          Axiom::Relation::Base              => [:visit_base_relation  ],
+          Axiom::Algebra::Restriction        => [:assign, :filter      ],
+          Axiom::Relation::Operation::Order  => [:assign, :sort        ],
+          Axiom::Relation::Operation::Limit  => [:assign, :size        ],
+          Axiom::Relation::Operation::Offset => [:assign, :from        ]
         )
 
         # Dispatch visitable
@@ -104,7 +104,7 @@ module Veritas
 
         # Visit a base relation
         #
-        # @param [Veritas::Relation::Base] relation
+        # @param [Axiom::Relation::Base] relation
         #
         # @return [self]
         #

@@ -16,7 +16,7 @@ describe Adapter::Elasticsearch::Visitor, '#components' do
   end
 
   let(:base_relation) do
-    Veritas::Relation::Base.new(:name, header)
+    Axiom::Relation::Base.new(:name, header)
   end
 
   context 'with an unsupported relation' do
@@ -47,7 +47,7 @@ describe Adapter::Elasticsearch::Visitor, '#components' do
     end
 
     it 'should raise error' do
-      expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, 'No support for nesting Veritas::Algebra::Restriction')
+      expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, 'No support for nesting Axiom::Algebra::Restriction')
     end
   end
 
@@ -112,7 +112,7 @@ describe Adapter::Elasticsearch::Visitor, '#components' do
       let(:relation) { ordered_relation.sort_by { |r| [r.firstname.asc, r.lastname ] } }
 
       it 'should raise error' do
-        expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, 'No support for nesting Veritas::Relation::Operation::Order')
+        expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, 'No support for nesting Axiom::Relation::Operation::Order')
       end
     end
 
@@ -134,7 +134,7 @@ describe Adapter::Elasticsearch::Visitor, '#components' do
         let(:relation) { ordered_relation.take(5).take(5) }
 
         it 'should raise error' do
-          expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, 'No support for nesting Veritas::Relation::Operation::Limit')
+          expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, 'No support for nesting Axiom::Relation::Operation::Limit')
         end
       end
     end
@@ -157,7 +157,7 @@ describe Adapter::Elasticsearch::Visitor, '#components' do
         let(:relation) { ordered_relation.drop(5).drop(5) }
 
         it 'should raise error' do
-          expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, 'No support for nesting Veritas::Relation::Operation::Offset')
+          expect { subject }.to raise_error(Adapter::Elasticsearch::UnsupportedAlgebraError, 'No support for nesting Axiom::Relation::Operation::Offset')
         end
       end
     end

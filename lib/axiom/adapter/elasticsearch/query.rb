@@ -1,4 +1,4 @@
-module Veritas
+module Axiom
   module Adapter
     module Elasticsearch
       # Abstract base class for queries

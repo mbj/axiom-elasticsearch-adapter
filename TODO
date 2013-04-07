@@ -5,9 +5,9 @@
 * Add option to force local timeouts in faraday.
 * Use optimizer to collapse nested operations.
 * Add optimizer stage to reorder relation in a way unsupported operations are not done on gateway relation.
-* Add write support once veritas has writable relations
-* Use Veritas::Proxy to simplify gateway
-* Fix/Workaround coredump in jruby-19mode http://travis-ci.org/#!/mbj/veritas-elasticsearch-adapter/jobs/1768119
+* Add write support once axiom has writable relations
+* Use Axiom::Proxy to simplify gateway
+* Fix/Workaround coredump in jruby-19mode http://travis-ci.org/#!/mbj/axiom-elasticsearch-adapter/jobs/1768119
 * Push a bugreport to yard or yardstick to fix def each; super; end in Query::Unlimited and Query::Limited
 * Support a wait_for_connection method in driver.
 * Add class_method/new_spec for frozen objects 

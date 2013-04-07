@@ -1,18 +1,19 @@
-require 'veritas'
+require 'axiom'
+require 'concord'
 require 'elasticsearch'
-require 'veritas/adapter/elasticsearch/operations'
-require 'veritas/adapter/elasticsearch/literal'
-require 'veritas/adapter/elasticsearch/visitor'
-require 'veritas/adapter/elasticsearch/query'
-require 'veritas/adapter/elasticsearch/query/limited'
-require 'veritas/adapter/elasticsearch/query/unlimited'
-require 'veritas/adapter/elasticsearch/gateway'
-require 'veritas/adapter/elasticsearch/adapter'
+require 'axiom/adapter/elasticsearch/operations'
+require 'axiom/adapter/elasticsearch/literal'
+require 'axiom/adapter/elasticsearch/visitor'
+require 'axiom/adapter/elasticsearch/query'
+require 'axiom/adapter/elasticsearch/query/limited'
+require 'axiom/adapter/elasticsearch/query/unlimited'
+require 'axiom/adapter/elasticsearch/gateway'
+require 'axiom/adapter/elasticsearch/adapter'
 
 # jRuby specific overrides.
-require 'veritas/adapter/elasticsearch/jruby'
+require 'axiom/adapter/elasticsearch/jruby'
 
-module Veritas
+module Axiom
   module Adapter
     # An adapter for elasticsearch
     module Elasticsearch

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Veritas::Adapter::Elasticsearch::Literal,'#positive_integer' do
+describe Axiom::Adapter::Elasticsearch::Literal,'#positive_integer' do
   subject { object.positive_integer(value) }
 
-  let(:object) { Veritas::Adapter::Elasticsearch::Literal }
+  let(:object) { Axiom::Adapter::Elasticsearch::Literal }
 
   context 'when value is a positive fixnum in int32 range' do
     let(:value) { 10 }

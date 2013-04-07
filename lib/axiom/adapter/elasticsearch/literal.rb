@@ -1,4 +1,4 @@
-module Veritas
+module Axiom
   module Adapter
     module Elasticsearch
       module Literal
@@ -124,7 +124,7 @@ module Veritas
 
         # Create sort literal
         #
-        # @param [Veritas::Relation::Operation::Order] order
+        # @param [Axiom::Relation::Operation::Order] order
         #
         # @return [Hash]
         #
@@ -138,7 +138,7 @@ module Veritas
 
         # Create sort operation literal
         #
-        # @param [Veritas::Relation::Operation::Order::Direction] operation
+        # @param [Axiom::Relation::Operation::Order::Direction] operation
         #
         # @return [Hash]
         #
@@ -151,7 +151,7 @@ module Veritas
 
         # Create sort operation direction literal
         #
-        # @param [Veritas::Relation::Operation::Order::Direction] operation
+        # @param [Axiom::Relation::Operation::Order::Direction] operation
         #
         # @return [Hash]
         #
@@ -159,9 +159,9 @@ module Veritas
         #
         def self.sort_direction(operation)
           case operation
-          when ::Veritas::Relation::Operation::Order::Descending
+          when ::Axiom::Relation::Operation::Order::Descending
             :desc
-          when ::Veritas::Relation::Operation::Order::Ascending
+          when ::Axiom::Relation::Operation::Order::Ascending
             :asc
           else
             raise ArgumentError, "Unsupported operation: #{operation.class}"
@@ -170,22 +170,22 @@ module Veritas
         private_class_method :sort_direction
 
         OPERATIONS = Operations.new(
-          Veritas::Function::Predicate::Equality             => :equality_predicate,
-          Veritas::Function::Predicate::Inequality           => :create_inverse,
-          Veritas::Function::Predicate::Inclusion            => :inclusion_predicate,
-          Veritas::Function::Predicate::Exclusion            => :create_inverse,
-          Veritas::Function::Predicate::GreaterThan          => :greater_than_predicate,
-          Veritas::Function::Predicate::GreaterThanOrEqualTo => :greater_than_or_equal_to_predicate,
-          Veritas::Function::Predicate::LessThan             => :less_than_predicate,
-          Veritas::Function::Predicate::LessThanOrEqualTo    => :less_than_or_equal_to_predicate,
-          Veritas::Function::Connective::Disjunction         => :disjunction,
-          Veritas::Function::Connective::Conjunction         => :conjunction,
-          Veritas::Function::Connective::Negation            => :create_inverse
+          Axiom::Function::Predicate::Equality             => :equality_predicate,
+          Axiom::Function::Predicate::Inequality           => :create_inverse,
+          Axiom::Function::Predicate::Inclusion            => :inclusion_predicate,
+          Axiom::Function::Predicate::Exclusion            => :create_inverse,
+          Axiom::Function::Predicate::GreaterThan          => :greater_than_predicate,
+          Axiom::Function::Predicate::GreaterThanOrEqualTo => :greater_than_or_equal_to_predicate,
+          Axiom::Function::Predicate::LessThan             => :less_than_predicate,
+          Axiom::Function::Predicate::LessThanOrEqualTo    => :less_than_or_equal_to_predicate,
+          Axiom::Function::Connective::Disjunction         => :disjunction,
+          Axiom::Function::Connective::Conjunction         => :conjunction,
+          Axiom::Function::Connective::Negation            => :create_inverse
         )
 
         # Create filter literal internals
         #
-        # @param [Veritas::Function] function
+        # @param [Axiom::Function] function
         #
         # @return [Hash]
         #
@@ -198,7 +198,7 @@ module Veritas
 
         # Create filter literal internals from disjunction
         #
-        # @param [Veritas::Function::Predicate::Disjunction] disjunction
+        # @param [Axiom::Function::Predicate::Disjunction] disjunction
         #
         # @return [Hash]
         #
@@ -211,7 +211,7 @@ module Veritas
 
         # Create filter literal internals from conjunction
         #
-        # @param [Veritas::Function::Predicate::Disjunction] conjunction
+        # @param [Axiom::Function::Predicate::Disjunction] conjunction
         #
         # @return [Hash]
         #
@@ -224,7 +224,7 @@ module Veritas
 
         # Create connective literal
         #
-        # @param [Veritas::Function::Connective] connective
+        # @param [Axiom::Function::Connective] connective
         # @param [Symbol] operator
         #
         # @return [Hash]
@@ -238,7 +238,7 @@ module Veritas
 
         # Create filter literal internals from quality predicate
         #
-        # @param [Veritas::Function::Predicate::Equality] predicate
+        # @param [Axiom::Function::Predicate::Equality] predicate
         #
         # @return [Hash]
         #
@@ -251,7 +251,7 @@ module Veritas
 
         # Create filter literal internals from inclusion predicate
         #
-        # @param [Veritas::Function::Predicate::Inclusion] predicate
+        # @param [Axiom::Function::Predicate::Inclusion] predicate
         #
         # @return [Hash]
         #
@@ -264,7 +264,7 @@ module Veritas
 
         # Create filter literal internals from less than predicate
         #
-        # @param [Veritas::Function::Predicate::LessThan] predicate
+        # @param [Axiom::Function::Predicate::LessThan] predicate
         #
         # @return [Hash]
         #
@@ -277,7 +277,7 @@ module Veritas
 
         # Create filter literal internals from less than or equal to predicate
         #
-        # @param [Veritas::Function::Predicate::LessThanOrEqualTo] predicate
+        # @param [Axiom::Function::Predicate::LessThanOrEqualTo] predicate
         #
         # @return [Hash]
         #
@@ -290,7 +290,7 @@ module Veritas
 
         # Create filter literal internals from greater than predicate
         #
-        # @param [Veritas::Function::Predicate::GreaterThan] predicate
+        # @param [Axiom::Function::Predicate::GreaterThan] predicate
         #
         # @return [Hash]
         #
@@ -303,7 +303,7 @@ module Veritas
 
         # Create filter literal internals from greater than or equal to predicate
         #
-        # @param [Veritas::Function::Predicate::GreaterThanOrEqualTo] predicate
+        # @param [Axiom::Function::Predicate::GreaterThanOrEqualTo] predicate
         #
         # @return [Hash]
         #
@@ -316,7 +316,7 @@ module Veritas
 
         # Create filter from predicate and type
         #
-        # @param [Veritas::Function::Predicate] predicate
+        # @param [Axiom::Function::Predicate] predicate
         # @param [Symbol] type
         #
         # @return [Hash]
@@ -330,7 +330,7 @@ module Veritas
 
         # Create filter from predicate type and operator
         #
-        # @param [Veritas::Function::Predicate] predicate
+        # @param [Axiom::Function::Predicate] predicate
         # @param [Symbol] type
         # @param [Symbol] operator
         #
@@ -345,7 +345,7 @@ module Veritas
 
         # Create filter from predicate type and operand
         #
-        # @param [Veritas::Function::Predicate] predicate
+        # @param [Axiom::Function::Predicate] predicate
         # @param [Symbol] type
         # @param [Object] operand
         #
@@ -360,7 +360,7 @@ module Veritas
 
         # Create inverted filter
         #
-        # @param [Veritas::Function] function
+        # @param [Axiom::Function] function
         #
         # @return [Hash]
         #

@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-module Veritas
+module Axiom
   module Adapter
     module Elasticsearch
       # A relation backed by elasticserach adapter
-      class Gateway < ::Veritas::Relation
+      class Gateway < ::Axiom::Relation
         include Adamantium::Flat, AbstractType
 
         DECORATED_CLASS = superclass
@@ -138,4 +138,4 @@ module Veritas
       end
     end # class Gateway
   end # class Relation
-end # module Veritas
+end # module Axiom
