@@ -3,7 +3,7 @@ module Veritas
     module Elasticsearch
       # Abstract base class for queries
       class Query
-        include Enumerable, Adamantium::Flat
+        include AbstractType, Enumerable, Adamantium::Flat, Concord.new(:visitor)
 
         # Initialize query
         #
@@ -112,9 +112,7 @@ module Veritas
         #
         # @api private
         #
-        def bounds
-          raise NotImplementedError, "#{self.class}##{__method__} must be implemented"
-        end
+        abstract_method :bounds
 
         # Return results for offset and size
         #
