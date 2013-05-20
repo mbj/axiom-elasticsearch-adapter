@@ -9,7 +9,7 @@ describe Adapter::Elasticsearch, 'reading' do
   let(:adapter)       { Adapter::Elasticsearch::Adapter.new(index)                             }
   let(:header)        { Relation::Header.coerce([ [:firstname, String], [:lastname, String] ]) }
   let(:base_relation) { Relation::Base.new('people', header)                                   }
-  let(:cluster)       { Elasticsearch::Cluster.connect(uri, logger)                            }
+  let(:cluster)       { Esearch::Cluster.connect(uri, logger)                                  }
   let(:index)         { cluster.index(index_name)                                              }
   let(:index_name)    { 'test'                                                                 }
   let(:relation)      { Adapter::Elasticsearch::Gateway.new(adapter, base_relation)            }

@@ -14,6 +14,10 @@ shared_examples_for 'a query #each method' do
 
   class FakeHit
     include Concord.new(:raw)
+
+    def fields
+      raw.fetch('fields')
+    end
   end
 
   class FakeResult

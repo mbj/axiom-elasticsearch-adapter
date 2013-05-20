@@ -1,6 +1,6 @@
 require 'axiom'
 require 'concord'
-require 'elasticsearch'
+require 'esearch'
 require 'axiom/adapter/elasticsearch/operations'
 require 'axiom/adapter/elasticsearch/literal'
 require 'axiom/adapter/elasticsearch/visitor'
