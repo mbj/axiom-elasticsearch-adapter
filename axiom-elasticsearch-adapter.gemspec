@@ -17,5 +17,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('axiom',      '~> 0.1.0')
   gem.add_runtime_dependency('adamantium', '~> 0.0.7')
   gem.add_runtime_dependency('esearch',    '~> 0.2.0')
-  gem.add_runtime_dependency('concord',    '~> 0.1.0')
+  gem.add_runtime_dependency('concord',    '~> 0.1.1')
 end
